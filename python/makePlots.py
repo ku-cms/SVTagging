@@ -61,9 +61,16 @@ def makePlots():
     #input_file = "root://cmsxrootd.fnal.gov//store/mc/RunIIFall17NanoAODv7/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/270000/FC6D9F02-3BCC-454B-A535-9FE6B2783A49.root"
     #plot_dir   = "plots_SV_Standard_TTJets_DiLept"
 
-    # custom file created on UNL
-    input_file = "samples/custom/myNanoProdMc2017_NANO_v2.root"
-    plot_dir   = "plots_SV_Custom_TTJets_DiLept"
+    #input_file = "samples/custom/myNanoProdMc2017_NANO_v2.root"
+    #plot_dir   = "plots_SV_Custom_TTJets_DiLept"
+    
+    input_file = "data/TTJets-DiLept-FullSim-2016-v1.root"
+    plot_dir   = "plots-TTJets-DiLept-FullSim-2016-v1"
+
+    # check that file exists
+    if not os.path.isfile(input_file):
+        print("ERROR: The input file \"{0}\" does not exist.".format(input_file))
+        return
 
     # SV variables:
     # ------------
