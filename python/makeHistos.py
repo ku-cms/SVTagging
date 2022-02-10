@@ -13,10 +13,17 @@ ROOT.TH1.AddDirectory(False)
 
 def process(input_file, output_file):
     print("Processing {0} to create {1}".format(input_file, output_file))
+    
     # check that file exists
     if not os.path.isfile(input_file):
         print("ERROR: The input file \"{0}\" does not exist.".format(input_file))
         return
+    
+    # WARNING: Make sure to open file here, not within getTree() so that TFile stays open. 
+    #          If TFile closes, then TTree object is destroyed.
+    tree_name   = "Events"
+    open_file   = ROOT.TFile.Open(input_file)
+    tree        = tools.getTree(open_file, tree_name)
 
 def makeHistos():
     print("Go make histos!")
