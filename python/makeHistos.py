@@ -13,6 +13,7 @@ ROOT.TH1.AddDirectory(False)
 
 def process(input_file, output_file):
     print("Processing {0} to create {1}".format(input_file, output_file))
+    max_event = 1
     
     # check that file exists
     if not os.path.isfile(input_file):
@@ -24,6 +25,20 @@ def process(input_file, output_file):
     tree_name   = "Events"
     open_file   = ROOT.TFile.Open(input_file)
     tree        = tools.getTree(open_file, tree_name)
+    reader      = ROOT.TTreeReader(tree_name, open_file)
+    #SV_pt       = ROOT.TTreeReaderValue(float)(reader, "SV_pt")
+    MET_pt      = ROOT.TTreeReaderValue(float)(reader, "MET_pt")
+
+    # loop over events
+    event_i = 0
+    while(reader.Next()):
+        if max_event >= 0:
+            if event_i >= max_event:
+                break
+        #print("SV_pt: {0}".format(SV_pt))
+        print("MET_pt: {0}".format(MET_pt))
+        event_i += 1
+
 
 def makeHistos():
     print("Go make histos!")
