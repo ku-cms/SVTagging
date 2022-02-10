@@ -2,6 +2,7 @@
 
 import os
 import ROOT
+import tools
 
 # Make sure ROOT.TFile.Open(fileURL) does not seg fault when $ is in sys.argv (e.g. $ passed in as argument)
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -9,11 +10,6 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 # Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
 ROOT.TH1.AddDirectory(False)
-
-# creates directory if it does not exist
-def makeDir(dir_name):
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
 
 # get chain from list of ROOT files
 def getChain(input_files, num_files):
@@ -116,7 +112,7 @@ def makePlots():
     open_file   = ROOT.TFile.Open(input_file)
     tree        = getTree(open_file, tree_name)
     
-    makeDir(plot_dir)
+    tools.makeDir(plot_dir)
     
     for variable in variables:
         plot_name = variable
