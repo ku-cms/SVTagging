@@ -1,4 +1,4 @@
-# makePlots.py
+# makePlotsTrees.py
 
 import os
 import ROOT
