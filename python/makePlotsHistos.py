@@ -6,13 +6,28 @@ import tools
 
 def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
     print("Plotting {0} - {1}".format(variable, mc_type))
+
+    # WARNING: must keep TFile open to use histograms; histograms are destroyed when TFile is closed
+    open_files  = {}
+    histos      = {}
+    
+    print("first loop")
     for era in eras:
         key         = "{0}-{1}".format(mc_type, era)
         input_file  = "{0}/{1}".format(input_dir, input_files[key])
+        
         # check that input file exists
         if not os.path.isfile(input_file):
             print("ERROR: The input file \"{0}\" does not exist.".format(input_file))
             return
+        
+        open_files[era] = ROOT.TFile.Open(input_file)
+        histos[era]     = open_files[era].Get(h_name)
+        print("era: {0}, h: {1}".format(era, histos[era]))
+    
+    print("second loop")
+    for era in eras:
+        print("era: {0}, h: {1}".format(era, histos[era]))
 
 def process(input_dir, plot_dir, variable, h_name):
     eras        = ["2016", "2017", "2018"]
@@ -27,18 +42,6 @@ def process(input_dir, plot_dir, variable, h_name):
             "FastSim-2018" : "Histos-TTJets-DiLept-FastSim-2018-v1.root",
     }
     
-    # # check that input file exists
-    # if not os.path.isfile(input_file):
-    #     print("ERROR: The input file \"{0}\" does not exist.".format(input_file))
-    #     return
-    
-    #open_file = ROOT.TFile.Open(input_file)
-
-    #histo_names = ["h_MET_pt", "h_nSV", "h_SV_ntrk", "h_SV_flavor", "h_SV_pt_v1", "h_SV_pt_v2", "h_SV_eta"]
-
-    #for h_name in histo_names:
-    #    h = open_file.Get(h_name)
-
     for mc_type in mc_types:
         plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name)
 
@@ -61,10 +64,6 @@ def makePlots():
     for key in histos:
         process(input_dir, plot_dir, key, histos[key])
     
-    #for key in info:
-    #    input_file  = "{0}/{1}".format(input_dir,  info[key]["input"])
-    #    process(input_file, plot_dir)
-
 def main():
     makePlots()
 
