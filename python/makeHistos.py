@@ -44,7 +44,7 @@ def process(input_file, output_file):
             if entry >= max_event:
                 break
         if entry % 1000 == 0:
-            print("Processing entry {0}".format(entry))
+            print("Processing entry {0}".format(entry), flush=True)
         
         chain.GetEntry(entry)
         
