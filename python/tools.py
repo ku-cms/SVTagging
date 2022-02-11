@@ -18,8 +18,15 @@ def getTree(open_file, tree_name):
     print("tree: {0}, number of events: {1}".format(tree_name, n_events))
     return tree
 
-def setupHist(hist, color, lineWidth):
+def setupHist(hist, title, x_title, y_title, color, lineWidth):
     hist.SetStats(ROOT.kFALSE)
+    
+    x_axis = hist.GetXaxis()
+    y_axis = hist.GetYaxis()
+    
+    hist.SetTitle(title)
+    x_axis.SetTitle(x_title)
+    y_axis.SetTitle(y_title)
     hist.SetLineColor(colors.getColorIndex(color))
     hist.SetLineWidth(lineWidth)
 

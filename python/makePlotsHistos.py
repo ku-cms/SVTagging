@@ -50,17 +50,19 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
     legend_y1 = 0.70
     legend_y2 = 0.90
     legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
-    #legend.SetFillStyle(0)
-    #legend.SetBorderSize(0)
-    #legend.SetLineWidth(1)
-    #legend.SetNColumns(1)
-    #legend.SetTextFont(42)
+    legend.SetFillStyle(0)
+    legend.SetBorderSize(0)
+    legend.SetLineWidth(0)
+    legend.SetNColumns(1)
+    legend.SetTextFont(42)
     
     # draw histos
     for i, era in enumerate(eras):
-        histos[era].SetStats(ROOT.kFALSE)
+        title   = "{0} ({1})".format(variable, mc_type)
+        x_title = variable
+        y_title = "Events"
+        tools.setupHist(histos[era], title, x_title, y_title, colors[i], 3)
         histos[era].Draw("hist error same")
-        tools.setupHist(histos[era], colors[i], 3)
         legend.AddEntry(histos[era], era, "l")
 
     legend.Draw()
