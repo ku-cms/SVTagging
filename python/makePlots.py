@@ -77,6 +77,8 @@ def makePlots():
     
     # standard variables
     variables = [
+        "MET_pt",
+        "nSV",
         "SV_dlen",
         "SV_dlenSig",
         "SV_dxy",
