@@ -30,7 +30,7 @@ def process(input_file, output_file):
     h_SV_eta    = ROOT.TH1F("h_SV_eta",     "h_SV_eta",     20, -np.pi, np.pi)
     
     # See python examples in https://github.com/alexpearce/Ntuple
-    max_event   = 10000
+    max_event   = -1
     tree_name   = "Events"
     chain = ROOT.TChain(tree_name)
     chain.Add(input_file)
@@ -79,7 +79,7 @@ def process(input_file, output_file):
 def makeHistos():
     print("Go make histos!")
     input_dir   = "data"
-    output_dir  = "histos-v1"
+    output_dir  = "histos-v2"
     info = {
             "FullSim-2016" : {"input" : "TTJets-DiLept-FullSim-2016-v1.root", "output" : "Histos-TTJets-DiLept-FullSim-2016-v1.root"},
             "FullSim-2017" : {"input" : "TTJets-DiLept-FullSim-2017-v1.root", "output" : "Histos-TTJets-DiLept-FullSim-2017-v1.root"},
