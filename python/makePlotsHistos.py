@@ -11,7 +11,7 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 # Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
 ROOT.TH1.AddDirectory(False)
 
-def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
+def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits):
     print("Plotting {0} - {1}".format(variable, mc_type))
 
     # xkcd colors: https://xkcd.com/color/rgb/
@@ -61,7 +61,7 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
         title   = "{0} ({1})".format(variable, mc_type)
         x_title = variable
         y_title = "Events"
-        tools.setupHist(histos[era], title, x_title, y_title, colors[i], 3)
+        tools.setupHist(histos[era], title, x_title, y_title, y_limits[0], y_limits[1], colors[i], 3)
         histos[era].Draw("hist error same")
         legend.AddEntry(histos[era], era, "l")
 
@@ -72,7 +72,7 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
     c.SaveAs(output_name + ".pdf")
     c.SaveAs(output_name + ".png")
 
-def process(input_dir, plot_dir, variable, h_name):
+def process(input_dir, plot_dir, variable, h_name, y_limits):
     eras        = ["2016", "2017", "2018"]
     mc_types    = ["FullSim", "FastSim"]
     
@@ -86,26 +86,26 @@ def process(input_dir, plot_dir, variable, h_name):
     }
     
     for mc_type in mc_types:
-        plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name)
+        plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits)
 
 def makePlots():
     print("Go make plots!")
     plot_dir    = "plots-histos"
     input_dir   = "histos-v2"
     histos = {
-        "MET_pt"    : "h_MET_pt",
-        "nSV"       : "h_nSV",
-        "SV_ntrk"   : "h_SV_ntrk",
-        "SV_flavor" : "h_SV_flavor",
-        "SV_pt_v1"  : "h_SV_pt_v1",
-        "SV_pt_v2"  : "h_SV_pt_v2",
-        "SV_eta"    : "h_SV_eta",
+        "MET_pt"    : {"h_name" : "h_MET_pt",       "y_limits" : [0, 5e4]},
+        "nSV"       : {"h_name" : "h_nSV",          "y_limits" : [0, 5e4]},
+        "SV_ntrk"   : {"h_name" : "h_SV_ntrk",      "y_limits" : [0, 2e5]},
+        "SV_flavor" : {"h_name" : "h_SV_flavor",    "y_limits" : [0, 3e5]},
+        "SV_pt_v1"  : {"h_name" : "h_SV_pt_v1",     "y_limits" : [0, 1e5]},
+        "SV_pt_v2"  : {"h_name" : "h_SV_pt_v2",     "y_limits" : [0, 4e4]},
+        "SV_eta"    : {"h_name" : "h_SV_eta",       "y_limits" : [0, 5e4]},
     }
     
     tools.makeDir(plot_dir)
 
     for key in histos:
-        process(input_dir, plot_dir, key, histos[key])
+        process(input_dir, plot_dir, key, histos[key]["h_name"], histos[key]["y_limits"])
     
 def main():
     makePlots()
