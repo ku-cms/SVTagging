@@ -13,37 +13,15 @@ ROOT.TH1.AddDirectory(False)
 
 def process(input_file, output_file):
     print("Processing {0} to create {1}".format(input_file, output_file))
-    max_event = 10
     
     # check that file exists
     if not os.path.isfile(input_file):
         print("ERROR: The input file \"{0}\" does not exist.".format(input_file))
         return
     
-    tree_name   = "Events"
-    
-    # # attempt 1
-    # 
-    # # WARNING: Make sure to open file here, not within getTree() so that TFile stays open. 
-    # #          If TFile closes, then TTree object is destroyed.
-    # open_file   = ROOT.TFile.Open(input_file)
-    # tree        = tools.getTree(open_file, tree_name)
-    # reader      = ROOT.TTreeReader(tree_name, open_file)
-    # #SV_pt       = ROOT.TTreeReaderValue(float)(reader, "SV_pt")
-    # MET_pt      = ROOT.TTreeReaderValue(float)(reader, "MET_pt")
-
-    # # loop over events
-    # event_i = 0
-    # while(reader.Next()):
-    #     if max_event >= 0:
-    #         if event_i >= max_event:
-    #             break
-    #     #print("SV_pt: {0}".format(SV_pt))
-    #     print("MET_pt: {0}".format(MET_pt))
-    #     event_i += 1
-
-    # attempt 2
     # See python examples in https://github.com/alexpearce/Ntuple
+    max_event   = 10
+    tree_name   = "Events"
     chain = ROOT.TChain(tree_name)
     chain.Add(input_file)
     entries = chain.GetEntries()
@@ -55,7 +33,6 @@ def process(input_file, output_file):
         chain.GetEntry(entry)
         SV_pt_list = [x for x in chain.SV_pt]
         print("{0}: MET_pt = {1:.3f}, nSV = {2}, SV_pt = {3}".format(entry, chain.MET_pt, chain.nSV, SV_pt_list))
-
 
 def makeHistos():
     print("Go make histos!")
@@ -75,7 +52,6 @@ def makeHistos():
         input_file  = "{0}/{1}".format(input_dir,  info[key]["input"])
         output_file = "{0}/{1}".format(output_dir, info[key]["output"])
         process(input_file, output_file)
-
 
 def main():
     makeHistos()
