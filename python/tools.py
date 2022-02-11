@@ -1,6 +1,8 @@
 # tools.py
 
 import os
+import ROOT
+import colors
 
 # creates directory if it does not exist
 def makeDir(dir_name):
@@ -15,4 +17,9 @@ def getTree(open_file, tree_name):
     n_events = tree.GetEntries()
     print("tree: {0}, number of events: {1}".format(tree_name, n_events))
     return tree
+
+def setupHist(hist, color, lineWidth):
+    hist.SetStats(ROOT.kFALSE)
+    hist.SetLineColor(colors.getColorIndex(color))
+    hist.SetLineWidth(lineWidth)
 

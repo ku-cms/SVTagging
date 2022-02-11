@@ -1,8 +1,8 @@
 # colors.py
 
-import ROOT
-import json
 import os
+import json
+import ROOT
 
 # xkcd color survey
 # see https://xkcd.com/color/rgb.txt
@@ -28,7 +28,7 @@ def getColorIndex(color):
         # otherwise, assume RBG are provided
         else:
             index = ROOT.TColor.GetColor(color)
-        print("{0}: {1}: {2}".format(color, data[color], index)) 
+        #print("{0}: {1}: {2}".format(color, data[color], index)) 
         return index
 
 # make RGB json file from xkcd colors text file

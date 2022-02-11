@@ -14,6 +14,10 @@ ROOT.TH1.AddDirectory(False)
 def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
     print("Plotting {0} - {1}".format(variable, mc_type))
 
+    # xkcd colors: https://xkcd.com/color/rgb/
+    #colors = ["red", "green", "blue"]
+    colors = ["tomato", "kelly green", "azure"]
+
     # WARNING: must keep TFile open to use histograms; histograms are destroyed when TFile is closed
     open_files  = {}
     histos      = {}
@@ -56,6 +60,7 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
     for i, era in enumerate(eras):
         histos[era].SetStats(ROOT.kFALSE)
         histos[era].Draw("hist error same")
+        tools.setupHist(histos[era], colors[i], 3)
         legend.AddEntry(histos[era], era, "l")
 
     legend.Draw()
