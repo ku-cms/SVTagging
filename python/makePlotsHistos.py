@@ -40,9 +40,25 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
     
     c = ROOT.TCanvas("c", "c", 800, 800)
     
+    # legend: TLegend(x1,y1,x2,y2)
+    legend_x1 = 0.70
+    legend_x2 = 0.90
+    legend_y1 = 0.70
+    legend_y2 = 0.90
+    legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+    #legend.SetFillStyle(0)
+    #legend.SetBorderSize(0)
+    #legend.SetLineWidth(1)
+    #legend.SetNColumns(1)
+    #legend.SetTextFont(42)
+    
     # draw histos
     for i, era in enumerate(eras):
+        histos[era].SetStats(ROOT.kFALSE)
         histos[era].Draw("hist error same")
+        legend.AddEntry(histos[era], era, "l")
+
+    legend.Draw()
     
     # save plots
     c.Update()
