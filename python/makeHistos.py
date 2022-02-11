@@ -35,12 +35,16 @@ def process(input_file, output_file):
     chain = ROOT.TChain(tree_name)
     chain.Add(input_file)
     entries = chain.GetEntries()
+    
     print("entries: {0}, max_event: {1}".format(entries, max_event))
+    
     for entry in range(entries):
         # skip if max event is >= 0
         if max_event >= 0:
             if entry >= max_event:
                 break
+        if entry % 1000 == 0:
+            print("Processing entry {0}".format(entry))
         
         chain.GetEntry(entry)
         
@@ -75,7 +79,7 @@ def process(input_file, output_file):
 def makeHistos():
     print("Go make histos!")
     input_dir   = "data"
-    output_dir  = "histos"
+    output_dir  = "histos-v1"
     info = {
             "FullSim-2016" : {"input" : "TTJets-DiLept-FullSim-2016-v1.root", "output" : "Histos-TTJets-DiLept-FullSim-2016-v1.root"},
             "FullSim-2017" : {"input" : "TTJets-DiLept-FullSim-2017-v1.root", "output" : "Histos-TTJets-DiLept-FullSim-2017-v1.root"},
