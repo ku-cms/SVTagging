@@ -4,6 +4,13 @@ import os
 import ROOT
 import tools
 
+# Make sure ROOT.TFile.Open(fileURL) does not seg fault when $ is in sys.argv (e.g. $ passed in as argument)
+ROOT.PyConfig.IgnoreCommandLineOptions = True
+# Make plots faster without displaying them
+ROOT.gROOT.SetBatch(ROOT.kTRUE)
+# Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
+ROOT.TH1.AddDirectory(False)
+
 def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
     print("Plotting {0} - {1}".format(variable, mc_type))
 
@@ -11,7 +18,7 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
     open_files  = {}
     histos      = {}
     
-    print("first loop")
+    #print("first loop")
     for era in eras:
         key         = "{0}-{1}".format(mc_type, era)
         input_file  = "{0}/{1}".format(input_dir, input_files[key])
@@ -23,11 +30,24 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name):
         
         open_files[era] = ROOT.TFile.Open(input_file)
         histos[era]     = open_files[era].Get(h_name)
-        print("era: {0}, h: {1}".format(era, histos[era]))
+        #print("era: {0}, h: {1}".format(era, histos[era]))
     
-    print("second loop")
-    for era in eras:
-        print("era: {0}, h: {1}".format(era, histos[era]))
+    #print("second loop")
+    #for era in eras:
+    #    print("era: {0}, h: {1}".format(era, histos[era]))
+    
+    output_name = "{0}/{1}-{2}".format(plot_dir, variable, mc_type)
+    
+    c = ROOT.TCanvas("c", "c", 800, 800)
+    
+    # draw histos
+    for i, era in enumerate(eras):
+        histos[era].Draw("hist error same")
+    
+    # save plots
+    c.Update()
+    c.SaveAs(output_name + ".pdf")
+    c.SaveAs(output_name + ".png")
 
 def process(input_dir, plot_dir, variable, h_name):
     eras        = ["2016", "2017", "2018"]
