@@ -66,6 +66,7 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_li
         legend.AddEntry(histos[era], era, "l")
 
     legend.Draw()
+    c.SetLogy(1) 
     
     # save plots
     c.Update()
@@ -93,13 +94,13 @@ def makePlots():
     plot_dir    = "plots-histos"
     input_dir   = "histos-v2"
     histos = {
-        "MET_pt"    : {"h_name" : "h_MET_pt",       "y_limits" : [0, 5e4]},
-        "nSV"       : {"h_name" : "h_nSV",          "y_limits" : [0, 5e4]},
-        "SV_ntrk"   : {"h_name" : "h_SV_ntrk",      "y_limits" : [0, 2e5]},
-        "SV_flavor" : {"h_name" : "h_SV_flavor",    "y_limits" : [0, 3e5]},
-        "SV_pt_v1"  : {"h_name" : "h_SV_pt_v1",     "y_limits" : [0, 1e5]},
-        "SV_pt_v2"  : {"h_name" : "h_SV_pt_v2",     "y_limits" : [0, 4e4]},
-        "SV_eta"    : {"h_name" : "h_SV_eta",       "y_limits" : [0, 5e4]},
+        "MET_pt"    : {"h_name" : "h_MET_pt",       "y_limits" : [1e-1, 5e4]},
+        "nSV"       : {"h_name" : "h_nSV",          "y_limits" : [1e-1, 5e4]},
+        "SV_ntrk"   : {"h_name" : "h_SV_ntrk",      "y_limits" : [1e-1, 2e5]},
+        "SV_flavor" : {"h_name" : "h_SV_flavor",    "y_limits" : [1e-1, 3e5]},
+        "SV_pt_v1"  : {"h_name" : "h_SV_pt_v1",     "y_limits" : [1e-1, 1e5]},
+        "SV_pt_v2"  : {"h_name" : "h_SV_pt_v2",     "y_limits" : [1e-1, 4e4]},
+        "SV_eta"    : {"h_name" : "h_SV_eta",       "y_limits" : [1e-1, 5e4]},
     }
     
     tools.makeDir(plot_dir)
