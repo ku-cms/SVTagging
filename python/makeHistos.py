@@ -90,6 +90,7 @@ def makeHistos():
     }
     
     tools.makeDir(output_dir)
+    
     for key in info:
         input_file  = "{0}/{1}".format(input_dir,  info[key]["input"])
         output_file = "{0}/{1}".format(output_dir, info[key]["output"])
