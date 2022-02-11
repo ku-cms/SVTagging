@@ -1,7 +1,8 @@
-# makePlots.py
+# makePlotsTrees.py
 
 import os
 import ROOT
+import tools
 
 # Make sure ROOT.TFile.Open(fileURL) does not seg fault when $ is in sys.argv (e.g. $ passed in as argument)
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -9,11 +10,6 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
 # Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
 ROOT.TH1.AddDirectory(False)
-
-# creates directory if it does not exist
-def makeDir(dir_name):
-    if not os.path.exists(dir_name):
-        os.makedirs(dir_name)
 
 # get chain from list of ROOT files
 def getChain(input_files, num_files):
@@ -24,15 +20,6 @@ def getChain(input_files, num_files):
     for f in input_files:
         chain.Add(f)
     return 
-
-# get tree from open file
-# WARNING: Do not open TFile in getTree(); if you do, the returned TTree object will be destroyed when the TFile closes.
-#          Pass open TFile to getTree().
-def getTree(open_file, tree_name):
-    tree     = open_file.Get(tree_name)
-    n_events = tree.GetEntries()
-    print("tree: {0}, number of events: {1}".format(tree_name, n_events))
-    return tree
 
 def plot(plot_dir, plot_name, tree, variable, cuts = "", setLogY=True):
     output_name = "{0}/{1}".format(plot_dir, plot_name)
@@ -52,8 +39,6 @@ def plot(plot_dir, plot_name, tree, variable, cuts = "", setLogY=True):
 def makePlots():
     print("Go make plots!")
     
-    tree_name  = "Events"
-    
     # file for ntuples (from Erich's NANO AOD script)
     #input_file = "root://xrootd.unl.edu//store/mc/RunIIFall17MiniAODv2/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/70000/D0890E60-8086-E811-93BF-0025904B7C26.root"
     
@@ -61,9 +46,16 @@ def makePlots():
     #input_file = "root://cmsxrootd.fnal.gov//store/mc/RunIIFall17NanoAODv7/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/270000/FC6D9F02-3BCC-454B-A535-9FE6B2783A49.root"
     #plot_dir   = "plots_SV_Standard_TTJets_DiLept"
 
-    # custom file created on UNL
-    input_file = "samples/custom/myNanoProdMc2017_NANO_v2.root"
-    plot_dir   = "plots_SV_Custom_TTJets_DiLept"
+    #input_file = "samples/custom/myNanoProdMc2017_NANO_v2.root"
+    #plot_dir   = "plots_SV_Custom_TTJets_DiLept"
+    
+    input_file = "data/TTJets-DiLept-FullSim-2016-v1.root"
+    plot_dir   = "plots-TTJets-DiLept-FullSim-2016-v1"
+
+    # check that file exists
+    if not os.path.isfile(input_file):
+        print("ERROR: The input file \"{0}\" does not exist.".format(input_file))
+        return
 
     # SV variables:
     # ------------
@@ -85,6 +77,8 @@ def makePlots():
     
     # standard variables
     variables = [
+        "MET_pt",
+        "nSV",
         "SV_dlen",
         "SV_dlenSig",
         "SV_dxy",
@@ -106,10 +100,11 @@ def makePlots():
     
     # WARNING: Make sure to open file here, not within getTree() so that TFile stays open. 
     #          If TFile closes, then TTree object is destroyed.
+    tree_name   = "Events"
     open_file   = ROOT.TFile.Open(input_file)
-    tree        = getTree(open_file, tree_name)
+    tree        = tools.getTree(open_file, tree_name)
     
-    makeDir(plot_dir)
+    tools.makeDir(plot_dir)
     
     for variable in variables:
         plot_name = variable
