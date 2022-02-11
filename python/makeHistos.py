@@ -79,7 +79,7 @@ def process(input_file, output_file):
 def makeHistos():
     print("Go make histos!")
     input_dir   = "data"
-    output_dir  = "histos-v2"
+    output_dir  = "histos"
     info = {
             "FullSim-2016" : {"input" : "TTJets-DiLept-FullSim-2016-v1.root", "output" : "Histos-TTJets-DiLept-FullSim-2016-v1.root"},
             "FullSim-2017" : {"input" : "TTJets-DiLept-FullSim-2017-v1.root", "output" : "Histos-TTJets-DiLept-FullSim-2017-v1.root"},
