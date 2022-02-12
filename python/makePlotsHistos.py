@@ -22,7 +22,6 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_li
     open_files  = {}
     histos      = {}
     
-    #print("first loop")
     for era in eras:
         key         = "{0}-{1}".format(mc_type, era)
         input_file  = "{0}/{1}".format(input_dir, input_files[key])
@@ -34,11 +33,6 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_li
         
         open_files[era] = ROOT.TFile.Open(input_file)
         histos[era]     = open_files[era].Get(h_name)
-        #print("era: {0}, h: {1}".format(era, histos[era]))
-    
-    #print("second loop")
-    #for era in eras:
-    #    print("era: {0}, h: {1}".format(era, histos[era]))
     
     output_name = "{0}/{1}-{2}".format(plot_dir, variable, mc_type)
     
