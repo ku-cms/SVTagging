@@ -31,3 +31,10 @@ def setupHist(hist, title, x_title, y_title, y_min, y_max, color, lineWidth):
     hist.SetLineColor(colors.getColorIndex(color))
     hist.SetLineWidth(lineWidth)
 
+def setupLegend(legend):
+    legend.SetFillStyle(0)
+    legend.SetBorderSize(0)
+    legend.SetLineWidth(0)
+    legend.SetNColumns(1)
+    legend.SetTextFont(42)
+
