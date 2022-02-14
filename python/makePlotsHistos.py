@@ -11,11 +11,11 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 # Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
 ROOT.TH1.AddDirectory(False)
 
+# plot multiple eras on the same plot
 def plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY):
     print("Plotting {0} - {1}".format(variable, mc_type))
 
     # xkcd colors: https://xkcd.com/color/rgb/
-    #colors = ["red", "green", "blue"]
     colors = ["tomato", "kelly green", "azure"]
 
     # WARNING: must keep TFile open to use histograms; histograms are destroyed when TFile is closed
@@ -68,6 +68,63 @@ def plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, 
     c.SaveAs(output_name + ".pdf")
     c.SaveAs(output_name + ".png")
 
+# plot multiple MC types (fast/full sim) on the same plot
+def plotSim(input_dir, plot_dir, input_files, mc_types, era, variable, h_name, y_limits, setLogY):
+    print("Plotting {0} - {1}".format(variable, era))
+    
+    # xkcd colors: https://xkcd.com/color/rgb/
+    colors = ["tomato", "kelly green", "azure"]
+    
+    # WARNING: must keep TFile open to use histograms; histograms are destroyed when TFile is closed
+    open_files  = {}
+    histos      = {}
+    
+    for mc_type in mc_types:
+        key         = "{0}-{1}".format(mc_type, era)
+        input_file  = "{0}/{1}".format(input_dir, input_files[key])
+        
+        # check that input file exists
+        if not os.path.isfile(input_file):
+            print("ERROR: The input file \"{0}\" does not exist.".format(input_file))
+            return
+        
+        open_files[mc_type] = ROOT.TFile.Open(input_file)
+        histos[mc_type]     = open_files[mc_type].Get(h_name)
+    
+    output_name = "{0}/{1}-{2}".format(plot_dir, variable, era)
+    
+    c = ROOT.TCanvas("c", "c", 800, 800)
+    c.SetLeftMargin(0.15)
+    
+    # legend
+    legend_x1 = 0.70
+    legend_x2 = 0.90
+    legend_y1 = 0.70
+    legend_y2 = 0.90
+    # legend: TLegend(x1,y1,x2,y2)
+    legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+
+    tools.setupLegend(legend)
+    
+    # draw histos
+    for i, mc_type in enumerate(mc_types):
+        title   = "{0} ({1})".format(variable, era)
+        x_title = variable
+        y_title = "Events"
+        tools.setupHist(histos[mc_type], title, x_title, y_title, y_limits[0], y_limits[1], colors[i], 3)
+        histos[mc_type].Draw("hist error same")
+        legend.AddEntry(histos[mc_type], mc_type, "l")
+
+    legend.Draw()
+    
+    if setLogY:
+        c.SetLogy(1) 
+    
+    # save plots
+    c.Update()
+    c.SaveAs(output_name + ".pdf")
+    c.SaveAs(output_name + ".png")
+
 def process(input_dir, plot_dir, variable, h_name, y_limits, setLogY):
     eras        = ["2016", "2017", "2018"]
     mc_types    = ["FullSim", "FastSim"]
@@ -83,6 +140,9 @@ def process(input_dir, plot_dir, variable, h_name, y_limits, setLogY):
     
     for mc_type in mc_types:
         plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY)
+    
+    for era in eras:
+        plotSim(input_dir, plot_dir, input_files, mc_types, era, variable, h_name, y_limits, setLogY)
 
 def makePlots():
     print("Go make plots!")
