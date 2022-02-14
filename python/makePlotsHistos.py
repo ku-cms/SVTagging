@@ -11,7 +11,7 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 # Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
 ROOT.TH1.AddDirectory(False)
 
-def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits):
+def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY):
     print("Plotting {0} - {1}".format(variable, mc_type))
 
     # xkcd colors: https://xkcd.com/color/rgb/
@@ -62,14 +62,15 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_li
 
     legend.Draw()
     
-    #c.SetLogy(1) 
+    if setLogY:
+        c.SetLogy(1) 
     
     # save plots
     c.Update()
     c.SaveAs(output_name + ".pdf")
     c.SaveAs(output_name + ".png")
 
-def process(input_dir, plot_dir, variable, h_name, y_limits):
+def process(input_dir, plot_dir, variable, h_name, y_limits, setLogY):
     eras        = ["2016", "2017", "2018"]
     mc_types    = ["FullSim", "FastSim"]
     
@@ -83,37 +84,32 @@ def process(input_dir, plot_dir, variable, h_name, y_limits):
     }
     
     for mc_type in mc_types:
-        plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits)
+        plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY)
 
 def makePlots():
     print("Go make plots!")
-    plot_dir    = "plots-histos"
-    input_dir   = "histos-v2"
-    # y axis limits tuned for linear scale
-    histos = {
-        "MET_pt"    : {"h_name" : "h_MET_pt",       "y_limits" : [0, 5e4]},
-        "nSV"       : {"h_name" : "h_nSV",          "y_limits" : [0, 5e4]},
-        "SV_ntrk"   : {"h_name" : "h_SV_ntrk",      "y_limits" : [0, 2e5]},
-        "SV_flavor" : {"h_name" : "h_SV_flavor",    "y_limits" : [0, 3e5]},
-        "SV_pt_v1"  : {"h_name" : "h_SV_pt_v1",     "y_limits" : [0, 1e5]},
-        "SV_pt_v2"  : {"h_name" : "h_SV_pt_v2",     "y_limits" : [0, 4e4]},
-        "SV_eta"    : {"h_name" : "h_SV_eta",       "y_limits" : [0, 5e4]},
-    }
-    # y axis limits tuned for log scale
-    #histos = {
-    #    "MET_pt"    : {"h_name" : "h_MET_pt",       "y_limits" : [1e-1, 5e4]},
-    #    "nSV"       : {"h_name" : "h_nSV",          "y_limits" : [1e-1, 5e4]},
-    #    "SV_ntrk"   : {"h_name" : "h_SV_ntrk",      "y_limits" : [1e-1, 2e5]},
-    #    "SV_flavor" : {"h_name" : "h_SV_flavor",    "y_limits" : [1e-1, 3e5]},
-    #    "SV_pt_v1"  : {"h_name" : "h_SV_pt_v1",     "y_limits" : [1e-1, 1e5]},
-    #    "SV_pt_v2"  : {"h_name" : "h_SV_pt_v2",     "y_limits" : [1e-1, 4e4]},
-    #    "SV_eta"    : {"h_name" : "h_SV_eta",       "y_limits" : [1e-1, 5e4]},
-    #}
     
-    tools.makeDir(plot_dir)
+    plot_dir_linear = "plots-histos-linear"
+    plot_dir_log    = "plots-histos-log"
+    input_dir       = "histos-v2"
+    
+    # y axis limits tuned for both linear and log scales
+    histos = {
+        "MET_pt"    : {"h_name" : "h_MET_pt",    "y_limits_linear" : [0, 5e4], "y_limits_log" : [1e-1, 1e10]},
+        "nSV"       : {"h_name" : "h_nSV",       "y_limits_linear" : [0, 5e4], "y_limits_log" : [1e-1, 1e10]},
+        "SV_ntrk"   : {"h_name" : "h_SV_ntrk",   "y_limits_linear" : [0, 2e5], "y_limits_log" : [1e-1, 1e10]},
+        "SV_flavor" : {"h_name" : "h_SV_flavor", "y_limits_linear" : [0, 3e5], "y_limits_log" : [1e-1, 1e10]},
+        "SV_pt_v1"  : {"h_name" : "h_SV_pt_v1",  "y_limits_linear" : [0, 1e5], "y_limits_log" : [1e-1, 1e10]},
+        "SV_pt_v2"  : {"h_name" : "h_SV_pt_v2",  "y_limits_linear" : [0, 4e4], "y_limits_log" : [1e-1, 1e10]},
+        "SV_eta"    : {"h_name" : "h_SV_eta",    "y_limits_linear" : [0, 5e4], "y_limits_log" : [1e-1, 1e10]},
+    }
+    
+    tools.makeDir(plot_dir_linear)
+    tools.makeDir(plot_dir_log)
 
     for key in histos:
-        process(input_dir, plot_dir, key, histos[key]["h_name"], histos[key]["y_limits"])
+        process(input_dir, plot_dir_linear, key, histos[key]["h_name"], histos[key]["y_limits_linear"], setLogY=False)
+        process(input_dir, plot_dir_log, key, histos[key]["h_name"], histos[key]["y_limits_log"], setLogY=True)
     
 def main():
     makePlots()
