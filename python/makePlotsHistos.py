@@ -11,7 +11,7 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 # Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
 ROOT.TH1.AddDirectory(False)
 
-def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY):
+def plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY):
     print("Plotting {0} - {1}".format(variable, mc_type))
 
     # xkcd colors: https://xkcd.com/color/rgb/
@@ -39,17 +39,15 @@ def plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_li
     c = ROOT.TCanvas("c", "c", 800, 800)
     c.SetLeftMargin(0.15)
     
-    # legend: TLegend(x1,y1,x2,y2)
+    # legend
     legend_x1 = 0.70
     legend_x2 = 0.90
     legend_y1 = 0.70
     legend_y2 = 0.90
+    # legend: TLegend(x1,y1,x2,y2)
     legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
-    legend.SetFillStyle(0)
-    legend.SetBorderSize(0)
-    legend.SetLineWidth(0)
-    legend.SetNColumns(1)
-    legend.SetTextFont(42)
+
+    tools.setupLegend(legend)
     
     # draw histos
     for i, era in enumerate(eras):
@@ -84,7 +82,7 @@ def process(input_dir, plot_dir, variable, h_name, y_limits, setLogY):
     }
     
     for mc_type in mc_types:
-        plot(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY)
+        plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY)
 
 def makePlots():
     print("Go make plots!")
