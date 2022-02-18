@@ -35,6 +35,7 @@ def plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name,
         open_files[mc_type] = ROOT.TFile.Open(input_file)
         histos[mc_type]     = open_files[mc_type].Get(h_name)
     
+    # ratio: FullSim / FastSim
     h_ratio = histos["FullSim"].Clone("h_ratio")
     h_ratio.Divide(histos["FastSim"])
 
@@ -96,13 +97,30 @@ def plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name,
     pad.SetTopMargin(0.01)
     pad.SetBottomMargin(0.4)
 
-    title   = "{0} ({1})".format(variable, era)
+    # format
+    
+    # label and title formatting
+    labelSize           = 0.14
+    titleSize           = 0.14
+    titleOffsetXaxis    = 1.20
+    titleOffsetYaxis    = 0.60
+    
+    h_ratio.GetXaxis().SetLabelSize(labelSize)
+    h_ratio.GetXaxis().SetTitleSize(titleSize)
+    h_ratio.GetXaxis().SetTitleOffset(titleOffsetXaxis)
+    h_ratio.GetXaxis().SetNdivisions(5, 5, 0, True)
+    h_ratio.GetYaxis().SetLabelSize(labelSize)
+    h_ratio.GetYaxis().SetTitleSize(titleSize)
+    h_ratio.GetYaxis().SetTitleOffset(titleOffsetYaxis)
+    h_ratio.GetYaxis().SetNdivisions(3, 5, 0, True)
+
+    title   = ""
     x_title = variable
-    y_title = "Events"
-    y_min   = 0.5
-    y_max   = 1.5
+    y_title = "FullSim/FastSim"
+    y_min   = 0.7
+    y_max   = 1.3
     tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, "black", 3)
-    h_ratio.Draw("hist error same")
+    h_ratio.Draw("hist")
     
     # save plots
     c.Update()
