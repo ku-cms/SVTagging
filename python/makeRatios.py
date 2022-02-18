@@ -36,9 +36,27 @@ def plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name,
         histos[mc_type]     = open_files[mc_type].Get(h_name)
     
     output_name = "{0}/{1}-{2}".format(plot_dir, variable, era)
+
+    lowerPadHeight = 0.30
     
     c = ROOT.TCanvas("c", "c", 800, 800)
-    c.SetLeftMargin(0.15)
+    c.Divide(1, 2)
+    
+    # pad for histograms
+    pad = c.cd(1)
+    # resize pad
+    # SetPad(xlow, ylow, xup, yup)
+    pad.SetPad(0, lowerPadHeight, 1, 1)
+    # set ticks on all sides of plot
+    pad.SetTickx()
+    pad.SetTicky()
+    pad.SetLeftMargin(0.2)
+    pad.SetRightMargin(0.1)
+    pad.SetTopMargin(0.1)
+    pad.SetBottomMargin(0.01)
+    
+    if setLogY:
+        pad.SetLogy(1) 
     
     # legend
     legend_x1 = 0.70
@@ -61,8 +79,19 @@ def plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name,
 
     legend.Draw()
     
-    if setLogY:
-        c.SetLogy(1) 
+    # pad for ratio
+    pad = c.cd(2)
+    pad.SetGridy()
+    # resize pad
+    # SetPad(xlow, ylow, xup, yup)
+    pad.SetPad(0, 0, 1, lowerPadHeight)
+    # set ticks on all sides of plot
+    pad.SetTickx()
+    pad.SetTicky()
+    pad.SetLeftMargin(0.2)
+    pad.SetRightMargin(0.1)
+    pad.SetTopMargin(0.01)
+    pad.SetBottomMargin(0.4)
     
     # save plots
     c.Update()
