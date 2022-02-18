@@ -84,7 +84,7 @@ def plotSim(input_dir, plot_dir, input_files, mc_types, era, variable, h_name, y
     print("Plotting {0} - {1}".format(variable, era))
     
     # xkcd colors: https://xkcd.com/color/rgb/
-    colors = ["tomato", "kelly green", "azure"]
+    colors = ["tomato", "azure"]
     
     # WARNING: must keep TFile open to use histograms; histograms are destroyed when TFile is closed
     open_files  = {}
