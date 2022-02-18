@@ -11,6 +11,17 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 # Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
 ROOT.TH1.AddDirectory(False)
 
+def getInputFiles():
+    input_files = {
+            "FullSim-2016" : "Histos-TTJets-DiLept-FullSim-2016-v1.root",
+            "FullSim-2017" : "Histos-TTJets-DiLept-FullSim-2017-v1.root",
+            "FullSim-2018" : "Histos-TTJets-DiLept-FullSim-2018-v1.root",
+            "FastSim-2016" : "Histos-TTJets-DiLept-FastSim-2016-v1.root",
+            "FastSim-2017" : "Histos-TTJets-DiLept-FastSim-2017-v1.root",
+            "FastSim-2018" : "Histos-TTJets-DiLept-FastSim-2018-v1.root",
+    }
+    return input_files
+
 # plot multiple eras on the same plot
 def plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY):
     print("Plotting {0} - {1}".format(variable, mc_type))
@@ -128,15 +139,8 @@ def plotSim(input_dir, plot_dir, input_files, mc_types, era, variable, h_name, y
 def process(input_dir, plot_dir, variable, h_name, y_limits, setLogY):
     eras        = ["2016", "2017", "2018"]
     mc_types    = ["FullSim", "FastSim"]
-    
-    input_files = {
-            "FullSim-2016" : "Histos-TTJets-DiLept-FullSim-2016-v1.root",
-            "FullSim-2017" : "Histos-TTJets-DiLept-FullSim-2017-v1.root",
-            "FullSim-2018" : "Histos-TTJets-DiLept-FullSim-2018-v1.root",
-            "FastSim-2016" : "Histos-TTJets-DiLept-FastSim-2016-v1.root",
-            "FastSim-2017" : "Histos-TTJets-DiLept-FastSim-2017-v1.root",
-            "FastSim-2018" : "Histos-TTJets-DiLept-FastSim-2018-v1.root",
-    }
+
+    input_files = getInputFiles()
     
     for mc_type in mc_types:
         plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY)
