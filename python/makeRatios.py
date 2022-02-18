@@ -41,7 +41,10 @@ def plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name,
 
     output_name = "{0}/{1}-{2}".format(plot_dir, variable, era)
 
+    # set lower pad height as percentage
     lowerPadHeight = 0.30
+    # use special ratio to tune label sizes
+    padHeightRatio = lowerPadHeight / (1.0 - lowerPadHeight)
     
     c = ROOT.TCanvas("c", "c", 800, 800)
     c.Divide(1, 2)
@@ -104,7 +107,15 @@ def plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name,
     titleSize           = 0.14
     titleOffsetXaxis    = 1.20
     titleOffsetYaxis    = 0.60
-    
+   
+    # upper plot: FullSim is drawn first 
+    histos["FullSim"].GetXaxis().SetLabelSize(0) # turn off x-axis labels for upper plot
+    histos["FullSim"].GetYaxis().SetLabelSize(padHeightRatio * labelSize)
+    histos["FullSim"].GetYaxis().SetTitleSize(padHeightRatio * titleSize)
+    histos["FullSim"].GetYaxis().SetTitleOffset(titleOffsetYaxis/padHeightRatio)
+    histos["FullSim"].GetYaxis().SetNdivisions(5, 5, 0, True)
+ 
+    # lower plot: ratio
     h_ratio.GetXaxis().SetLabelSize(labelSize)
     h_ratio.GetXaxis().SetTitleSize(titleSize)
     h_ratio.GetXaxis().SetTitleOffset(titleOffsetXaxis)
