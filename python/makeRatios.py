@@ -75,12 +75,6 @@ def process(input_dir, plot_dir, variable, h_name, y_limits, setLogY):
 
     input_files = makePlotsHistos.getInputFiles()
     
-    #for mc_type in mc_types:
-    #    plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, y_limits, setLogY)
-    #
-    #for era in eras:
-    #    plotSim(input_dir, plot_dir, input_files, mc_types, era, variable, h_name, y_limits, setLogY)
-    
     for era in eras:
         plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name, y_limits, setLogY)
     
