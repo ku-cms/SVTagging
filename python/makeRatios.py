@@ -35,6 +35,9 @@ def plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name,
         open_files[mc_type] = ROOT.TFile.Open(input_file)
         histos[mc_type]     = open_files[mc_type].Get(h_name)
     
+    h_ratio = histos["FullSim"].Clone("h_ratio")
+    h_ratio.Divide(histos["FastSim"])
+
     output_name = "{0}/{1}-{2}".format(plot_dir, variable, era)
 
     lowerPadHeight = 0.30
@@ -92,6 +95,14 @@ def plotRatio(input_dir, plot_dir, input_files, mc_types, era, variable, h_name,
     pad.SetRightMargin(0.1)
     pad.SetTopMargin(0.01)
     pad.SetBottomMargin(0.4)
+
+    title   = "{0} ({1})".format(variable, era)
+    x_title = variable
+    y_title = "Events"
+    y_min   = 0.5
+    y_max   = 1.5
+    tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, "black", 3)
+    h_ratio.Draw("hist error same")
     
     # save plots
     c.Update()
