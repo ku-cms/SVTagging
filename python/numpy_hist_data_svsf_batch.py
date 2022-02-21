@@ -291,12 +291,16 @@ if __name__ == "__main__":
 ])
 ])
 
-    regions = [
-              #  'b_eff', 
-               'sv',
-               #'sv_forward',
-               #'sv_central',
-              ]
+    #regions = [
+    #            # 'b_eff', 
+    #            # 'sv',
+    #            # 'sv_forward',
+    #            # 'sv_central',
+    #]
+    
+    #regions = ['b_eff']
+    regions = ['sv']
+    
     files_per_job = 50
 
     background_list = process_the_samples(backgrounds, None, None)
@@ -306,7 +310,9 @@ if __name__ == "__main__":
   
     working_dir = os.getcwd()
 
+    #output_dir = os.path.join(working_dir, 'output_condor_hists_b_eff_2D_proposal_'+date)
     output_dir = os.path.join(working_dir, 'output_condor_hists_sv_2D_proposal_'+date)
+    
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
         os.mkdir(os.path.join(output_dir, 'out'))
