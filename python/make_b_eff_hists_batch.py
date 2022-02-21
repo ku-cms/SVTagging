@@ -26,7 +26,6 @@ date = strftime('%d%b%y', localtime())
 
 ########################################################
 
-
 def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
     
     hist    = OrderedDict()
@@ -161,11 +160,7 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
                 print 'finished filling'
     return hist
 
-
-             
-
-if __name__ == "__main__":
-
+def main():
     parser = arg.ArgumentParser(description='receiving file lists for batch jobs')
     parser.add_argument('-f', '--file_list', type=str)
     parser.add_argument('-o', '--out_file', type=str) 
@@ -173,7 +168,19 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     sample_file = args.file_list
-    file_name = args.out_file
+    file_name   = args.out_file
+
+    print "sample file: {0}".format(sample_file)
+
+    # check that sample file was specified
+    if not sample_file:
+        print "ERROR: Please provide a file listing samples with the -f flag."
+        return
+    
+    # check that sample file exists
+    if not os.path.isfile(sample_file):
+        print("ERROR: The sample file \"{0}\" does not exist.".format(sample_file))
+        return
 
     sample_list = pickle.load( open(sample_file, "rb"))
     variables = ['MET', 'PTISR', 'RISR', 'NSV','PT_SV', 'Eta_SV', 'M_SV', 'Ndof_SV', 'ProbB_SV', 'D3d_SV', 'D3dSig_SV', 'Dxy_SV', 'CosTheta_SV', 'Flavor_SV']
@@ -186,4 +193,6 @@ if __name__ == "__main__":
     stop_b = time.time()
     print "total:      ", stop_b - start_b
 
+if __name__ == "__main__":
+    main()
 
