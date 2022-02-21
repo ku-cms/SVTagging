@@ -17,9 +17,9 @@ rt.gStyle.SetPalette(rt.kBlueRedYellow)
 rt.TH1.SetDefaultSumw2()
 rt.TH1.AddDirectory(rt.kFALSE)
 
-helper   = imp.load_source('fix'     , './help.py')
-tdrstyle = imp.load_source('tdrstyle', './tdrstyle.py')
-CMS_lumi = imp.load_source('CMS_lumi', './CMS_lumi.py') 
+helper   = imp.load_source('fix'     , './python/help.py')
+tdrstyle = imp.load_source('tdrstyle', './python/tdrstyle.py')
+CMS_lumi = imp.load_source('CMS_lumi', './python/CMS_lumi.py') 
 
 #tdrstyle.setTDRStyle()
 
@@ -982,10 +982,16 @@ if __name__ == "__main__":
     #background_file = './output_background_risr_95_mixed_10Jan20.root'
     #background_file = 'output_background_1l_10Feb20.root'
     #background_file = 'output_background_hist_sv_2D_flav_3Jan20.root'
-    background_file = 'output_background_hist_sv_b_eff_09Dec20.root'
+    
+    # use this one:
+    #background_file = 'output_background_hist_sv_b_eff_09Dec20.root'
+    
     #background_file = 'output_background_hist_2D_region_vars_21sam_14Jan21_tot.root'
     #background_file = 'output_background_hist_1l_regions_2Dec20.root'
     #background_file = 'output_background_hist_dphimetv_3Dec20.root'
+    
+    background_file = 'data/output_background_hist_sv_b_eff_09Dec20.root'
+    
     b_hists = read_in_hists(background_file)
     suffix = 'eff'
     #suffix = 'regions'
@@ -999,3 +1005,4 @@ if __name__ == "__main__":
     #make_overlay_plot(sig_hists_new, suffix)
     #make_2D_plots(sig_hists, suffix)
     #make_2D_plots(b_hists, suffix)
+
