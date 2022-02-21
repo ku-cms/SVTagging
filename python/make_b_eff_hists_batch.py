@@ -84,7 +84,7 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
 
                 d3ds_g4 = sv_d3dsig > 4.
                 d3ds_g3 = sv_d3dsig > 3.
-		ndof_l1p8 = sv_ndof > 1.8 
+                ndof_l1p8 = sv_ndof > 1.8 
                 cos_g0p98 = sv_cos > 0.98        
                 dxy_l3 = sv_dxy < 3.
 
