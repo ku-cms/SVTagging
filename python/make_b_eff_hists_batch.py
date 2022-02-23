@@ -163,7 +163,7 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
 def main():
     parser = arg.ArgumentParser(description='receiving file lists for batch jobs')
     parser.add_argument('-f', '--file_list', type=str)
-    parser.add_argument('-o', '--out_file', type=str) 
+    parser.add_argument('-o', '--out_file',  type=str) 
 
     args = parser.parse_args()
 

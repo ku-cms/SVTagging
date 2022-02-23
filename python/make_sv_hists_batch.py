@@ -402,24 +402,33 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
                 print 'finished filling'
     return hist
 
-
-             
-
-if __name__ == "__main__":
-
+def main():
     parser = arg.ArgumentParser(description='receiving file lists for batch jobs')
     parser.add_argument('-f', '--file_list', type=str)
-    parser.add_argument('-o', '--out_file', type=str) 
+    parser.add_argument('-o', '--out_file',  type=str) 
 
     args = parser.parse_args()
 
     sample_file = args.file_list
-    file_name = args.out_file
+    file_name   = args.out_file
+    
+    print "sample file: {0}".format(sample_file)
+
+    # check that sample file was specified
+    if not sample_file:
+        print "ERROR: Please provide a file listing samples with the -f flag."
+        return
+    
+    # check that sample file exists
+    if not os.path.isfile(sample_file):
+        print("ERROR: The sample file \"{0}\" does not exist.".format(sample_file))
+        return
 
     sample_list = pickle.load(open(sample_file, "rb"))
+    
     #variables = ['MET', 'MET_phi', 'PT_lep', 'Phi_lep', 'MiniIso_lep', 'ID_lep', 'Nbjet','Nbjet_ISR', 'Nbjet_S', 'weight', 'NSV', 'NSV_S', 'NSV_ISR', 'Nlep', 'PT_SV', 'Eta_SV', 'PT_jet', 'Eta_jet', 'SIP3D_lep', 'Njet', 'Btag_jet', 'ProbB_SV', 'Ndof_SV', 'M_SV', 'Dxy_SV', 'D3d_SV', 'D3dSig_SV', 'CosTheta_SV', 'PDGID_lep', 'Charge_lep', 'DxySig_SV', 'MX3a_BoostT','MX3b_BoostT', 'RISR', 'METtrigger', 'RelIso_lep']
-    variables = ['MET', 'MET_phi', 'PT_lep', 'Phi_lep', 'MiniIso_lep', 'ID_lep', 'Nbjet','Nbjet_ISR', 'Nbjet_S', 'weight', 'NSV', 'NSV_S', 'NSV_ISR', 'Nlep', 'PT_SV', 'Eta_SV', 'PT_jet', 'Eta_jet', 'SIP3D_lep', 'Njet', 'Btag_jet', 'PDGID_lep', 'Charge_lep', 'MX3a_BoostT','MX3b_BoostT', 'RISR', 'METtrigger', 'RelIso_lep', 'PTISR', 'PTCM', 'dphiCMI', 'dphiMET_V']
     #variables = ['MET', 'MET_phi', 'PT_lep', 'Phi_lep', 'MiniIso_lep', 'ID_lep', 'Nbjet','Nbjet_ISR', 'Nbjet_S', 'weight', 'NSV', 'NSV_S', 'NSV_ISR', 'Nlep', 'PT_SV', 'Eta_SV', 'PT_jet', 'Eta_jet', 'SIP3D_lep', 'Njet', 'Btag_jet', 'ProbB_SV', 'Ndof_SV', 'M_SV', 'Dxy_SV', 'D3d_SV', 'D3dSig_SV', 'CosTheta_SV', 'EMutrigger', 'PDGID_lep', 'Charge_lep', 'MatchedJetID_SV', 'MX3a_BoostT','MX3b_BoostT', 'RISR', 'METtrigger', 'RelIso_lep', 'Flavor_SV']
+    variables = ['MET', 'MET_phi', 'PT_lep', 'Phi_lep', 'MiniIso_lep', 'ID_lep', 'Nbjet','Nbjet_ISR', 'Nbjet_S', 'weight', 'NSV', 'NSV_S', 'NSV_ISR', 'Nlep', 'PT_SV', 'Eta_SV', 'PT_jet', 'Eta_jet', 'SIP3D_lep', 'Njet', 'Btag_jet', 'PDGID_lep', 'Charge_lep', 'MX3a_BoostT','MX3b_BoostT', 'RISR', 'METtrigger', 'RelIso_lep', 'PTISR', 'PTCM', 'dphiCMI', 'dphiMET_V']
 
     start_b = time.time()    
 
@@ -429,4 +438,6 @@ if __name__ == "__main__":
     stop_b = time.time()
     print "total:      ", stop_b - start_b
 
+if __name__ == "__main__":
+    main()
 
