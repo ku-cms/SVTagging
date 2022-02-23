@@ -182,7 +182,7 @@ def main():
         print("ERROR: The sample file \"{0}\" does not exist.".format(sample_file))
         return
 
-    sample_list = pickle.load( open(sample_file, "rb"))
+    sample_list = pickle.load(open(sample_file, "rb"))
     variables = ['MET', 'PTISR', 'RISR', 'NSV','PT_SV', 'Eta_SV', 'M_SV', 'Ndof_SV', 'ProbB_SV', 'D3d_SV', 'D3dSig_SV', 'Dxy_SV', 'CosTheta_SV', 'Flavor_SV']
 
     start_b = time.time()    

@@ -416,7 +416,7 @@ if __name__ == "__main__":
     sample_file = args.file_list
     file_name = args.out_file
 
-    sample_list = pickle.load( open(sample_file, "rb"))
+    sample_list = pickle.load(open(sample_file, "rb"))
     #variables = ['MET', 'MET_phi', 'PT_lep', 'Phi_lep', 'MiniIso_lep', 'ID_lep', 'Nbjet','Nbjet_ISR', 'Nbjet_S', 'weight', 'NSV', 'NSV_S', 'NSV_ISR', 'Nlep', 'PT_SV', 'Eta_SV', 'PT_jet', 'Eta_jet', 'SIP3D_lep', 'Njet', 'Btag_jet', 'ProbB_SV', 'Ndof_SV', 'M_SV', 'Dxy_SV', 'D3d_SV', 'D3dSig_SV', 'CosTheta_SV', 'PDGID_lep', 'Charge_lep', 'DxySig_SV', 'MX3a_BoostT','MX3b_BoostT', 'RISR', 'METtrigger', 'RelIso_lep']
     variables = ['MET', 'MET_phi', 'PT_lep', 'Phi_lep', 'MiniIso_lep', 'ID_lep', 'Nbjet','Nbjet_ISR', 'Nbjet_S', 'weight', 'NSV', 'NSV_S', 'NSV_ISR', 'Nlep', 'PT_SV', 'Eta_SV', 'PT_jet', 'Eta_jet', 'SIP3D_lep', 'Njet', 'Btag_jet', 'PDGID_lep', 'Charge_lep', 'MX3a_BoostT','MX3b_BoostT', 'RISR', 'METtrigger', 'RelIso_lep', 'PTISR', 'PTCM', 'dphiCMI', 'dphiMET_V']
     #variables = ['MET', 'MET_phi', 'PT_lep', 'Phi_lep', 'MiniIso_lep', 'ID_lep', 'Nbjet','Nbjet_ISR', 'Nbjet_S', 'weight', 'NSV', 'NSV_S', 'NSV_ISR', 'Nlep', 'PT_SV', 'Eta_SV', 'PT_jet', 'Eta_jet', 'SIP3D_lep', 'Njet', 'Btag_jet', 'ProbB_SV', 'Ndof_SV', 'M_SV', 'Dxy_SV', 'D3d_SV', 'D3dSig_SV', 'CosTheta_SV', 'EMutrigger', 'PDGID_lep', 'Charge_lep', 'MatchedJetID_SV', 'MX3a_BoostT','MX3b_BoostT', 'RISR', 'METtrigger', 'RelIso_lep', 'Flavor_SV']
