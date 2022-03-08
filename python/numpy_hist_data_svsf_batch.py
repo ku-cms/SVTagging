@@ -251,7 +251,7 @@ if __name__ == "__main__":
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8_Fall17_102X',
 ]),
     ('WJets2017' , [
-                    '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ]),
     ('VV2017', [ 
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X',
