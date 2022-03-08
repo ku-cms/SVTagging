@@ -17,9 +17,9 @@ rt.gStyle.SetPalette(rt.kBlueRedYellow)
 rt.TH1.SetDefaultSumw2()
 rt.TH1.AddDirectory(rt.kFALSE)
 
-helper   = imp.load_source('fix'     , './help.py')
-tdrstyle = imp.load_source('tdrstyle', './tdrstyle.py')
-CMS_lumi = imp.load_source('CMS_lumi', './CMS_lumi.py') 
+helper   = imp.load_source('fix'     , './python/help.py')
+tdrstyle = imp.load_source('tdrstyle', './python/tdrstyle.py')
+CMS_lumi = imp.load_source('CMS_lumi', './python/CMS_lumi.py') 
 
 #tdrstyle.setTDRStyle()
 
@@ -110,8 +110,10 @@ def make_2D_plots(hists_, suffix_):
 def make_overlay_plot(hists_, suffix_):
     print 'for posterity'
     hists_tmp = OrderedDict()
-    if not (os.path.isdir('./plots_'+date)): os.mkdir('./plots_'+date)
-    out_dir = os.path.join('./plots_'+date)
+    plot_dir = './plots_' + date
+    if not (os.path.isdir(plot_dir)):
+        os.mkdir(plot_dir)
+    out_dir = os.path.join(plot_dir)
 
     for sample in hists_:
         for tree in hists_[sample]:
@@ -920,9 +922,9 @@ def make_new_hists(hists_):
                     temp_new[sample][tree][new_hist_2].Divide(hists_[sample][tree][hist_name.replace('all','ntrk')])
                     #zero_value = temp_new[sample][tree][new_hist].GetBinContent(1)
                     #temp_new[sample][tree][new_hist].Scale(1./zero_value)
-#                    for ibin in xrange(temp_new[sample][tree][new_hist].GetNbinsX()):
-#                        bin_val = temp_new[sample][tree][new_hist].GetBinContent(ibin)
-#                        temp_new[sample][tree][new_hist].SetBinContent(ibin, bin_val / zero_value)
+                    #for ibin in xrange(temp_new[sample][tree][new_hist].GetNbinsX()):
+                    #    bin_val = temp_new[sample][tree][new_hist].GetBinContent(ibin)
+                    #    temp_new[sample][tree][new_hist].SetBinContent(ibin, bin_val / zero_value)
                 elif 'discr' in hist_name:
                     if 'ntrk' in hist_name:
                         new_hist = hist_name.replace('discr_ntrk', 'discr_ntrk_div_nojets')
@@ -939,9 +941,9 @@ def make_new_hists(hists_):
 
                     #zero_value = temp_new[sample][tree][new_hist].GetBinContent(1)
                     #temp_new[sample][tree][new_hist].Scale(1./zero_value)
-#                    for ibin in xrange(temp_new[sample][tree][new_hist].GetNbinsX()):
-#                        bin_val = temp_new[sample][tree][new_hist].GetBinContent(ibin)
-#                        temp_new[sample][tree][new_hist].SetBinContent(ibin, bin_val / zero_value)
+                    #for ibin in xrange(temp_new[sample][tree][new_hist].GetNbinsX()):
+                    #    bin_val = temp_new[sample][tree][new_hist].GetBinContent(ibin)
+                    #    temp_new[sample][tree][new_hist].SetBinContent(ibin, bin_val / zero_value)
     hists_.update(temp_new)
     return hists_
 
@@ -969,9 +971,11 @@ if __name__ == "__main__":
     #data_file = 'output_data_hist_sv_check_0p3_upperMet_18Nov20.root'
     #data_hists = read_in_hists(data_file)
     #signal_file = './output_signal_risr_95_mixed_10Jan20.root'
-    signal_file = 'output_signal_hist_sv_eff_06Dec20.root'
     #signal_file = 'output_signal_hist_1l_regions_2Dec20.root'
     #signal_file = 'output_signal_hist_2D_region_vars_21sam_14Jan21.root'
+    
+    signal_file = 'output_signal_hist_sv_eff_06Dec20.root'
+    
     #sig_hists = read_in_hists(signal_file)
     #suffix = '0p95'
     #suffix = 'sigs'
@@ -982,20 +986,26 @@ if __name__ == "__main__":
     #background_file = './output_background_risr_95_mixed_10Jan20.root'
     #background_file = 'output_background_1l_10Feb20.root'
     #background_file = 'output_background_hist_sv_2D_flav_3Jan20.root'
-    background_file = 'output_background_hist_sv_b_eff_09Dec20.root'
     #background_file = 'output_background_hist_2D_region_vars_21sam_14Jan21_tot.root'
     #background_file = 'output_background_hist_1l_regions_2Dec20.root'
     #background_file = 'output_background_hist_dphimetv_3Dec20.root'
+    #background_file = 'output_background_hist_sv_b_eff_09Dec20.root'
+    
+    background_file = 'data/output_background_hist_sv_b_eff_09Dec20.root'
     b_hists = read_in_hists(background_file)
-    suffix = 'eff'
     #suffix = 'regions'
+    suffix = 'eff'
     b_hists_new = make_new_hists(b_hists)
     print b_hists_new
+    make_overlay_plot(b_hists_new, suffix)
+    
     #print b_hists
     #make_1D_plots(b_hists, suffix)
     #make_stacked_plots(b_hists, sig_hists, True, suffix)
     #make_data_stacked_plots(data_hists, b_hists, sig_hists, True, suffix)
-    make_overlay_plot(b_hists_new, suffix)
     #make_overlay_plot(sig_hists_new, suffix)
+    #make_overlay_plot(b_hists_new, suffix)
     #make_2D_plots(sig_hists, suffix)
     #make_2D_plots(b_hists, suffix)
+    
+
