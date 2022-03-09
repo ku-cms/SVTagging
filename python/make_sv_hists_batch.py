@@ -60,9 +60,9 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
             # Reserve histograms
 
             for sel in selections_str:
-                hist[sample][tree_name]['RISR_MPE_'+sel] = rt.TH2D('_'.join(['RISR_MPE', sel, sample, tree_name]), '', 100, 0, 1.5, 100, 0, 100)
-                hist[sample][tree_name]['MET_'+sel] = rt.TH1D('_'.join(['MET', sel, sample, tree_name]), '', 100, 50, 500)
-                hist[sample][tree_name]['MET_1bin'+sel] = rt.TH1D('_'.join(['MET_1bin', sel, sample, tree_name]), '', 1, 50, 500)
+                hist[sample][tree_name]['RISR_MPE_'+sel]    = rt.TH2D('_'.join(['RISR_MPE', sel, sample, tree_name]), '', 100, 0, 1.5, 100, 0, 100)
+                hist[sample][tree_name]['MET_'+sel]         = rt.TH1D('_'.join(['MET', sel, sample, tree_name]), '', 100, 50, 500)
+                hist[sample][tree_name]['MET_1bin'+sel]     = rt.TH1D('_'.join(['MET_1bin', sel, sample, tree_name]), '', 1, 50, 500)
                 #hist[sample][tree_name]['PT_Eta_'+sel] = rt.TH2D('_'.join(['PT_Eta', sel, sample, tree_name]), '', 18, 2, 20, 2, -2.4, 2.4)
                 #hist[sample][tree_name]['PT_SV_'+sel] = rt.TH1D('_'.join(['PT_SV', sel, sample, tree_name]), '', 50, 2, 20)
                 #hist[sample][tree_name]['PT_SV_1GeV_'+sel] = rt.TH1D('_'.join(['PT_SV_1GeV', sel, sample, tree_name]), '', 18, 2, 20)
@@ -101,60 +101,63 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
                 print '\nGetting Histograms for:', sample, tree_name, in_file
                 print 'file: ', ifile+1, ' / ', len(list_of_files_[sample]['files'])
 
-                met = np.array(sample_array['MET'])
-                risr = np.array(sample_array['RISR'])
-                ptisr = np.array(sample_array['PTISR'])
-                ptcm = np.array(sample_array['PTCM'])
-                dphicmi = np.array(sample_array['dphiCMI'])
-                dphimetv = np.array(sample_array['dphiMET_V'])
-                mxpa = np.array(sample_array['MX3a_BoostT'])
-                mxpb = np.array(sample_array['MX3b_BoostT'])
-                if len(met) == 0: continue 
+                met         = np.array(sample_array['MET'])
+                risr        = np.array(sample_array['RISR'])
+                ptisr       = np.array(sample_array['PTISR'])
+                ptcm        = np.array(sample_array['PTCM'])
+                dphicmi     = np.array(sample_array['dphiCMI'])
+                dphimetv    = np.array(sample_array['dphiMET_V'])
+                mxpa        = np.array(sample_array['MX3a_BoostT'])
+                mxpb        = np.array(sample_array['MX3b_BoostT'])
+                
+                if len(met) == 0:
+                    continue 
 
                 #emu_trig = np.array(sample_array['EMutrigger'])
                 met_trig = np.array(sample_array['METtrigger'])
 
-                nsv = np.array(sample_array['NSV'])
-                nsv_s = np.array(sample_array['NSV_S'])
-                nsv_isr = np.array(sample_array['NSV_ISR'])
-                pt_sv = np.array(sample_array['PT_SV'])
-                eta_sv = np.array(sample_array['Eta_SV'])
-                #probb_sv = np.array(sample_array['ProbB_SV'])
-                ##flav_sv = np.array(sample_array['Flavor_SV'])
-                #flav_sv = np.array([pt<0 for pt in pt_sv])
-                ##matched_sv = np.array(sample_array['MatchedJetID_SV'])
-                #matched_sv = np.array([pt<0 for pt in pt_sv])
-                #ndof_sv = np.array(sample_array['Ndof_SV'])
-                #mass_sv = np.array(sample_array['M_SV'])
-                #dxy_sv = np.array(sample_array['Dxy_SV'])
-                ##dxysig_sv = np.array(sample_array['DxySig_SV'])
-                #d3d_sv = np.array(sample_array['D3d_SV'])
-                #d3dsig_sv = np.array(sample_array['D3dSig_SV'])
-                #cos_sv = np.array(sample_array['CosTheta_SV'])
+                nsv             = np.array(sample_array['NSV'])
+                nsv_s           = np.array(sample_array['NSV_S'])
+                nsv_isr         = np.array(sample_array['NSV_ISR'])
+                pt_sv           = np.array(sample_array['PT_SV'])
+                eta_sv          = np.array(sample_array['Eta_SV'])
+                #probb_sv       = np.array(sample_array['ProbB_SV'])
+                #flav_sv        = np.array(sample_array['Flavor_SV'])
+                #flav_sv        = np.array([pt<0 for pt in pt_sv])
+                #matched_sv     = np.array(sample_array['MatchedJetID_SV'])
+                #matched_sv     = np.array([pt<0 for pt in pt_sv])
+                #ndof_sv        = np.array(sample_array['Ndof_SV'])
+                #mass_sv        = np.array(sample_array['M_SV'])
+                #dxy_sv         = np.array(sample_array['Dxy_SV'])
+                #dxysig_sv      = np.array(sample_array['DxySig_SV'])
+                #d3d_sv         = np.array(sample_array['D3d_SV'])
+                #d3dsig_sv      = np.array(sample_array['D3dSig_SV'])
+                #cos_sv         = np.array(sample_array['CosTheta_SV'])
 
-                nbjet = np.array(sample_array['Nbjet'])
-                nbjet_isr = np.array(sample_array['Nbjet_ISR'])
-                nbjet_s = np.array(sample_array['Nbjet_S'])
+                nbjet       = np.array(sample_array['Nbjet'])
+                nbjet_isr   = np.array(sample_array['Nbjet_ISR'])
+                nbjet_s     = np.array(sample_array['Nbjet_S'])
 
-                njet = np.array(sample_array['Njet'])
-                pt_jet = np.array(sample_array['PT_jet'])
-                eta_jet = np.array(sample_array['Eta_jet'])
-                btag_jet = np.array(sample_array['Btag_jet'])
+                njet        = np.array(sample_array['Njet'])
+                pt_jet      = np.array(sample_array['PT_jet'])
+                eta_jet     = np.array(sample_array['Eta_jet'])
+                btag_jet    = np.array(sample_array['Btag_jet'])
 
-                weight = np.array(sample_array['weight'])
+                weight      = np.array(sample_array['weight'])
 
-                nlep = np.array(sample_array['Nlep'])
-                phi_lep = np.array(sample_array['Phi_lep'])
-                id_lep = np.array(sample_array['ID_lep'])
-                pt_lep = np.array(sample_array['PT_lep'])
-                mini_lep = np.array(sample_array['MiniIso_lep'])
-                pf_lep = np.array(sample_array['RelIso_lep'])
-                sip3d_lep = np.array(sample_array['SIP3D_lep'])
-                pdgid_lep = np.array(sample_array['PDGID_lep'])
-                ch_lep = np.array(sample_array['Charge_lep'])
+                nlep        = np.array(sample_array['Nlep'])
+                phi_lep     = np.array(sample_array['Phi_lep'])
+                id_lep      = np.array(sample_array['ID_lep'])
+                pt_lep      = np.array(sample_array['PT_lep'])
+                mini_lep    = np.array(sample_array['MiniIso_lep'])
+                pf_lep      = np.array(sample_array['RelIso_lep'])
+                sip3d_lep   = np.array(sample_array['SIP3D_lep'])
+                pdgid_lep   = np.array(sample_array['PDGID_lep'])
+                ch_lep      = np.array(sample_array['Charge_lep'])
+                
                 #if 'SMS_T2_4bd_490' in sample:
                 #    weight = np.array([(137000 * 0.51848) / 1207007. for w in weight])
-                #else:
+                
                 if 'data' in sample:
                     weight = np.ones(len(weight))
                 elif '2016' in sample:
@@ -194,25 +197,25 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
 
 
                 zero_lep = nlep == 0 
-                one_lep = nlep == 1 
-                two_lep = nlep >= 2 
+                one_lep  = nlep == 1 
+                two_lep  = nlep >= 2 
                 ################        Medium       #####################
-                id_lep = np.array([lep[::2] for lep in id_lep])                
-                mini_lep = np.array([mini[lid>=3]*pt[lid>=3] for mini, lid, pt in zip(mini_lep, id_lep, pt_lep)])
-                pf_lep = np.array([pf[lid>=3]*pt[lid>=3] for pf, lid, pt in zip(pf_lep, id_lep, pt_lep)])
-                sip3d_lep = np.array([ips[lid>=3] for ips, lid in zip(sip3d_lep, id_lep)])
-                pt_lep = np.array([ips[lid>=3] for ips, lid in zip(pt_lep, id_lep)])
-                pdgid_lep = np.array([ips[lid>=3] for ips, lid in zip(pdgid_lep, id_lep)])
-                ch_lep = np.array([ips[lid>=3] for ips, lid in zip(ch_lep, id_lep)])
+                id_lep      = np.array([lep[::2] for lep in id_lep])                
+                mini_lep    = np.array([mini[lid>=3]*pt[lid>=3] for mini, lid, pt in zip(mini_lep, id_lep, pt_lep)])
+                pf_lep      = np.array([pf[lid>=3]*pt[lid>=3] for pf, lid, pt in zip(pf_lep, id_lep, pt_lep)])
+                sip3d_lep   = np.array([ips[lid>=3] for ips, lid in zip(sip3d_lep, id_lep)])
+                pt_lep      = np.array([ips[lid>=3] for ips, lid in zip(pt_lep, id_lep)])
+                pdgid_lep   = np.array([ips[lid>=3] for ips, lid in zip(pdgid_lep, id_lep)])
+                ch_lep      = np.array([ips[lid>=3] for ips, lid in zip(ch_lep, id_lep)])
 
                 iso_sip_check = np.array([(mini<4)*(pf<4)*(sip<2) for mini, pf, sip in zip(mini_lep, pf_lep, sip3d_lep)])
 
-                gold_2_mask = np.array([ True if len(pt[iso*(pt>24)]) == 2 and two else False for iso, two, pt in zip(iso_sip_check, two_lep, pt_lep)])
+                gold_2_mask  = np.array([ True if len(pt[iso*(pt>24)]) == 2 and two else False for iso, two, pt in zip(iso_sip_check, two_lep, pt_lep)])
                 gold_22_mask = np.array([ True if len(pt[iso]) == 2 and two else False for iso, two, pt in zip(iso_sip_check, two_lep, pt_lep)])
-                gold_1_mask = np.array([ True if len(iso[iso]) == 1 and one else False for iso, one in zip(iso_sip_check, one_lep)])
+                gold_1_mask  = np.array([ True if len(iso[iso]) == 1 and one else False for iso, one in zip(iso_sip_check, one_lep)])
               
-                n_mu = np.array([ len(lep[(np.abs(lep) == 13)*iso*(pt>25)]) for iso, lep, pt in zip(iso_sip_check, pdgid_lep, pt_lep)])
-                n_el = np.array([ len(lep[(np.abs(lep) == 11)*iso*(pt>24)]) for iso, lep, pt in zip(iso_sip_check, pdgid_lep, pt_lep)])
+                n_mu  = np.array([len(lep[(np.abs(lep) == 13)*iso*(pt>25)]) for iso, lep, pt in zip(iso_sip_check, pdgid_lep, pt_lep)])
+                n_el  = np.array([len(lep[(np.abs(lep) == 11)*iso*(pt>24)]) for iso, lep, pt in zip(iso_sip_check, pdgid_lep, pt_lep)])
                 n_pos = np.array([len(lep[(lep > 0)*iso*(pt>24)]) for iso, lep, pt in zip(iso_sip_check, ch_lep, pt_lep)])
                 n_neg = np.array([len(lep[(lep < 0)*iso*(pt>24)]) for iso, lep, pt in zip(iso_sip_check, ch_lep, pt_lep)])
 
@@ -220,32 +223,32 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
                 #c_sv = np.array([np.abs(sv)==4 for sv in flav_sv])
                 #light_sv = np.array([(np.abs(sv)!=5)*(np.abs(sv)!=4) for sv in flav_sv])                
 
-                risr_0p5 = risr > 0.5 
-                met_50 = met > 50.
-                met_l175 = met <= 175.
-                met_150 = met > 150.
-                met_175 = met > 175.
-                met_0 = met > 0.
-                ptisr_250 = ptisr > 250
-                metv = np.abs(dphimetv) < np.pi/2.
-                risr_l0p8 = risr < 0.8
-                one_el = n_el >= 1
-                one_mu = n_mu >= 1
-                one_pos = n_pos >= 1
-                one_neg = n_neg >= 1
+                risr_0p5    = risr > 0.5 
+                met_50      = met > 50.
+                met_l175    = met <= 175.
+                met_150     = met > 150.
+                met_175     = met > 175.
+                met_0       = met > 0.
+                ptisr_250   = ptisr > 250
+                metv        = np.abs(dphimetv) < np.pi/2.
+                risr_l0p8   = risr < 0.8
+                one_el      = n_el >= 1
+                one_mu      = n_mu >= 1
+                one_pos     = n_pos >= 1
+                one_neg     = n_neg >= 1
 
-                no_isrb = nbjet_isr < 1
-                one_bjet = nbjet == 1
-                jet_veto = nbjet = njet
+                no_isrb     = nbjet_isr < 1
+                one_bjet    = nbjet == 1
+                jet_veto    = nbjet = njet
 
-                ge_one_sv = nsv >= 1
+                ge_one_sv   = nsv >= 1
 
                 #pass_di_trig = emu_trig > 0
                 pass_met_trig = met_trig > 0
 
-                dphi_cut_75 = (ptcm<75)*(dphicmi<=np.pi/4)  # 400x - 400x^2 - y
-                dphi_cut_100 = (ptcm<100)*(dphicmi>(3*np.pi)/4)  # 400x - 400x^2 - y
-                dphi_cut_other = (ptcm>0)*((dphicmi > np.pi/4) * (dphicmi <= (3*np.pi)/4))
+                dphi_cut_75     = (ptcm<75)  * (dphicmi<=np.pi/4)  # 400x - 400x^2 - y
+                dphi_cut_100    = (ptcm<100) * (dphicmi>(3*np.pi)/4)  # 400x - 400x^2 - y
+                dphi_cut_other  = (ptcm>0)   * ((dphicmi > np.pi/4) * (dphicmi <= (3*np.pi)/4))
 
                 dphicmi_ptcm_cut = dphi_cut_100 + dphi_cut_75 + dphi_cut_other
 
@@ -268,23 +271,23 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
                 #evt_0lep_sv_selection_mask = np.all([met_175, zero_lep, no_isrb, ge_one_sv, pass_met_trig], axis=0)
 
                 selections = [
-                evt_base_selection_mask,
-                evt_base_sv_selection_mask,
-                evt_base_pre_selection_mask,
-                evt_base_pre_sv_selection_mask,
-                #evt_emu_lowmet_selection_mask,
-                #evt_emu_lowmet_sv_selection_mask,
-                #evt_emu_highmet_selection_mask,
-                #evt_emu_highmet_sv_selection_mask,
-                #evt_2lep_selection_mask,
-                #evt_2lep_sv_selection_mask,
-                #evt_1lep_selection_mask,
-                #evt_1lep_sv_selection_mask,
-                #evt_1lep_l0p8_selection_mask,
-                #evt_1lep_l0p8_sv_selection_mask,
-                #evt_0lep_selection_mask,
-                #evt_0lep_sv_selection_mask,
-                             ]
+                    evt_base_selection_mask,
+                    evt_base_sv_selection_mask,
+                    evt_base_pre_selection_mask,
+                    evt_base_pre_sv_selection_mask,
+                    #evt_emu_lowmet_selection_mask,
+                    #evt_emu_lowmet_sv_selection_mask,
+                    #evt_emu_highmet_selection_mask,
+                    #evt_emu_highmet_sv_selection_mask,
+                    #evt_2lep_selection_mask,
+                    #evt_2lep_sv_selection_mask,
+                    #evt_1lep_selection_mask,
+                    #evt_1lep_sv_selection_mask,
+                    #evt_1lep_l0p8_selection_mask,
+                    #evt_1lep_l0p8_sv_selection_mask,
+                    #evt_0lep_selection_mask,
+                    #evt_0lep_sv_selection_mask,
+                ]
           
                 for sel, sel_str in zip(selections, selections_str): 
                     if np.any(sel):
@@ -417,6 +420,11 @@ def main():
     # check that sample file was specified
     if not sample_file:
         print "ERROR: Please provide a file listing samples with the -f flag."
+        return
+    
+    # check that output file was specified
+    if not file_name:
+        print "ERROR: Please provide an output file with the -o flag."
         return
     
     # check that sample file exists

@@ -177,6 +177,11 @@ def main():
         print "ERROR: Please provide a file listing samples with the -f flag."
         return
     
+    # check that output file was specified
+    if not file_name:
+        print "ERROR: Please provide an output file with the -o flag."
+        return
+    
     # check that sample file exists
     if not os.path.isfile(sample_file):
         print("ERROR: The sample file \"{0}\" does not exist.".format(sample_file))
