@@ -290,12 +290,27 @@ if __name__ == "__main__":
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ZJetsToNuNu_HT-2500ToInf_13TeV-madgraph_Fall17_102X',
     ])
     ])
+    
     backgrounds_v2 = OrderedDict([ 
-        #('TTJets2017' , [
-        #    '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
-        #    '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
-        #    '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
-        #]),
+        ('TTJets2017' , [
+            '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+            '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+            '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+        ]),
+    ])
+    
+    # UNL
+    backgrounds_v3 = OrderedDict([ 
+        ('TTJets_FullSim_2017' , [
+            '/home/t3-ku/calebsmith/SUSY_analysis/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FullSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+        ]),
+        ('TTJets_FastSim_2017' , [
+            '/home/t3-ku/calebsmith/SUSY_analysis/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FastSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+        ]),
+    ])
+    
+    # CMS LPC
+    backgrounds_v4 = OrderedDict([ 
         ('TTJets_FullSim_2017' , [
             '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FullSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
         ]),
@@ -317,8 +332,7 @@ if __name__ == "__main__":
     
     files_per_job = 50
 
-    #background_list = process_the_samples(backgrounds_v1, None, None)
-    background_list = process_the_samples(backgrounds_v2, None, None)
+    background_list = process_the_samples(backgrounds_v3, None, None)
     
     #signal_list = process_the_samples(signals, None, None)
 
@@ -326,8 +340,7 @@ if __name__ == "__main__":
   
     working_dir = os.getcwd()
 
-    #output_dir = os.path.join(working_dir, 'output_condor_hists_b_eff_2D_proposal_'+date)
-    output_dir = os.path.join(working_dir, 'output_condor_hists_sv_2D_proposal_'+date)
+    output_dir = os.path.join(working_dir, 'output_condor_hists_2D_proposal_'+date)
     
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
