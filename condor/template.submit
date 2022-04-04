@@ -1,0 +1,12 @@
+universe = vanilla 
+executable = /uscms_data/d3/caleb/KU_Compressed_SUSY/CMSSW_10_6_5/src/SVTagging/output_condor_hists_sv_2D_proposal_28Mar22/exe/template.sh 
+getenv = True 
+Arguments = TTJets_FastSim_2017_files_$(Process).pkl output_background_TTJets_FastSim_2017_regions_28Mar22_$(Process)_b_eff.root 
+transfer_input_files = ../../python/make_b_eff_hists_batch.py, ../../python/file_table_functions.py, ../file_lists/TTJets_FastSim_2017_files_$(Process).pkl, /uscms/home/z374f439/nobackup/whatever_you_want/sandbox-CMSSW_10_6_5-6403d6f.tar.bz2, /uscms/home/z374f439/nobackup/whatever_you_want/cmssw_setup_connect.sh
+transfer_output_files = output_background_TTJets_FastSim_2017_regions_28Mar22_$(Process)_b_eff.root
+transfer_output_remaps = "output_background_TTJets_FastSim_2017_regions_28Mar22_$(Process)_b_eff.root = /uscms/home/caleb/nobackup/KU_Compressed_SUSY/CMSSW_10_6_5/src/SVTagging/output_condor_hists_sv_2D_proposal_28Mar22/out_files/b_eff/output_background_TTJets_FastSim_2017_regions_28Mar22_$(Process)_b_eff.root" 
+output = /uscms_data/d3/caleb/KU_Compressed_SUSY/CMSSW_10_6_5/src/SVTagging/output_condor_hists_sv_2D_proposal_28Mar22/out/output_background_TTJets_FastSim_2017_regions_28Mar22_$(Process)_b_eff.out 
+error = /uscms_data/d3/caleb/KU_Compressed_SUSY/CMSSW_10_6_5/src/SVTagging/output_condor_hists_sv_2D_proposal_28Mar22/err/output_background_TTJets_FastSim_2017_regions_28Mar22_$(Process)_b_eff.err 
+log = /uscms_data/d3/caleb/KU_Compressed_SUSY/CMSSW_10_6_5/src/SVTagging/output_condor_hists_sv_2D_proposal_28Mar22/log/output_background_TTJets_FastSim_2017_regions_28Mar22_$(Process)_b_eff.log 
+request_memory = 2000
+queue 1 
