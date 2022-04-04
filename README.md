@@ -36,7 +36,7 @@ Submit crab jobs with this script:
 ```
 python submitTreesLPC.py -c <config> -d <dir> -f <datasets>
 ```
-where <config> is a CMS config file, <dir> is a directory name for the crab submission, and <datasets> is a text file listing full dataset names with one dataset per line.
+where `<config>` is a CMS config file, `<dir>` is a directory name for the crab submission, and `<datasets>` is a text file listing full dataset names with one dataset per line.
 
 For example,
 ```
