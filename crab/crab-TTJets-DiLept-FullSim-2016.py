@@ -31,7 +31,7 @@ config.JobType.psetName = 'SUS-RunIISummer16NanoAODv7-cfg.py'
 config.JobType.outputFiles = ['TTJets-DiLept-FullSim-2016.root']
 config.JobType.disableAutomaticOutputCollection = True
 config.JobType.maxJobRuntimeMin = 3000
-config.JobType.maxMemoryMB = 4000
+config.JobType.maxMemoryMB = 2500
 
 # Note: slash required after <CERN-username> if <output-directory> is not provided
 #config.Data.outLFNDirBase = '/store/user/<CERN-username>/<output-directory>'
