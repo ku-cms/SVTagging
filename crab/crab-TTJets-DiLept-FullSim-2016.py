@@ -22,7 +22,7 @@ config = Configuration()
 config.section_('General')
 config.General.transferOutputs = True
 config.General.transferLogs = True
-config.General.requestName = 'crab-TTJets-DiLept-FullSim-2016'
+config.General.requestName = 'TTJets-DiLept-FullSim-2016'
 
 config.section_('JobType')
 config.JobType.allowUndistributedCMSSW = True
