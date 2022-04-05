@@ -52,7 +52,7 @@ python ${workdir}/make_SCRIPT_hists_batch.py --file_list $1 --out_file $2
 
 
 if __name__ == "__main__":
-    backgrounds = OrderedDict([ 
+    backgrounds_v1 = OrderedDict([ 
 #    ('data_muoneg'   , [
 #                    '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_Data_MuonEG_SVSF/MuonEG_Run2017B-02Apr2020-v1_2017_Fall17_102X',
 #                    '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_Data_MuonEG_SVSF/MuonEG_Run2017C-02Apr2020-v1_2017_Fall17_102X',
@@ -108,7 +108,7 @@ if __name__ == "__main__":
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-600toInf_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X',
-]),
+    ]),
 ##    ('Tot2017_isB' , [
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
@@ -150,7 +150,7 @@ if __name__ == "__main__":
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-600toInf_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X',
-##]),
+##    ]),
 ##    ('Tot2017_isC' , [
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
@@ -192,7 +192,7 @@ if __name__ == "__main__":
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-600toInf_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X',
-##]),
+##    ]),
 ##    ('Tot2017_isLight' , [
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
@@ -234,14 +234,14 @@ if __name__ == "__main__":
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-600toInf_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 ##                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_Fall17_102X',
-##]),
+##    ]),
     ('TTJets2017' , [
 #                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
 #                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTTT_TuneCP5_13TeV-amcatnlo-pythia8_Fall17_102X',
-]),
+    ]),
     ('TTV2017' , [
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_Fall17_102X',
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTWJetsToLNu_TuneCP5_PSweights_13TeV-amcatnloFXFX-madspin-pythia8_Fall17_102X',
@@ -249,10 +249,10 @@ if __name__ == "__main__":
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8_Fall17_102X',
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ttHToNonbb_M125_TuneCP5_13TeV-powheg-pythia8_Fall17_102X',
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ttHTobb_M125_TuneCP5_13TeV-powheg-pythia8_Fall17_102X',
-]),
+    ]),
     ('WJets2017' , [
                      '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
-]),
+    ]),
     ('VV2017', [ 
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/WWTo4Q_NNPDF31_TuneCP5_13TeV-powheg-pythia8_Fall17_102X',
@@ -266,7 +266,7 @@ if __name__ == "__main__":
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_Fall17_102X',
-]),
+    ]),
     ('ST2017', [
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ST_s-channel_4f_hadronicDecays_TuneCP5_13TeV-amcatnlo-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8_Fall17_102X',
@@ -274,7 +274,7 @@ if __name__ == "__main__":
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8_Fall17_102X',
-]),
+    ]),
     ('ZDY2017' , [
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-100to200_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/DYJetsToLL_M-4to50_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
@@ -288,8 +288,36 @@ if __name__ == "__main__":
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ZJetsToNuNu_HT-800To1200_13TeV-madgraph_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ZJetsToNuNu_HT-1200To2500_13TeV-madgraph_Fall17_102X',
                     '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/ZJetsToNuNu_HT-2500ToInf_13TeV-madgraph_Fall17_102X',
-])
-])
+    ])
+    ])
+    
+    backgrounds_v2 = OrderedDict([ 
+        ('TTJets2017' , [
+            '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+            '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+            '/home/t3-ku/erichjs/work/Ewkinos/NTUPLES/Fall17_102X_SVSF/TTJets_SingleLeptFromTbar_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+        ]),
+    ])
+    
+    # UNL
+    backgrounds_v3 = OrderedDict([ 
+        ('TTJets_FullSim_2017' , [
+            '/home/t3-ku/calebsmith/SUSY_analysis/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FullSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+        ]),
+        ('TTJets_FastSim_2017' , [
+            '/home/t3-ku/calebsmith/SUSY_analysis/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FastSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+        ]),
+    ])
+    
+    # CMS LPC
+    backgrounds_v4 = OrderedDict([ 
+        ('TTJets_FullSim_2017' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FullSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+        ]),
+        ('TTJets_FastSim_2017' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FastSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+        ]),
+    ])
 
     #regions = [
     #            # 'b_eff', 
@@ -299,19 +327,20 @@ if __name__ == "__main__":
     #]
     
     #regions = ['b_eff']
-    regions = ['sv']
+    #regions = ['sv']
+    regions = ['b_eff', 'sv']
     
     files_per_job = 50
 
-    background_list = process_the_samples(backgrounds, None, None)
+    background_list = process_the_samples(backgrounds_v3, None, None)
+    
     #signal_list = process_the_samples(signals, None, None)
 
     file_name_base = 'output_{}_regions_'+date+'_{}.root'
   
     working_dir = os.getcwd()
 
-    #output_dir = os.path.join(working_dir, 'output_condor_hists_b_eff_2D_proposal_'+date)
-    output_dir = os.path.join(working_dir, 'output_condor_hists_sv_2D_proposal_'+date)
+    output_dir = os.path.join(working_dir, 'output_condor_hists_2D_proposal_'+date)
     
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
