@@ -37,7 +37,7 @@ config.JobType.maxMemoryMB = 2500
 #config.Data.outLFNDirBase = '/store/group/<group-name>/<output-directory>'
 config.section_('Data')
 config.Data.inputDataset = '/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM'
-config.Data.outLFNDirBase = '/store/group/lpcsusylep/NANO_SVSF'
+config.Data.outLFNDirBase = '/store/group/lpcsusylep/NANO_SVSF_v2'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 config.Data.publication = False
