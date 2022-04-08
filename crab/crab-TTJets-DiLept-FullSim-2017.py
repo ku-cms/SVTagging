@@ -19,7 +19,7 @@ config = Configuration()
 # When Data.splitting = 'Automatic', Data.unitsPerJob represents the jobs target runtime in minutes,
 # and its minimum allowed value is 180 (i.e. 3 hours).
 config.section_('General')
-config.General.requestName = 'TTJets-DiLept-FullSim-2017'
+config.General.requestName = 'TTJets-DiLept-FullSim-2017-v2'
 config.General.transferOutputs = True
 config.General.transferLogs = True
 
