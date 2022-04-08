@@ -39,7 +39,7 @@ config.section_('Data')
 config.Data.inputDataset = '/TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM'
 config.Data.outLFNDirBase = '/store/group/lpcsusylep/NANO_SVSF'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 2
+config.Data.unitsPerJob = 1
 config.Data.publication = False
 config.Data.ignoreLocality = False
 
