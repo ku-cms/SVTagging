@@ -19,7 +19,7 @@ config = Configuration()
 # When Data.splitting = 'Automatic', Data.unitsPerJob represents the jobs target runtime in minutes,
 # and its minimum allowed value is 180 (i.e. 3 hours).
 config.section_('General')
-config.General.requestName = 'TTJets-DiLept-FastSim-2017'
+config.General.requestName = 'TTJets-DiLept-FastSim-2017-v2'
 config.General.transferOutputs = True
 config.General.transferLogs = True
 
@@ -37,7 +37,7 @@ config.JobType.maxMemoryMB = 2500
 #config.Data.outLFNDirBase = '/store/group/<group-name>/<output-directory>'
 config.section_('Data')
 config.Data.inputDataset = '/TTJets_DiLept_TuneCP2_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PUFall17Fast_lhe_94X_mc2017_realistic_v15-v1/MINIAODSIM'
-config.Data.outLFNDirBase = '/store/group/lpcsusylep/NANO_SVSF'
+config.Data.outLFNDirBase = '/store/group/lpcsusylep/NANO_SVSF_v2'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 config.Data.publication = False
