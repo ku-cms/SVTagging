@@ -332,7 +332,7 @@ if __name__ == "__main__":
     
     files_per_job = 50
 
-    background_list = process_the_samples(backgrounds_v3, None, None)
+    background_list = process_the_samples(backgrounds_v1, None, None)
     
     #signal_list = process_the_samples(signals, None, None)
 

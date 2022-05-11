@@ -188,7 +188,8 @@ def main():
         return
 
     sample_list = pickle.load(open(sample_file, "rb"))
-    variables = ['MET', 'PTISR', 'RISR', 'NSV','PT_SV', 'Eta_SV', 'M_SV', 'Ndof_SV', 'ProbB_SV', 'D3d_SV', 'D3dSig_SV', 'Dxy_SV', 'CosTheta_SV', 'Flavor_SV']
+    #variables = ['MET', 'PTISR', 'RISR', 'NSV','PT_SV', 'Eta_SV', 'M_SV', 'Ndof_SV', 'ProbB_SV', 'D3d_SV', 'D3dSig_SV', 'Dxy_SV', 'CosTheta_SV', 'Flavor_SV']
+    variables = ['MET', 'PTISR', 'RISR', 'NSV','PT_SV', 'Eta_SV', 'M_SV', 'ProbB_SV']
 
     start_b = time.time()    
 
