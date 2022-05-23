@@ -111,7 +111,7 @@ def make_2D_plots(hists_, suffix_):
 
 
 def make_overlay_plot(hists_, suffix_, output_name_):
-    print 'make_overlay_plot(): start'
+    print("make_overlay_plot(): start")
     hists_tmp = OrderedDict()
     plot_dir = './plots_' + output_name_ + '_' + date
     print("plot_dir: {0}".format(plot_dir))
@@ -926,6 +926,7 @@ def read_in_hists(in_file_):
     return hists 
 
 def make_new_hists(hists_):
+    print("make_new_hists(): start")
     temp_new = OrderedDict()
     for sample in hists_:
         temp_new[sample] = OrderedDict()
@@ -1025,12 +1026,26 @@ if __name__ == "__main__":
     # old 2017 version
     #background_file = 'data/output_background_hist_sv_b_eff_09Dec20.root'
     # run 2 version
-    background_file = 'output_background_hist_b_eff_TTJets_FastSim_2016_17May22.root'
-    b_hists = read_in_hists(background_file)
+
+    
+    #background_file = 'output_background_hist_b_eff_TTJets_FastSim_2016_17May22.root'
+    #output_name = "TTJets_FastSim_2016"
     #suffix = 'regions'
+    
     suffix = 'eff'
-    b_hists_new = make_new_hists(b_hists)
-    #print b_hists_new
-    output_name = "TTJets_FastSim_2016"
-    make_overlay_plot(b_hists_new, suffix, output_name)
+    file_map = {
+        "TTJets_FastSim_2016" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2016.root",
+        "TTJets_FastSim_2017" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2017.root",
+        "TTJets_FastSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2018.root",
+        "TTJets_FullSim_2016" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2016.root",
+        "TTJets_FullSim_2017" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2017.root",
+        "TTJets_FullSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
+    }
+    
+    for output_name in file_map:
+        print(" - Process {0}".format(output_name))
+        background_file = file_map[output_name]
+        b_hists         = read_in_hists(background_file)
+        b_hists_new     = make_new_hists(b_hists)
+        make_overlay_plot(b_hists_new, suffix, output_name)
     
