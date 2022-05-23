@@ -6,7 +6,7 @@ from plotting_susy_cff import sample_configurables as sc
 import imp, os
 
 date = strftime('%d%b%y', localtime())
-date = date + '_eff'
+#date = date + '_eff'
 
 rt.gROOT.SetBatch()
 rt.gROOT.SetStyle('Plain')
@@ -49,9 +49,12 @@ def make_2D_plots(hists_, suffix_):
             if not (os.path.isdir('./plots_'+date+'/'+sample+'/'+tree)): os.mkdir(os.path.join('./plots_'+date, sample, tree))
             out_dir = os.path.join('./plots_'+date, sample, tree)
             for hist_name, hist in hists_[sample][tree].items():
-                if not hist.InheritsFrom(rt.TH2.Class()): continue
-                if not hist.GetEntries() > 0.: continue                 
-                if hist_name not in pc: continue
+                if not hist.InheritsFrom(rt.TH2.Class()):
+                    continue
+                if not hist.GetEntries() > 0.:
+                    continue                 
+                if hist_name not in pc:
+                    continue
                 can = make_me_a_canvas()
                 can.cd() 
                 #if 'N' not in hist_name.split('_')[0]: hist.RebinX(2)
@@ -107,10 +110,11 @@ def make_2D_plots(hists_, suffix_):
                 can.SaveAs(out_dir+'/h_'+hist.GetName()+'_'+suffix_+'.pdf')
 
 
-def make_overlay_plot(hists_, suffix_):
-    print 'for posterity'
+def make_overlay_plot(hists_, suffix_, output_name_):
+    print("make_overlay_plot(): start")
     hists_tmp = OrderedDict()
-    plot_dir = './plots_' + date
+    plot_dir = './plots_' + output_name_ + '_' + date
+    print("plot_dir: {0}".format(plot_dir))
     if not (os.path.isdir(plot_dir)):
         os.mkdir(plot_dir)
     out_dir = os.path.join(plot_dir)
@@ -150,7 +154,8 @@ def make_overlay_plot(hists_, suffix_):
         leg.SetFillStyle(0)
         for sample in hists_tmp[hist]:
             for itr, tree in enumerate(hists_tmp[hist][sample]):
-                if int(hists_tmp[hist][sample][tree].GetEntries()) == 0: continue
+                if int(hists_tmp[hist][sample][tree].GetEntries()) == 0:
+                    continue
                 hists_tmp[hist][sample][tree].SetLineColor(sc[sample]['color']+itr*2)
                 hists_tmp[hist][sample][tree].SetLineStyle(sc[sample]['style'])
                 hists_tmp[hist][sample][tree].SetLineWidth(sc[sample]['width'])
@@ -813,7 +818,7 @@ def make_data_stacked_plots(data_, hists_, sig_hists_ = None, print_plots = True
 
 
 def make_1D_plots(hists_, suffix_):
-    print 'some more posterity here'
+    print("make_1D_plots(): start")
     tdrstyle.setTDRStyle()
     if not (os.path.isdir('./plots_'+date)): os.mkdir('./plots_'+date)
     for sample in hists_:
@@ -865,13 +870,17 @@ def make_1D_plots(hists_, suffix_):
                 can.SaveAs(out_dir+'/h_'+hist.GetName()+'_'+suffix_+'.pdf')
 
 def read_in_hists(in_file_):
-    print 'look at all that posterity' 
+    USE_OLD_VERSION = False
+    print("read_in_hists(): start")
     in_file = rt.TFile(in_file_, 'r')
     hists = OrderedDict()
     for key in in_file.GetListOfKeys():
         print key.GetName()
         key_name = key.GetName()
-        if key_name not in sc: continue
+        # WARNING: key_name is skipped if it is not in sc
+        if key_name not in sc:
+            print("The key_name '{0}' is not in 'sc'. Skipping!".format(key_name))
+            continue
         sample_dir = in_file.Get(key.GetName())
         hists[key_name] = OrderedDict()
         for tree_key in sample_dir.GetListOfKeys():
@@ -883,6 +892,13 @@ def read_in_hists(in_file_):
                 print hist_key.GetName()
                 hist_name = hist_key.GetName()
                 hist = tree_dir.Get(hist_key.GetName())
+                # debugging
+                #print("key_name: {0}".format(key_name))
+                #print("tree_name: {0}".format(tree_name))
+                #print("hist_name: {0}".format(hist_name))
+                #print("split: {0}".format(hist_name.split('_')))
+                #print("start: {0}".format(hist_name.split('_')[:-5]))
+                #print("joined: {0}".format('_'.join(hist_name.split('_')[:-5])))
                 if 'SMST2bW' in key_name or 'SMST2tt' in key_name:
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-4])] = hist
                 elif 'SMS_T2_' in key_name:
@@ -897,18 +913,29 @@ def read_in_hists(in_file_):
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-5])] = hist
                 #elif 'DY' in key_name:
                 #    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-2])] = hist
-		elif '2017' in key_name:
+                # old 2017 version
+                # WARNING: [:-3] required for old version
+                elif USE_OLD_VERSION and '2017' in key_name:
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-3])] = hist
+                # current version for run 2:
+                # WARNING: [:-5] required for new version
                 else:
-                    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-2])] = hist
+                    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-5])] = hist
+    # debugging
+    # print(" --- hists (start) --- ")
+    # for key in hists:
+    #     print("{0}: {1}".format(key, len(hists[key])))
+    # print(" --- hists (end) --- ")
     return hists 
 
 def make_new_hists(hists_):
+    print("make_new_hists(): start")
     temp_new = OrderedDict()
     for sample in hists_:
         temp_new[sample] = OrderedDict()
         for tree in hists_[sample]:
-            if '4bd' in sample and sample.split('_')[1] not in tree: continue
+            if '4bd' in sample and sample.split('_')[1] not in tree:
+                continue
             temp_new[sample][tree] = OrderedDict()
             for hist_name, hist in hists_[sample][tree].items():
                 new_hist = None
@@ -990,14 +1017,6 @@ if __name__ == "__main__":
     #background_file = 'output_background_hist_dphimetv_3Dec20.root'
     #background_file = 'output_background_hist_sv_b_eff_09Dec20.root'
     
-    background_file = 'data/output_background_hist_sv_b_eff_09Dec20.root'
-    b_hists = read_in_hists(background_file)
-    #suffix = 'regions'
-    suffix = 'eff'
-    b_hists_new = make_new_hists(b_hists)
-    print b_hists_new
-    make_overlay_plot(b_hists_new, suffix)
-    
     #print b_hists
     #make_1D_plots(b_hists, suffix)
     #make_stacked_plots(b_hists, sig_hists, True, suffix)
@@ -1006,4 +1025,37 @@ if __name__ == "__main__":
     #make_overlay_plot(b_hists_new, suffix)
     #make_2D_plots(sig_hists, suffix)
     #make_2D_plots(b_hists, suffix)
+    
+    # old 2017 version
+    #background_file = 'data/output_background_hist_sv_b_eff_09Dec20.root'
+    # run 2 version
+
+    
+    #background_file = 'output_background_hist_b_eff_TTJets_FastSim_2016_17May22.root'
+    #output_name = "TTJets_FastSim_2016"
+    #suffix = 'regions'
+    
+    suffix = 'eff'
+    # old input from Erich (full sim 2017, all backgrounds)
+    file_map_v1 = {
+        "Old_Tot2017" : "data/output_background_hist_sv_b_eff_09Dec20.root",
+    }
+    # new inputs from Caleb (fast/full sim, 2016, 2017, 2018, only TTJets DiLepton)
+    file_map_v2 = {
+        "TTJets_FastSim_2016" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2016.root",
+        "TTJets_FastSim_2017" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2017.root",
+        "TTJets_FastSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2018.root",
+        "TTJets_FullSim_2016" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2016.root",
+        "TTJets_FullSim_2017" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2017.root",
+        "TTJets_FullSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
+    }
+
+    the_map = file_map_v2
+    
+    for output_name in the_map:
+        print(" - Process {0}".format(output_name))
+        background_file = the_map[output_name]
+        b_hists         = read_in_hists(background_file)
+        b_hists_new     = make_new_hists(b_hists)
+        make_overlay_plot(b_hists_new, suffix, output_name)
     

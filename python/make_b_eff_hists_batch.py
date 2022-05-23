@@ -189,14 +189,14 @@ def main():
 
     sample_list = pickle.load(open(sample_file, "rb"))
     variables = ['MET', 'PTISR', 'RISR', 'NSV','PT_SV', 'Eta_SV', 'M_SV', 'Ndof_SV', 'ProbB_SV', 'D3d_SV', 'D3dSig_SV', 'Dxy_SV', 'CosTheta_SV', 'Flavor_SV']
+    #variables = ['MET', 'PTISR', 'RISR', 'NSV','PT_SV', 'Eta_SV', 'M_SV', 'ProbB_SV']
 
-    start_b = time.time()    
-
+    start_time = time.time()    
     hist_sample = get_histograms(sample_list, variables, None)
-
     write_hists_to_file(hist_sample, file_name) 
-    stop_b = time.time()
-    print "total:      ", stop_b - start_b
+    stop_time = time.time()
+    run_time = stop_time - start_time
+    print "run time: {0:.2f}".format(run_time)
 
 if __name__ == "__main__":
     main()

@@ -26,6 +26,7 @@ def get_tree_info_singular(sample_, file_name_, tree_name_, variable_list_, cuts
     tmp_t = tmp_f.Get(tree_name_)
     tmp_array = None
     if bool(tmp_t) and tmp_t.InheritsFrom(rt.TTree.Class()): 
+        print("sample_: {0}, file_name_: {1}, tree_name_: {2}, variable_list_: {3}, cuts_to_apply_: {4}".format(sample_, file_name_, tree_name_, variable_list_, cuts_to_apply_))
         tmp_array = rnp.tree2array(tmp_t, branches=variable_list_, selection=cuts_to_apply_)
     else:
         print('tree: ' + tree_name_ + ' is not a tree, skipping')
@@ -315,10 +316,5 @@ def write_table_deperecated(table_array_, table_w_array_, table_name_):
         t.write('\n')
         t.writelines(out_w_lines)
         t.close()
-
-
-
-        
-     
 
 
