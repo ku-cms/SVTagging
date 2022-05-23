@@ -189,6 +189,7 @@ sample_configurables = {
              },
 
 #Flavors
+# Old 2017
 'Tot2017_isB'   : {
   'legend' : 'B Flavor SVs',
   'color'  : rt.kRed,
@@ -196,7 +197,7 @@ sample_configurables = {
   'width'  : 3,
   'fill'   : rt.kRed,
   'fill_style'   : 1001,
-             },
+},
 'Tot2017_isC'   : {
   'legend' : 'C Flavor SVs',
   'color'  : rt.kCyan,
@@ -204,7 +205,7 @@ sample_configurables = {
   'width'  : 3,
   'fill'   : rt.kCyan,
   'fill_style'   : 3005,
-             },
+},
 'Tot2017_isLight'   : {
   'legend' : 'Light Flavor SVs',
   'color'  : rt.kBlue,
@@ -212,7 +213,32 @@ sample_configurables = {
   'width'  : 3,
   'fill'   : rt.kBlue,
   'fill_style'   : 3004,
-             },
+},
+# New Run 2 
+'TTJets_FastSim_2016_isB'   : {
+  'legend' : 'B Flavor SVs',
+  'color'  : rt.kRed,
+  'style'  : 1,
+  'width'  : 3,
+  'fill'   : rt.kRed,
+  'fill_style'   : 1001,
+},
+'TTJets_FastSim_2016_isC'   : {
+  'legend' : 'C Flavor SVs',
+  'color'  : rt.kCyan,
+  'style'  : 1,
+  'width'  : 3,
+  'fill'   : rt.kCyan,
+  'fill_style'   : 3005,
+},
+'TTJets_FastSim_2016_isLight'   : {
+  'legend' : 'Light Flavor SVs',
+  'color'  : rt.kBlue,
+  'style'  : 1,
+  'width'  : 3,
+  'fill'   : rt.kBlue,
+  'fill_style'   : 3004,
+},
 #'TTJets2017_isB'   : {
 #  'legend' : 't#bar{t}+jets b',
 #  'color'  : rt.kGreen+3,
