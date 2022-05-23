@@ -6,7 +6,7 @@ from plotting_susy_cff import sample_configurables as sc
 import imp, os
 
 date = strftime('%d%b%y', localtime())
-date = date + '_eff'
+#date = date + '_eff'
 
 rt.gROOT.SetBatch()
 rt.gROOT.SetStyle('Plain')
@@ -110,10 +110,11 @@ def make_2D_plots(hists_, suffix_):
                 can.SaveAs(out_dir+'/h_'+hist.GetName()+'_'+suffix_+'.pdf')
 
 
-def make_overlay_plot(hists_, suffix_):
+def make_overlay_plot(hists_, suffix_, output_name_):
     print 'make_overlay_plot(): start'
     hists_tmp = OrderedDict()
-    plot_dir = './plots_' + date
+    plot_dir = './plots_' + output_name_ + '_' + date
+    print("plot_dir: {0}".format(plot_dir))
     if not (os.path.isdir(plot_dir)):
         os.mkdir(plot_dir)
     out_dir = os.path.join(plot_dir)
@@ -890,12 +891,13 @@ def read_in_hists(in_file_):
                 print hist_key.GetName()
                 hist_name = hist_key.GetName()
                 hist = tree_dir.Get(hist_key.GetName())
-                print("key_name: {0}".format(key_name))
-                print("tree_name: {0}".format(tree_name))
-                print("hist_name: {0}".format(hist_name))
-                print("split: {0}".format(hist_name.split('_')))
-                print("start: {0}".format(hist_name.split('_')[:-5]))
-                print("joined: {0}".format('_'.join(hist_name.split('_')[:-5])))
+                # debugging
+                #print("key_name: {0}".format(key_name))
+                #print("tree_name: {0}".format(tree_name))
+                #print("hist_name: {0}".format(hist_name))
+                #print("split: {0}".format(hist_name.split('_')))
+                #print("start: {0}".format(hist_name.split('_')[:-5]))
+                #print("joined: {0}".format('_'.join(hist_name.split('_')[:-5])))
                 if 'SMST2bW' in key_name or 'SMST2tt' in key_name:
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-4])] = hist
                 elif 'SMS_T2_' in key_name:
@@ -910,14 +912,17 @@ def read_in_hists(in_file_):
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-5])] = hist
                 #elif 'DY' in key_name:
                 #    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-2])] = hist
-                elif '2017' in key_name:
-                    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-3])] = hist
+                # old 2017 version
+                #elif '2017' in key_name:
+                #    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-3])] = hist
+                # current version for run 2:
                 else:
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-5])] = hist
-    print(" --- hists (start) --- ")
-    for key in hists:
-        print("{0}: {1}".format(key, len(hists[key])))
-    print(" --- hists (end) --- ")
+    # debugging
+    # print(" --- hists (start) --- ")
+    # for key in hists:
+    #     print("{0}: {1}".format(key, len(hists[key])))
+    # print(" --- hists (end) --- ")
     return hists 
 
 def make_new_hists(hists_):
@@ -1015,7 +1020,8 @@ if __name__ == "__main__":
     suffix = 'eff'
     b_hists_new = make_new_hists(b_hists)
     #print b_hists_new
-    make_overlay_plot(b_hists_new, suffix)
+    output_name = "TTJets_FastSim_2016"
+    make_overlay_plot(b_hists_new, suffix, output_name)
     
     #print b_hists
     #make_1D_plots(b_hists, suffix)
