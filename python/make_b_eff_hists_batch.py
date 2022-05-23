@@ -192,13 +192,11 @@ def main():
     #variables = ['MET', 'PTISR', 'RISR', 'NSV','PT_SV', 'Eta_SV', 'M_SV', 'ProbB_SV']
 
     start_time = time.time()    
-
     hist_sample = get_histograms(sample_list, variables, None)
-
     write_hists_to_file(hist_sample, file_name) 
     stop_time = time.time()
-    total_time = stop_time - start_time
-    print "total time: {0:.2f}".format(total_time)
+    run_time = stop_time - start_time
+    print "run time: {0:.2f}".format(run_time)
 
 if __name__ == "__main__":
     main()

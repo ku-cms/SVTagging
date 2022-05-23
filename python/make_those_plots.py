@@ -1013,16 +1013,6 @@ if __name__ == "__main__":
     #background_file = 'output_background_hist_dphimetv_3Dec20.root'
     #background_file = 'output_background_hist_sv_b_eff_09Dec20.root'
     
-    #background_file = 'data/output_background_hist_sv_b_eff_09Dec20.root'
-    background_file = 'output_background_hist_b_eff_TTJets_FastSim_2016_17May22.root'
-    b_hists = read_in_hists(background_file)
-    #suffix = 'regions'
-    suffix = 'eff'
-    b_hists_new = make_new_hists(b_hists)
-    #print b_hists_new
-    output_name = "TTJets_FastSim_2016"
-    make_overlay_plot(b_hists_new, suffix, output_name)
-    
     #print b_hists
     #make_1D_plots(b_hists, suffix)
     #make_stacked_plots(b_hists, sig_hists, True, suffix)
@@ -1031,4 +1021,16 @@ if __name__ == "__main__":
     #make_overlay_plot(b_hists_new, suffix)
     #make_2D_plots(sig_hists, suffix)
     #make_2D_plots(b_hists, suffix)
+    
+    # old 2017 version
+    #background_file = 'data/output_background_hist_sv_b_eff_09Dec20.root'
+    # run 2 version
+    background_file = 'output_background_hist_b_eff_TTJets_FastSim_2016_17May22.root'
+    b_hists = read_in_hists(background_file)
+    #suffix = 'regions'
+    suffix = 'eff'
+    b_hists_new = make_new_hists(b_hists)
+    #print b_hists_new
+    output_name = "TTJets_FastSim_2016"
+    make_overlay_plot(b_hists_new, suffix, output_name)
     
