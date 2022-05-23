@@ -870,6 +870,7 @@ def make_1D_plots(hists_, suffix_):
                 can.SaveAs(out_dir+'/h_'+hist.GetName()+'_'+suffix_+'.pdf')
 
 def read_in_hists(in_file_):
+    USE_OLD_VERSION = False
     print("read_in_hists(): start")
     in_file = rt.TFile(in_file_, 'r')
     hists = OrderedDict()
@@ -913,9 +914,11 @@ def read_in_hists(in_file_):
                 #elif 'DY' in key_name:
                 #    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-2])] = hist
                 # old 2017 version
-                #elif '2017' in key_name:
-                #    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-3])] = hist
+                # WARNING: [:-3] required for old version
+                elif USE_OLD_VERSION and '2017' in key_name:
+                    hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-3])] = hist
                 # current version for run 2:
+                # WARNING: [:-5] required for new version
                 else:
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-5])] = hist
     # debugging
@@ -1033,7 +1036,12 @@ if __name__ == "__main__":
     #suffix = 'regions'
     
     suffix = 'eff'
-    file_map = {
+    # old input from Erich (full sim 2017, all backgrounds)
+    file_map_v1 = {
+        "Old_Tot2017" : "data/output_background_hist_sv_b_eff_09Dec20.root",
+    }
+    # new inputs from Caleb (fast/full sim, 2016, 2017, 2018, only TTJets DiLepton)
+    file_map_v2 = {
         "TTJets_FastSim_2016" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2016.root",
         "TTJets_FastSim_2017" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2017.root",
         "TTJets_FastSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2018.root",
@@ -1041,10 +1049,12 @@ if __name__ == "__main__":
         "TTJets_FullSim_2017" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2017.root",
         "TTJets_FullSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
+
+    the_map = file_map_v2
     
-    for output_name in file_map:
+    for output_name in the_map:
         print(" - Process {0}".format(output_name))
-        background_file = file_map[output_name]
+        background_file = the_map[output_name]
         b_hists         = read_in_hists(background_file)
         b_hists_new     = make_new_hists(b_hists)
         make_overlay_plot(b_hists_new, suffix, output_name)
