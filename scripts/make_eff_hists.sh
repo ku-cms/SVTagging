@@ -3,8 +3,10 @@
 # Caleb J. Smith
 # May 23, 2022
 
-input_dir=output_condor_hists_2D_proposal_23May22
-output_dir=output_files_23May22
+# Script to run make_b_eff_hists_batch.py and then ahadd.py
+
+input_dir=output_condor_hists_2D_proposal_24May22
+output_dir=output_files_24May22
 
 # delete directory if it exists
 if [ -d ${output_dir} ]; then

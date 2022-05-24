@@ -312,10 +312,10 @@ if __name__ == "__main__":
     # CMS LPC
     backgrounds_v4 = OrderedDict([ 
         ('TTJets_FullSim_2017' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FullSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v1/Fall17_102X_SVSF/TTJets_DiLept_FullSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
         ]),
         ('TTJets_FastSim_2017' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/Fall17_102X_SVSF/TTJets_DiLept_FastSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v1/Fall17_102X_SVSF/TTJets_DiLept_FastSim_TuneCP5_13TeV-madgraphMLM-pythia8_Fall17_102X',
         ]),
     ])
     
@@ -323,60 +323,120 @@ if __name__ == "__main__":
     backgrounds_v5 = OrderedDict([ 
         # samples for isB
         ('TTJets_FullSim_2016_isB' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2016',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2016',
         ]),
         ('TTJets_FullSim_2017_isB' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2017',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2017',
         ]),
         ('TTJets_FullSim_2018_isB' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2018',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2018',
         ]),
         ('TTJets_FastSim_2016_isB' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2016',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2016',
         ]),
         ('TTJets_FastSim_2017_isB' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2017',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2017',
         ]),
         ('TTJets_FastSim_2018_isB' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2018',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2018',
         ]),
         # samples for isC
         ('TTJets_FullSim_2016_isC' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2016',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2016',
         ]),
         ('TTJets_FullSim_2017_isC' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2017',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2017',
         ]),
         ('TTJets_FullSim_2018_isC' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2018',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2018',
         ]),
         ('TTJets_FastSim_2016_isC' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2016',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2016',
         ]),
         ('TTJets_FastSim_2017_isC' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2017',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2017',
         ]),
         ('TTJets_FastSim_2018_isC' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2018',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2018',
         ]),
         # samples for isLight
         ('TTJets_FullSim_2016_isLight' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2016',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2016',
         ]),
         ('TTJets_FullSim_2017_isLight' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2017',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2017',
         ]),
         ('TTJets_FullSim_2018_isLight' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FullSim_2018',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FullSim_2018',
         ]),
         ('TTJets_FastSim_2016_isLight' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2016',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2016',
         ]),
         ('TTJets_FastSim_2017_isLight' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2017',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2017',
         ]),
         ('TTJets_FastSim_2018_isLight' , [
-            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF/FastSim_2018',
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v5/FastSim_2018',
+        ]),
+    ])
+    
+    backgrounds_v6 = OrderedDict([ 
+        # samples for isB
+        ('TTJets_FullSim_2016_isB' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2016',
+        ]),
+        ('TTJets_FullSim_2017_isB' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2017',
+        ]),
+        ('TTJets_FullSim_2018_isB' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2018',
+        ]),
+        ('TTJets_FastSim_2016_isB' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2016',
+        ]),
+        ('TTJets_FastSim_2017_isB' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2017',
+        ]),
+        ('TTJets_FastSim_2018_isB' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2018',
+        ]),
+        # samples for isC
+        ('TTJets_FullSim_2016_isC' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2016',
+        ]),
+        ('TTJets_FullSim_2017_isC' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2017',
+        ]),
+        ('TTJets_FullSim_2018_isC' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2018',
+        ]),
+        ('TTJets_FastSim_2016_isC' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2016',
+        ]),
+        ('TTJets_FastSim_2017_isC' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2017',
+        ]),
+        ('TTJets_FastSim_2018_isC' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2018',
+        ]),
+        # samples for isLight
+        ('TTJets_FullSim_2016_isLight' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2016',
+        ]),
+        ('TTJets_FullSim_2017_isLight' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2017',
+        ]),
+        ('TTJets_FullSim_2018_isLight' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FullSim_2018',
+        ]),
+        ('TTJets_FastSim_2016_isLight' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2016',
+        ]),
+        ('TTJets_FastSim_2017_isLight' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2017',
+        ]),
+        ('TTJets_FastSim_2018_isLight' , [
+            '/uscms/home/caleb/nobackup/KU_Compressed_SUSY/samples/NTUPLES_SVSF_v6/FastSim_2018',
         ]),
     ])
 
@@ -393,7 +453,7 @@ if __name__ == "__main__":
     
     files_per_job = 50
 
-    background_list = process_the_samples(backgrounds_v5, None, None)
+    background_list = process_the_samples(backgrounds_v6, None, None)
     
     #signal_list = process_the_samples(signals, None, None)
 

@@ -1041,7 +1041,8 @@ if __name__ == "__main__":
         "Old_Tot2017" : "data/output_background_hist_sv_b_eff_09Dec20.root",
     }
     # new inputs from Caleb (fast/full sim, 2016, 2017, 2018, only TTJets DiLepton)
-    file_map_v2 = {
+    # v5 ntuples
+    file_map_v5 = {
         "TTJets_FastSim_2016" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2016.root",
         "TTJets_FastSim_2017" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2017.root",
         "TTJets_FastSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FastSim_2018.root",
@@ -1049,8 +1050,17 @@ if __name__ == "__main__":
         "TTJets_FullSim_2017" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2017.root",
         "TTJets_FullSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
+    # v6 ntuples
+    file_map_v6 = {
+        "TTJets_FastSim_2016" : "output_files_24May22/output_background_hist_b_eff_TTJets_FastSim_2016.root",
+        "TTJets_FastSim_2017" : "output_files_24May22/output_background_hist_b_eff_TTJets_FastSim_2017.root",
+        "TTJets_FastSim_2018" : "output_files_24May22/output_background_hist_b_eff_TTJets_FastSim_2018.root",
+        "TTJets_FullSim_2016" : "output_files_24May22/output_background_hist_b_eff_TTJets_FullSim_2016.root",
+        "TTJets_FullSim_2017" : "output_files_24May22/output_background_hist_b_eff_TTJets_FullSim_2017.root",
+        "TTJets_FullSim_2018" : "output_files_24May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
+    }
 
-    the_map = file_map_v2
+    the_map = file_map_v6
     
     for output_name in the_map:
         print(" - Process {0}".format(output_name))
