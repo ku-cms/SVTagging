@@ -1,6 +1,9 @@
 # quick_ratio.py
 
 import ROOT
+import numpy as np
+
+ROOT.gROOT.SetBatch()
 
 def getHisto(f_name, h_name):
     f = ROOT.TFile(f_name)
@@ -14,6 +17,12 @@ def plot(h_num, h_den, plot_name):
     h_ratio.Divide(h_den)
     h_ratio.Draw()
     c.SaveAs(plot_name + ".pdf")
+
+def getBinValues(hist, start_bin, end_bin):
+    values = []
+    for i in range(start_bin, end_bin + 1, 1):
+        values.append(hist.GetBinContent(i))
+    return values
 
 def plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name):
     plot_dir = "plots_FastOverFull"
@@ -30,6 +39,17 @@ def plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name):
     h_ratio = h_num.Clone("h_ratio")
     h_ratio.Divide(h_den)
     h_ratio.Draw()
+    # define start/end separated for PT, Eta
+    start_bin = 1
+    end_bin   = h_ratio.GetNbinsX()
+    if "isC" in plot_name:
+        start_bin = 1
+        end_bin   = 18
+    if "Eta" in plot_name:
+        start_bin = 3
+        end_bin   = 18
+    values = getBinValues(h_ratio, start_bin, end_bin)
+    print("name: {0}, n_values: {1}, mean: {2:.3f}, std dev: {3:.3f}".format(plot_name, len(values), np.mean(values), np.std(values)))
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
 
 def main():
