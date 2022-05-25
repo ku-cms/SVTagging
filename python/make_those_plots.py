@@ -212,13 +212,13 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 
                 # Draw title
                 title_x = -999
-                title_y = 1.0
+                title_y = 1.1
                 if "PT" in hist:
-                    title_x = 15.0
+                    title_x = 13.0
                 elif "Eta" in hist:
-                    title_x = 1.5
+                    title_x = 0.5
                 mark = rt.TLatex()
-                mark.SetTextSize(0.05)
+                mark.SetTextSize(0.03)
                 mark.DrawLatex(title_x, title_y, title)
 
         can.cd()
