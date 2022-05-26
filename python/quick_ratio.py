@@ -29,7 +29,7 @@ def getBinValues(hist, start_bin, end_bin):
     return values
 
 # given file names and histogram names, plot a ratio of histograms
-def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_name):
+def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_name, variable):
     f_num = ROOT.TFile(f_num_name)
     f_den = ROOT.TFile(f_den_name)
     h_num = f_num.Get(h_num_name)
@@ -54,8 +54,18 @@ def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_nam
     c = ROOT.TCanvas("c", "c", 800, 800)
     h_ratio = h_num.Clone("h_ratio")
     h_ratio.Divide(h_den)
+    # setup
+    title       = plot_name
+    x_title     = variable
+    y_title     = "(fast sim eff) / (full sim eff)" 
+    y_min       = 0.0
+    y_max       = 2.0
+    color       = "black"
+    lineWidth   = 3
+    tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
+    # draw
     h_ratio.Draw()
-    # define start/end separated for PT, Eta
+    # for values, define start/end bins separately for PT, Eta
     start_bin = 1
     end_bin   = h_ratio.GetNbinsX()
     if "isC" in plot_name:
@@ -83,7 +93,7 @@ def run(input_dir, plot_dir, years, flavors, variables):
                 f_den_name = "{0}/TTJets_FullSim_{1}_sv_eff.root".format(input_dir, year)
                 h_num_name = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis".format(variable, year, flavor) 
                 h_den_name = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis".format(variable, year, flavor)
-                plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_name)
+                plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_name, variable)
 
 def main():
     # input_dir:    directory for input SV eff. ROOT files
