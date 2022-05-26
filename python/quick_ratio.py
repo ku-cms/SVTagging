@@ -12,13 +12,13 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.TH1.AddDirectory(False)
 
 # TODO:
-# - use fixed x, y ranges in plots 
-# - add labels to plots (title, axis, name, etc)
 # - save output ROOT files of double ratio
 # - save stats in text or csv file
 # DONE:
 # - loop over plotting function instead of copy/paste
 # - move input ROOT files to directory
+# - add labels to plots (title, axis, name, etc)
+# - use fixed x, y ranges in plots 
 
 # get bins values from histogram for a range of bins
 # include values from start and end bins
@@ -50,13 +50,18 @@ def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_nam
     
     # TODO:save num, den, and ratio histograms in a new root file
 
+    # axis labels
+    labels = {
+        "PT"    : "p_{T} [GeV]",
+        "Eta"   : "#eta"
+    }
     # plot ratio; save as pdf
     c = ROOT.TCanvas("c", "c", 800, 800)
     h_ratio = h_num.Clone("h_ratio")
     h_ratio.Divide(h_den)
     # setup
     title       = plot_name
-    x_title     = variable
+    x_title     = labels[variable]
     y_title     = "(fast sim eff) / (full sim eff)" 
     y_min       = 0.0
     y_max       = 2.0
