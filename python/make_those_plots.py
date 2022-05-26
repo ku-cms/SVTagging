@@ -4,6 +4,7 @@ from collections import OrderedDict
 from plotting_susy_cff import plot_configurables as pc
 from plotting_susy_cff import sample_configurables as sc
 import imp, os
+import tools
 
 date = strftime('%d%b%y', localtime())
 #date = date + '_eff'
@@ -179,7 +180,6 @@ def make_overlay_plot(hists_, suffix_, output_name_):
 
                 nbins = hists_tmp[hist][sample][tree].GetNbinsX()
                 print("NBINS: output_name_: {0}, hist: {1}, number of bins: {2}".format(output_name_, hist, nbins))
-
    
                 hists_tmp[hist][sample][tree].SetTitle(title)
                 hists_tmp[hist][sample][tree].GetXaxis().SetTitle(pc[hist]['xlabel'])
@@ -950,9 +950,12 @@ def read_in_hists(in_file_):
     # print(" --- hists (end) --- ")
     return hists 
 
-def make_new_hists(hists_, output_name_):
+# TODO:
+# Fix error: Error in <TH1D::Divide>: Cannot divide histograms with different number of bins
+# Fix rebinning (works for some ratios, but breaks others)
+def make_new_hists(hists_, output_file_name_):
     print("make_new_hists(): start")
-    output_file = rt.TFile(output_name_ + ".root", "RECREATE")
+    output_file = rt.TFile(output_file_name_, "RECREATE")
     DO_REBIN  = True
     REBIN_NUM = 5
     temp_new = OrderedDict()
@@ -1110,12 +1113,15 @@ if __name__ == "__main__":
         "TTJets_FullSim_2018" : "output_files_24May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
 
-    the_map = file_map_v6
+    the_map     = file_map_v6
+    output_dir  = "sv_eff"
+    tools.makeDir(output_dir)
     
     for output_name in the_map:
         print(" - Process {0}".format(output_name))
         background_file = the_map[output_name]
+        output_file_name = "{0}/{1}_sv_eff.root".format(output_dir, output_name)
         b_hists         = read_in_hists(background_file)
-        b_hists_new     = make_new_hists(b_hists, output_name)
+        b_hists_new     = make_new_hists(b_hists, output_file_name)
         make_overlay_plot(b_hists_new, suffix, output_name)
     

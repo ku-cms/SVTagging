@@ -11,12 +11,13 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.TH1.AddDirectory(False)
 
 # TODO:
-# - loop over plotting function instead of copy/paste
-# - move input ROOT files to directory
 # - save output ROOT files of double ratio
 # - save stats in text or csv file
 # - add labels to plots (title, axis, name, etc)
 # - use fixed x, y ranges in plots 
+# DONE:
+# - loop over plotting function instead of copy/paste
+# - move input ROOT files to directory
 
 # get bins values from histogram for a range of bins
 # include values from start and end bins
@@ -33,8 +34,19 @@ def plotRatio(f_num_name, f_den_name, h_num_name, h_den_name, plot_name):
     f_den = ROOT.TFile(f_den_name)
     h_num = f_num.Get(h_num_name)
     h_den = f_den.Get(h_den_name)
+    # check if histos loaded successfully
     print("h_num: {0}".format(h_num))
     print("h_den: {0}".format(h_den))
+    quit = False
+    if not h_num:
+        print("ERROR: h_num does not exist.")
+        quit = True
+    if not h_den:
+        print("ERROR: h_den does not exist.")
+        quit = True
+    if quit:
+        print("Quitting now.")
+        return
     # save num, den, and ratio histograms in a new root file
 
     # plot ratio; save as pdf
@@ -56,25 +68,27 @@ def plotRatio(f_num_name, f_den_name, h_num_name, h_den_name, plot_name):
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
 
 # create plots for different years, flavors, and variables
-def run(years, flavors, variables):
+def run(input_dir, years, flavors, variables):
     for year in years:
         for flavor in flavors:
             for variable in variables:
-                # numerator:    FastSim
-                # denominator:  FullSim
+                # numerator:    FastSim SV eff.
+                # denominator:  FullSim SV eff.
                 plot_name  = "TTJets_{0}_FastOverFull_{1}_{2}".format(year, flavor, variable)
-                f_num_name = "TTJets_FastSim_{0}.root".format(year) 
-                f_den_name = "TTJets_FullSim_{0}.root".format(year)
+                f_num_name = "{0}/TTJets_FastSim_{1}_sv_eff.root".format(input_dir, year) 
+                f_den_name = "{0}/TTJets_FullSim_{1}_sv_eff.root".format(input_dir, year)
                 h_num_name = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis".format(variable, year, flavor) 
                 h_den_name = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis".format(variable, year, flavor)
                 plotRatio(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
 
 def main():
+    # input directory with SV eff. ROOT files
+    input_dir   = "sv_eff"
     years       = ["2016", "2017", "2018"]
     flavors     = ["isB", "isC", "isLight"]
     variables   = ["PT", "Eta"]
     
-    run(years, flavors, variables)
+    run(input_dir, years, flavors, variables)
 
 if __name__ == "__main__":
     main()
