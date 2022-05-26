@@ -3,28 +3,31 @@
 import ROOT
 import numpy as np
 
-ROOT.gROOT.SetBatch()
+# Make sure ROOT.TFile.Open(fileURL) does not seg fault when $ is in sys.argv (e.g. $ passed in as argument)
+ROOT.PyConfig.IgnoreCommandLineOptions = True
+# Make plots faster without displaying them
+ROOT.gROOT.SetBatch(ROOT.kTRUE)
+# Tell ROOT not to be in charge of memory, fix issue of histograms being deleted when ROOT file is closed:
+ROOT.TH1.AddDirectory(False)
 
-def getHisto(f_name, h_name):
-    f = ROOT.TFile(f_name)
-    h = f.Get(h_name)
-    print("h: {0}".format(h))
-    return h
+# TODO:
+# - loop over plotting function instead of copy/paste
+# - move input ROOT files to directory
+# - save output ROOT files of double ratio
+# - save stats in text or csv file
+# - add labels to plots (title, axis, name, etc)
+# - use fixed x, y ranges in plots 
 
-def plot(h_num, h_den, plot_name):
-    c = ROOT.TCanvas("c", "c", 800, 800)
-    h_ratio = h_num.Clone("h_ratio")
-    h_ratio.Divide(h_den)
-    h_ratio.Draw()
-    c.SaveAs(plot_name + ".pdf")
-
+# get bins values from histogram for a range of bins
+# include values from start and end bins
 def getBinValues(hist, start_bin, end_bin):
     values = []
     for i in range(start_bin, end_bin + 1, 1):
         values.append(hist.GetBinContent(i))
     return values
 
-def plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name):
+# given file names and histogram names, plot a ratio of histograms
+def plotRatio(f_num_name, f_den_name, h_num_name, h_den_name, plot_name):
     plot_dir = "plots_FastOverFull"
     f_num = ROOT.TFile(f_num_name)
     f_den = ROOT.TFile(f_den_name)
@@ -52,139 +55,26 @@ def plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name):
     print("name: {0}, n_values: {1}, mean: {2:.3f}, std dev: {3:.3f}".format(plot_name, len(values), np.mean(values), np.std(values)))
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
 
+# create plots for different years, flavors, and variables
+def run(years, flavors, variables):
+    for year in years:
+        for flavor in flavors:
+            for variable in variables:
+                # numerator:    FastSim
+                # denominator:  FullSim
+                plot_name  = "TTJets_{0}_FastOverFull_{1}_{2}".format(year, flavor, variable)
+                f_num_name = "TTJets_FastSim_{0}.root".format(year) 
+                f_den_name = "TTJets_FullSim_{0}.root".format(year)
+                h_num_name = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis".format(variable, year, flavor) 
+                h_den_name = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis".format(variable, year, flavor)
+                plotRatio(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
+
 def main():
-    #h_num = getHisto(f_num_name, h_num_name)
-    #h_den = getHisto(f_den_name, h_den_name)
-    #plot(h_num, h_den, plot_name)
+    years       = ["2016", "2017", "2018"]
+    flavors     = ["isB", "isC", "isLight"]
+    variables   = ["PT", "Eta"]
     
-    # --- 2016 --- #
-    plot_name  = "TTJets_2016_FastOverFull_isB_PT"
-    f_num_name = "TTJets_FastSim_2016.root"
-    f_den_name = "TTJets_FullSim_2016.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2016_isB_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2016_isB_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2016_FastOverFull_isB_Eta"
-    f_num_name = "TTJets_FastSim_2016.root"
-    f_den_name = "TTJets_FullSim_2016.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2016_isB_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2016_isB_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2016_FastOverFull_isC_PT"
-    f_num_name = "TTJets_FastSim_2016.root"
-    f_den_name = "TTJets_FullSim_2016.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2016_isC_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2016_isC_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2016_FastOverFull_isC_Eta"
-    f_num_name = "TTJets_FastSim_2016.root"
-    f_den_name = "TTJets_FullSim_2016.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2016_isC_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2016_isC_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2016_FastOverFull_isLight_PT"
-    f_num_name = "TTJets_FastSim_2016.root"
-    f_den_name = "TTJets_FullSim_2016.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2016_isLight_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2016_isLight_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2016_FastOverFull_isLight_Eta"
-    f_num_name = "TTJets_FastSim_2016.root"
-    f_den_name = "TTJets_FullSim_2016.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2016_isLight_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2016_isLight_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    # --- 2017 --- #
-    plot_name  = "TTJets_2017_FastOverFull_isB_PT"
-    f_num_name = "TTJets_FastSim_2017.root"
-    f_den_name = "TTJets_FullSim_2017.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2017_isB_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2017_isB_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2017_FastOverFull_isB_Eta"
-    f_num_name = "TTJets_FastSim_2017.root"
-    f_den_name = "TTJets_FullSim_2017.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2017_isB_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2017_isB_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2017_FastOverFull_isC_PT"
-    f_num_name = "TTJets_FastSim_2017.root"
-    f_den_name = "TTJets_FullSim_2017.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2017_isC_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2017_isC_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2017_FastOverFull_isC_Eta"
-    f_num_name = "TTJets_FastSim_2017.root"
-    f_den_name = "TTJets_FullSim_2017.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2017_isC_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2017_isC_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2017_FastOverFull_isLight_PT"
-    f_num_name = "TTJets_FastSim_2017.root"
-    f_den_name = "TTJets_FullSim_2017.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2017_isLight_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2017_isLight_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2017_FastOverFull_isLight_Eta"
-    f_num_name = "TTJets_FastSim_2017.root"
-    f_den_name = "TTJets_FullSim_2017.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2017_isLight_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2017_isLight_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    # --- 2018 --- #
-    plot_name  = "TTJets_2018_FastOverFull_isB_PT"
-    f_num_name = "TTJets_FastSim_2018.root"
-    f_den_name = "TTJets_FullSim_2018.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2018_isB_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2018_isB_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2018_FastOverFull_isB_Eta"
-    f_num_name = "TTJets_FastSim_2018.root"
-    f_den_name = "TTJets_FullSim_2018.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2018_isB_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2018_isB_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2018_FastOverFull_isC_PT"
-    f_num_name = "TTJets_FastSim_2018.root"
-    f_den_name = "TTJets_FullSim_2018.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2018_isC_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2018_isC_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2018_FastOverFull_isC_Eta"
-    f_num_name = "TTJets_FastSim_2018.root"
-    f_den_name = "TTJets_FullSim_2018.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2018_isC_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2018_isC_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2018_FastOverFull_isLight_PT"
-    f_num_name = "TTJets_FastSim_2018.root"
-    f_den_name = "TTJets_FullSim_2018.root"
-    h_num_name = "PT_discr_div_nojets_TTJets_FastSim_2018_isLight_KUAnalysis"
-    h_den_name = "PT_discr_div_nojets_TTJets_FullSim_2018_isLight_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
-    
-    plot_name  = "TTJets_2018_FastOverFull_isLight_Eta"
-    f_num_name = "TTJets_FastSim_2018.root"
-    f_den_name = "TTJets_FullSim_2018.root"
-    h_num_name = "Eta_discr_div_nojets_TTJets_FastSim_2018_isLight_KUAnalysis"
-    h_den_name = "Eta_discr_div_nojets_TTJets_FullSim_2018_isLight_KUAnalysis"
-    plot_v2(f_num_name, f_den_name, h_num_name, h_den_name, plot_name)
+    run(years, flavors, variables)
 
 if __name__ == "__main__":
     main()
