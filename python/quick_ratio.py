@@ -31,6 +31,19 @@ def histExists(hist_name, hist):
     else:
         return True
 
+# TODO: write function to return a dictionary containing file and hist names
+# arguments: input_dir, year, flavor, variable
+# call this new function in plotRatio()
+
+# get names of plot, files, and hists
+def getNames(input_dir, year, flavor, variable):
+    names = {}
+    names["f_num_name"] = "{0}/TTJets_FastSim_{1}_sv_eff.root".format(input_dir, year) 
+    names["f_den_name"] = "{0}/TTJets_FullSim_{1}_sv_eff.root".format(input_dir, year)
+    names["h_num_name"] = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis".format(variable, year, flavor) 
+    names["h_den_name"] = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis".format(variable, year, flavor)
+    return names
+
 # get bins values from histogram for a range of bins
 # include values from start and end bins
 def getBinValues(hist, start_bin, end_bin):
@@ -62,11 +75,22 @@ def getRow(hist, plot_name, year, flavor, variable):
     return output_row
 
 # given file names and histogram names, plot a ratio of histograms
-def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_name, info, output_writer):
+def plotRatio(input_dir, plot_dir, plot_name, info, output_writer):
+    # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     year        = info["year"]
     flavor      = info["flavor"]
     variable    = info["variable"]
+    # axis labels
+    labels = {
+        "PT"    : "p_{T} [GeV]",
+        "Eta"   : "#eta"
+    }
+    names = getNames(input_dir, year, flavor, variable)
+    f_num_name = names["f_num_name"]
+    f_den_name = names["f_den_name"]
+    h_num_name = names["h_num_name"]
+    h_den_name = names["h_den_name"]
     
     # load files and histos
     f_num = ROOT.TFile(f_num_name)
@@ -83,18 +107,11 @@ def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_nam
         print("The histogram(s) did not load properly. Quitting now.")
         return
     
-    # TODO: save num, den, and ratio histograms in a new root file
-
-    # axis labels
-    labels = {
-        "PT"    : "p_{T} [GeV]",
-        "Eta"   : "#eta"
-    }
     # plot ratio; save as pdf
     c = ROOT.TCanvas("c", "c", 800, 800)
     h_ratio = h_num.Clone("h_ratio")
     h_ratio.Divide(h_den)
-    # setup
+    # setup hist for plot
     title       = plot_name
     x_title     = labels[variable]
     y_title     = "(fast sim eff) / (full sim eff)" 
@@ -105,11 +122,55 @@ def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_nam
     tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
     # draw
     h_ratio.Draw()
+    # save plot
+    c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
     
     # save stats to csv file
     output_row = getRow(h_ratio, plot_name, year, flavor, variable)
     output_writer.writerow(output_row)
 
+# plot ratio of histograms for multiple years on one plot
+def plotRatioMultiYear(plot_dir, plot_name, f_num_names, f_den_names, h_num_names, h_den_names, years, info, output_writer):
+    # TODO: save num, den, and ratio histograms in a new root file
+    # get info from info :-)
+    flavor      = info["flavor"]
+    variable    = info["variable"]
+    # axis labels
+    labels = {
+        "PT"    : "p_{T} [GeV]",
+        "Eta"   : "#eta"
+    }
+    
+    # plot ratio; save as pdf
+    c = ROOT.TCanvas("c", "c", 800, 800)
+    
+    # loop over years
+    for year in years:
+        f_num_name = f_num_names[year]
+        f_den_name = f_den_names[year]
+        h_num_name = h_num_names[year]
+        h_den_name = h_den_names[year]
+    
+        # load files and histos
+        f_num = ROOT.TFile(f_num_name)
+        f_den = ROOT.TFile(f_den_name)
+        h_num = f_num.Get(h_num_name)
+        h_den = f_den.Get(h_den_name)
+        
+        # check that histos exist (loaded successfully)
+        #print("h_num_name: {0}\nh_num: {1}".format(h_num_name, h_num))
+        #print("h_den_name: {0}\nh_den: {1}".format(h_den_name, h_den))
+        h_num_exists = histExists(h_num_name, h_num) 
+        h_den_exists = histExists(h_den_name, h_den) 
+        if not h_num_exists or not h_den_exists:
+            print("The histogram(s) did not load properly. Quitting now.")
+            return
+    
+        h_ratio = h_num.Clone("h_ratio")
+        h_ratio.Divide(h_den)
+        # draw
+        h_ratio.Draw()
+    
     # save plot
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
 
@@ -127,12 +188,19 @@ def run(input_dir, plot_dir, years, flavors, variables, output_writer):
                 info["year"]        = year
                 info["flavor"]      = flavor
                 info["variable"]    = variable
+                # TODO: write function to return a dictionary containing file and hist names
+                # arguments: input_dir, year, flavor, variable
+                # call this new function in plotRatio()
                 plot_name  = "TTJets_{0}_FastOverFull_{1}_{2}".format(year, flavor, variable)
-                f_num_name = "{0}/TTJets_FastSim_{1}_sv_eff.root".format(input_dir, year) 
-                f_den_name = "{0}/TTJets_FullSim_{1}_sv_eff.root".format(input_dir, year)
-                h_num_name = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis".format(variable, year, flavor) 
-                h_den_name = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis".format(variable, year, flavor)
-                plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_name, info, output_writer)
+                plotRatio(input_dir, plot_dir, plot_name, info, output_writer)
+    
+    # loop over flavors and variables 
+    #for flavor in flavors:
+    #    for variable in variables:
+    #        info = {}
+    #        info["flavor"]      = flavor
+    #        info["variable"]    = variable
+    #        plotRatioMultiYear(plot_dir, plot_name, f_num_names, f_den_names, h_num_names, h_den_names, years, info, output_writer)
 
 def main():
     # input_dir:        directory for input SV eff. ROOT files
