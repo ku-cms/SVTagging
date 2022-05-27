@@ -147,6 +147,15 @@ def plotRatioMultiYear(input_dir, plot_dir, plot_name, years, info):
     # plot ratio; save as pdf
     c = ROOT.TCanvas("c", "c", 800, 800)
     
+    # legend
+    legend_x1 = 0.70
+    legend_x2 = 0.90
+    legend_y1 = 0.70
+    legend_y2 = 0.90
+    # legend: TLegend(x1,y1,x2,y2)
+    legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+    tools.setupLegend(legend)
+    
     # loop over years
     # store histos in map so that they are not overwritten 
     histos = {}
@@ -190,8 +199,12 @@ def plotRatioMultiYear(input_dir, plot_dir, plot_name, years, info):
         tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
         # draw
         h_ratio.Draw("same")
+        legend.AddEntry(h_ratio, year, "l")
+    
+    legend.Draw()
     
     # save plot
+    c.Update()
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
 
 # create plots for different years, flavors, and variables

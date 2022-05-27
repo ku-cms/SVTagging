@@ -57,7 +57,6 @@ def plotEras(input_dir, plot_dir, input_files, eras, mc_type, variable, h_name, 
     legend_y2 = 0.90
     # legend: TLegend(x1,y1,x2,y2)
     legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
-
     tools.setupLegend(legend)
     
     # draw histos
