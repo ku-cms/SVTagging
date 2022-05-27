@@ -23,6 +23,14 @@ ROOT.TH1.AddDirectory(False)
 # - use fixed x, y ranges in plots 
 # - save stats in a csv file
 
+# check that histogram exists
+def histExists(hist_name, hist):
+    if not hist:
+        print("ERROR: the histogram \"{0}\" does not exist.".format(hist_name))
+        return False
+    else:
+        return True
+
 # get bins values from histogram for a range of bins
 # include values from start and end bins
 def getBinValues(hist, start_bin, end_bin):
@@ -66,18 +74,13 @@ def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_nam
     h_num = f_num.Get(h_num_name)
     h_den = f_den.Get(h_den_name)
     
-    # check if histos loaded successfully
-    #print("h_num: {0}".format(h_num))
-    #print("h_den: {0}".format(h_den))
-    quit = False
-    if not h_num:
-        print("ERROR: h_num does not exist.")
-        quit = True
-    if not h_den:
-        print("ERROR: h_den does not exist.")
-        quit = True
-    if quit:
-        print("Quitting now.")
+    # check that histos exist (loaded successfully)
+    #print("h_num_name: {0}\nh_num: {1}".format(h_num_name, h_num))
+    #print("h_den_name: {0}\nh_den: {1}".format(h_den_name, h_den))
+    h_num_exists = histExists(h_num_name, h_num) 
+    h_den_exists = histExists(h_den_name, h_den) 
+    if not h_num_exists or not h_den_exists:
+        print("The histogram(s) did not load properly. Quitting now.")
         return
     
     # TODO: save num, den, and ratio histograms in a new root file
@@ -138,9 +141,9 @@ def main():
     input_dir       = "sv_eff"
     plot_dir        = "plots_FastOverFull"
     csv_output_name = "sv_FastOverFull.csv"
-    years       = ["2016", "2017", "2018"]
-    flavors     = ["isB", "isC", "isLight"]
-    variables   = ["PT", "Eta"]
+    years           = ["2016", "2017", "2018"]
+    flavors         = ["isB", "isC", "isLight"]
+    variables       = ["PT", "Eta"]
 
     output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev"]
     with open(csv_output_name, 'w') as output_csv:
