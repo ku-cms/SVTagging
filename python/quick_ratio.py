@@ -31,11 +31,7 @@ def histExists(hist_name, hist):
     else:
         return True
 
-# TODO: write function to return a dictionary containing file and hist names
-# arguments: input_dir, year, flavor, variable
-# call this new function in plotRatio()
-
-# get names of plot, files, and hists
+# get names of files and hists
 def getNames(input_dir, year, flavor, variable):
     names = {}
     names["f_num_name"] = "{0}/TTJets_FastSim_{1}_sv_eff.root".format(input_dir, year) 
@@ -86,6 +82,7 @@ def plotRatio(input_dir, plot_dir, plot_name, info, output_writer):
         "PT"    : "p_{T} [GeV]",
         "Eta"   : "#eta"
     }
+    # get file and hist names
     names = getNames(input_dir, year, flavor, variable)
     f_num_name = names["f_num_name"]
     f_den_name = names["f_den_name"]
@@ -130,7 +127,7 @@ def plotRatio(input_dir, plot_dir, plot_name, info, output_writer):
     output_writer.writerow(output_row)
 
 # plot ratio of histograms for multiple years on one plot
-def plotRatioMultiYear(plot_dir, plot_name, f_num_names, f_den_names, h_num_names, h_den_names, years, info, output_writer):
+def plotRatioMultiYear(input_dir, plot_dir, plot_name, years, info):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     flavor      = info["flavor"]
@@ -138,24 +135,37 @@ def plotRatioMultiYear(plot_dir, plot_name, f_num_names, f_den_names, h_num_name
     # axis labels
     labels = {
         "PT"    : "p_{T} [GeV]",
-        "Eta"   : "#eta"
+        "Eta"   : "#eta",
+    }
+    # xkcd colors: https://xkcd.com/color/rgb/
+    colors = {
+        "2016" : "tomato",
+        "2017" : "kelly green",
+        "2018" : "azure",
     }
     
     # plot ratio; save as pdf
     c = ROOT.TCanvas("c", "c", 800, 800)
     
     # loop over years
+    # store histos in map so that they are not overwritten 
+    histos = {}
     for year in years:
-        f_num_name = f_num_names[year]
-        f_den_name = f_den_names[year]
-        h_num_name = h_num_names[year]
-        h_den_name = h_den_names[year]
+        histos[year] = {}
+        # get file and hist names
+        names = getNames(input_dir, year, flavor, variable)
+        f_num_name = names["f_num_name"]
+        f_den_name = names["f_den_name"]
+        h_num_name = names["h_num_name"]
+        h_den_name = names["h_den_name"]
     
         # load files and histos
         f_num = ROOT.TFile(f_num_name)
         f_den = ROOT.TFile(f_den_name)
-        h_num = f_num.Get(h_num_name)
-        h_den = f_den.Get(h_den_name)
+        histos[year]["h_num"] = f_num.Get(h_num_name)
+        histos[year]["h_den"] = f_den.Get(h_den_name)
+        h_num = histos[year]["h_num"]
+        h_den = histos[year]["h_den"]
         
         # check that histos exist (loaded successfully)
         #print("h_num_name: {0}\nh_num: {1}".format(h_num_name, h_num))
@@ -166,10 +176,20 @@ def plotRatioMultiYear(plot_dir, plot_name, f_num_names, f_den_names, h_num_name
             print("The histogram(s) did not load properly. Quitting now.")
             return
     
-        h_ratio = h_num.Clone("h_ratio")
+        histos[year]["h_ratio"] = h_num.Clone("h_ratio")
+        h_ratio = histos[year]["h_ratio"]
         h_ratio.Divide(h_den)
+        # setup hist for plot
+        title       = plot_name
+        x_title     = labels[variable]
+        y_title     = "(fast sim eff) / (full sim eff)" 
+        y_min       = 0.0
+        y_max       = 2.0
+        color       = colors[year]
+        lineWidth   = 3
+        tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
         # draw
-        h_ratio.Draw()
+        h_ratio.Draw("same")
     
     # save plot
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
@@ -188,19 +208,17 @@ def run(input_dir, plot_dir, years, flavors, variables, output_writer):
                 info["year"]        = year
                 info["flavor"]      = flavor
                 info["variable"]    = variable
-                # TODO: write function to return a dictionary containing file and hist names
-                # arguments: input_dir, year, flavor, variable
-                # call this new function in plotRatio()
-                plot_name  = "TTJets_{0}_FastOverFull_{1}_{2}".format(year, flavor, variable)
+                plot_name  = "TTJets_FastOverFull_{0}_{1}_{2}".format(year, flavor, variable)
                 plotRatio(input_dir, plot_dir, plot_name, info, output_writer)
     
     # loop over flavors and variables 
-    #for flavor in flavors:
-    #    for variable in variables:
-    #        info = {}
-    #        info["flavor"]      = flavor
-    #        info["variable"]    = variable
-    #        plotRatioMultiYear(plot_dir, plot_name, f_num_names, f_den_names, h_num_names, h_den_names, years, info, output_writer)
+    for flavor in flavors:
+        for variable in variables:
+            info = {}
+            info["flavor"]      = flavor
+            info["variable"]    = variable
+            plot_name  = "TTJets_FastOverFull_AllYears_{0}_{1}".format(flavor, variable)
+            plotRatioMultiYear(input_dir, plot_dir, plot_name, years, info)
 
 def main():
     # input_dir:        directory for input SV eff. ROOT files
