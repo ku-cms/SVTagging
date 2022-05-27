@@ -14,6 +14,8 @@ ROOT.TH1.AddDirectory(False)
 
 # TODO:
 # - save output ROOT files of double ratio
+# - plot efficiencies for multiple years
+# - plot (fast sim eff) / (full sim eff) for multiple years
 # DONE:
 # - loop over plotting function instead of copy/paste
 # - move input ROOT files to directory
@@ -28,6 +30,28 @@ def getBinValues(hist, start_bin, end_bin):
     for i in range(start_bin, end_bin + 1, 1):
         values.append(hist.GetBinContent(i))
     return values
+
+# get row for csv output
+def getRow(hist, plot_name, year, flavor, variable):
+    # default: use all bins
+    start_bin = 1
+    end_bin   = hist.GetNbinsX()
+    # use different start/end bins for isC (PT) and Eta (all flavors)
+    if "isC" in plot_name:
+        start_bin = 1
+        end_bin   = 18
+    if "Eta" in plot_name:
+        start_bin = 3
+        end_bin   = 18
+    values = getBinValues(hist, start_bin, end_bin)
+    n_values    = len(values)
+    mean        = np.mean(values)
+    std_dev     = np.std(values)
+    mean_rnd    = round(mean, 3)
+    std_dev_rnd = round(std_dev, 3)
+    # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev"]
+    output_row = ["FastOverFull", year, flavor, variable, n_values, mean_rnd, std_dev_rnd]
+    return output_row
 
 # given file names and histogram names, plot a ratio of histograms
 def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_name, info, output_writer):
@@ -78,25 +102,12 @@ def plotRatio(plot_dir, plot_name, f_num_name, f_den_name, h_num_name, h_den_nam
     tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
     # draw
     h_ratio.Draw()
-    # for values, define start/end bins separately for PT, Eta
-    start_bin = 1
-    end_bin   = h_ratio.GetNbinsX()
-    if "isC" in plot_name:
-        start_bin = 1
-        end_bin   = 18
-    if "Eta" in plot_name:
-        start_bin = 3
-        end_bin   = 18
-    values = getBinValues(h_ratio, start_bin, end_bin)
-    n_values    = len(values)
-    mean        = np.mean(values)
-    std_dev     = np.std(values)
-    mean_rnd    = round(mean, 3)
-    std_dev_rnd = round(std_dev, 3)
-    # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev"]
-    output_row = ["FastOverFull", year, flavor, variable, n_values, mean_rnd, std_dev_rnd]
+    
+    # save stats to csv file
+    output_row = getRow(h_ratio, plot_name, year, flavor, variable)
     output_writer.writerow(output_row)
-    #print("name: {0}, n_values: {1}, mean: {2:.3f}, std_dev: {3:.3f}".format(plot_name, n_values, mean_rnd, std_dev_rnd))
+
+    # save plot
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
 
 # create plots for different years, flavors, and variables
