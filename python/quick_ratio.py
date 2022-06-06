@@ -15,13 +15,18 @@ ROOT.TH1.AddDirectory(False)
 # TODO:
 # - save output ROOT files of double ratio
 # - plot efficiencies for multiple years
-# - plot (fast sim eff) / (full sim eff) for multiple years
+# - invert ratio: use (full sim eff) / (fast sim eff)
+# - use less bins: try 10 bins instead of 20
+# - remove extra eta bins
+# - add error bars to eff. plots and eff. ratio plots
+# - to get SFs, take weighted average over bins with weights w_i = 1/sig_i^2, where sig_i is the error on each bin
 # DONE:
 # - loop over plotting function instead of copy/paste
 # - move input ROOT files to directory
 # - add labels to plots (title, axis, name, etc)
 # - use fixed x, y ranges in plots 
 # - save stats in a csv file
+# - plot (fast sim eff) / (full sim eff) for multiple years
 
 # check that histogram exists
 def histExists(hist_name, hist):
