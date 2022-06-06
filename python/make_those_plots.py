@@ -4,6 +4,7 @@ from collections import OrderedDict
 from plotting_susy_cff import plot_configurables as pc
 from plotting_susy_cff import sample_configurables as sc
 import imp, os
+import tools
 
 date = strftime('%d%b%y', localtime())
 #date = date + '_eff'
@@ -110,8 +111,10 @@ def make_2D_plots(hists_, suffix_):
                 can.SaveAs(out_dir+'/h_'+hist.GetName()+'_'+suffix_+'.pdf')
 
 
+# main efficiency plot
 def make_overlay_plot(hists_, suffix_, output_name_):
     print("make_overlay_plot(): start")
+    title = output_name_
     hists_tmp = OrderedDict()
     plot_dir = './plots_' + output_name_ + '_' + date
     print("plot_dir: {0}".format(plot_dir))
@@ -169,9 +172,16 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 else:
                     leg.AddEntry(hists_tmp[hist][sample][tree], sc[sample]['legend'], 'fl')
 
-                if 'N' not in hist: hists_tmp[hist][sample][tree].Rebin(1)
+                #if 'N' not in hist:
+                #    print("TRUE: 'N' not in hist '{0}'".format(hist))
+                #    hists_tmp[hist][sample][tree].Rebin(1)
+
                 #hists_tmp[hist][sample][tree].Scale(1/hists_tmp[hist][sample][tree].Integral())
+
+                nbins = hists_tmp[hist][sample][tree].GetNbinsX()
+                print("NBINS: output_name_: {0}, hist: {1}, number of bins: {2}".format(output_name_, hist, nbins))
    
+                hists_tmp[hist][sample][tree].SetTitle(title)
                 hists_tmp[hist][sample][tree].GetXaxis().SetTitle(pc[hist]['xlabel'])
                 hists_tmp[hist][sample][tree].GetXaxis().CenterTitle()
                 hists_tmp[hist][sample][tree].GetXaxis().SetTitleFont(42)
@@ -199,6 +209,18 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 hists_tmp[hist][sample][tree].SetMaximum(1.25)
 
                 hists_tmp[hist][sample][tree].Draw('histsame')
+                
+                # Draw title
+                title_x = -999
+                title_y = 1.1
+                if "PT" in hist:
+                    title_x = 13.0
+                elif "Eta" in hist:
+                    title_x = 0.5
+                mark = rt.TLatex()
+                mark.SetTextSize(0.03)
+                mark.DrawLatex(title_x, title_y, title)
+
         can.cd()
         CMS_lumi.writeExtraText = 1
         CMS_lumi.extraText = 'Work in progress'
@@ -928,8 +950,14 @@ def read_in_hists(in_file_):
     # print(" --- hists (end) --- ")
     return hists 
 
-def make_new_hists(hists_):
+# TODO:
+# Fix error: Error in <TH1D::Divide>: Cannot divide histograms with different number of bins
+# Fix rebinning (works for some ratios, but breaks others)
+def make_new_hists(hists_, output_file_name_):
     print("make_new_hists(): start")
+    output_file = rt.TFile(output_file_name_, "RECREATE")
+    DO_REBIN  = True
+    REBIN_NUM = 5
     temp_new = OrderedDict()
     for sample in hists_:
         temp_new[sample] = OrderedDict()
@@ -941,12 +969,23 @@ def make_new_hists(hists_):
                 new_hist = None
                 if 'all' in hist_name:
                     print sample, tree, hist_name
+                    
                     new_hist = hist_name.replace('all', 'all_div_nojets')
                     temp_new[sample][tree][new_hist] = hist.Clone(hist.GetName().replace('all', 'all_div_nojets'))
+                    # rebin hists before dividing
+                    #if DO_REBIN:
+                    #    temp_new[sample][tree][new_hist].Rebin(REBIN_NUM)
+                    #    hists_[sample][tree][hist_name.replace('all','nojets')].Rebin(REBIN_NUM)
                     temp_new[sample][tree][new_hist].Divide(hists_[sample][tree][hist_name.replace('all','nojets')])
+                    
                     new_hist_2 = hist_name.replace('all', 'all_div_ntrk')
                     temp_new[sample][tree][new_hist_2] = hist.Clone(hist.GetName().replace('all', 'all_div_ntrk'))
+                    # rebin hists before dividing
+                    #if DO_REBIN:
+                    #    temp_new[sample][tree][new_hist_2].Rebin(REBIN_NUM)
+                    #    hists_[sample][tree][hist_name.replace('all','ntrk')].Rebin(REBIN_NUM)
                     temp_new[sample][tree][new_hist_2].Divide(hists_[sample][tree][hist_name.replace('all','ntrk')])
+                    
                     #zero_value = temp_new[sample][tree][new_hist].GetBinContent(1)
                     #temp_new[sample][tree][new_hist].Scale(1./zero_value)
                     #for ibin in xrange(temp_new[sample][tree][new_hist].GetNbinsX()):
@@ -956,15 +995,29 @@ def make_new_hists(hists_):
                     if 'ntrk' in hist_name:
                         new_hist = hist_name.replace('discr_ntrk', 'discr_ntrk_div_nojets')
                         temp_new[sample][tree][new_hist] = hist.Clone(hist.GetName().replace('discr_ntrk','discr_ntrk_div_nojets'))
+                        # rebin hists before dividing
+                        #if DO_REBIN:
+                        #    temp_new[sample][tree][new_hist].Rebin(REBIN_NUM)
+                        #    hists_[sample][tree][hist_name.replace('discr_ntrk','nojets')].Rebin(REBIN_NUM)
                         temp_new[sample][tree][new_hist].Divide(hists_[sample][tree][hist_name.replace('discr_ntrk','nojets')])
 
                         new_hist_2 = hist_name.replace('discr_ntrk', 'discr_ntrk_div_ntrk')
                         temp_new[sample][tree][new_hist_2] = hist.Clone(hist.GetName().replace('discr_ntrk','discr_ntrk_div_ntrk'))
+                        # rebin hists before dividing
+                        #if DO_REBIN:
+                        #    temp_new[sample][tree][new_hist_2].Rebin(REBIN_NUM)
+                        #    hists_[sample][tree][hist_name.replace('discr_ntrk','ntrk')].Rebin(REBIN_NUM)
                         temp_new[sample][tree][new_hist_2].Divide(hists_[sample][tree][hist_name.replace('discr_ntrk','ntrk')])
                     else:
                         new_hist = hist_name.replace('discr', 'discr_div_nojets')
                         temp_new[sample][tree][new_hist] = hist.Clone(hist.GetName().replace('discr','discr_div_nojets'))
+                        # rebin hists before dividing
+                        if DO_REBIN:
+                            temp_new[sample][tree][new_hist].Rebin(REBIN_NUM)
+                            hists_[sample][tree][hist_name.replace('discr','nojets')].Rebin(REBIN_NUM)
                         temp_new[sample][tree][new_hist].Divide(hists_[sample][tree][hist_name.replace('discr','nojets')])
+                        # save ratio to file
+                        temp_new[sample][tree][new_hist].Write()
 
                     #zero_value = temp_new[sample][tree][new_hist].GetBinContent(1)
                     #temp_new[sample][tree][new_hist].Scale(1./zero_value)
@@ -1060,12 +1113,15 @@ if __name__ == "__main__":
         "TTJets_FullSim_2018" : "output_files_24May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
 
-    the_map = file_map_v6
+    the_map     = file_map_v6
+    output_dir  = "sv_eff"
+    tools.makeDir(output_dir)
     
     for output_name in the_map:
         print(" - Process {0}".format(output_name))
         background_file = the_map[output_name]
+        output_file_name = "{0}/{1}_sv_eff.root".format(output_dir, output_name)
         b_hists         = read_in_hists(background_file)
-        b_hists_new     = make_new_hists(b_hists)
+        b_hists_new     = make_new_hists(b_hists, output_file_name)
         make_overlay_plot(b_hists_new, suffix, output_name)
     

@@ -39,8 +39,9 @@ def main():
     
     # check that input file exists
     if not os.path.isfile(input_name):
-        print("ERROR: The input file \"{0}\" does not exist.".format(input_name))
-        print("Download this required text file using \"wget https://xkcd.com/color/rgb.txt\"")
+        print("ERROR: The required input file \"{0}\" does not exist.".format(input_name))
+        print(" - First, download this required text file using \"wget https://xkcd.com/color/rgb.txt\"")
+        print(" - Then run this script again to produce \"{0}\"".format(output_name))
         return
     
     with open(input_name, "r") as input_file:
