@@ -1,4 +1,4 @@
-# quick_ratio.py
+# calc_ratio.py
 
 import ROOT
 import numpy as np
