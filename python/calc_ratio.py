@@ -13,10 +13,9 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.TH1.AddDirectory(False)
 
 # TODO:
-# - use less bins: try 10 bins instead of 20
-# - remove extra eta bins
 # - add error bars to eff. plots and eff. ratio plots
 # - to get SFs, take weighted average over bins with weights w_i = 1/sig_i^2, where sig_i is the error on each bin
+# - remove extra eta bins
 # - plot efficiencies for multiple years
 # - save output ROOT files of double ratio
 # DONE:
@@ -27,6 +26,7 @@ ROOT.TH1.AddDirectory(False)
 # - save stats in a csv file
 # - plot (fast sim eff) / (full sim eff) for multiple years
 # - invert ratio: use (full sim eff) / (fast sim eff)
+# - use less bins: try 10 bins instead of 20
 
 # check that histogram exists
 def histExists(hist_name, hist):
@@ -77,13 +77,22 @@ def getRow(hist, plot_name, ratio_name, year, flavor, variable):
     # default: use all bins
     start_bin = 1
     end_bin   = hist.GetNbinsX()
+    
     # use different start/end bins for isC (PT) and Eta (all flavors)
-    if "isC" in plot_name:
-        start_bin = 1
-        end_bin   = 18
+    
+    # old binning
+    # if "isC" in plot_name:
+    #     start_bin = 1
+    #     end_bin   = 18
+    # if "Eta" in plot_name:
+    #     start_bin = 3
+    #     end_bin   = 18
+    
+    # new binning
     if "Eta" in plot_name:
-        start_bin = 3
-        end_bin   = 18
+        start_bin += 1
+        end_bin   -= 1
+
     values = getBinValues(hist, start_bin, end_bin)
     n_values    = len(values)
     mean        = np.mean(values)

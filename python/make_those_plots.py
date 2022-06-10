@@ -957,7 +957,7 @@ def make_new_hists(hists_, output_file_name_):
     print("make_new_hists(): start")
     output_file = rt.TFile(output_file_name_, "RECREATE")
     DO_REBIN  = True
-    REBIN_NUM = 5
+    REBIN_NUM = 10
     temp_new = OrderedDict()
     for sample in hists_:
         temp_new[sample] = OrderedDict()
