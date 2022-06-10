@@ -73,7 +73,7 @@ def getBinValues(hist, start_bin, end_bin):
     return values
 
 # get row for csv output
-def getRow(hist, plot_name, year, flavor, variable):
+def getRow(hist, plot_name, ratio_name, year, flavor, variable):
     # default: use all bins
     start_bin = 1
     end_bin   = hist.GetNbinsX()
@@ -91,7 +91,7 @@ def getRow(hist, plot_name, year, flavor, variable):
     mean_rnd    = round(mean, 3)
     std_dev_rnd = round(std_dev, 3)
     # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev"]
-    output_row = ["FastOverFull", year, flavor, variable, n_values, mean_rnd, std_dev_rnd]
+    output_row = [ratio_name, year, flavor, variable, n_values, mean_rnd, std_dev_rnd]
     return output_row
 
 # given file names and histogram names, plot a ratio of histograms
@@ -150,7 +150,7 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer):
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
     
     # save stats to csv file
-    output_row = getRow(h_ratio, plot_name, year, flavor, variable)
+    output_row = getRow(h_ratio, plot_name, ratio_name, year, flavor, variable)
     output_writer.writerow(output_row)
 
 # plot ratio of histograms for multiple years on one plot
