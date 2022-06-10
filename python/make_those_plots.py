@@ -113,11 +113,11 @@ def make_2D_plots(hists_, suffix_):
 
 # main efficiency plot
 def make_overlay_plot(hists_, suffix_, output_name_):
-    print("make_overlay_plot(): start")
+    #print("make_overlay_plot(): start")
     title = output_name_
     hists_tmp = OrderedDict()
     plot_dir = './plots_' + output_name_ + '_' + date
-    print("plot_dir: {0}".format(plot_dir))
+    #print("plot_dir: {0}".format(plot_dir))
     if not (os.path.isdir(plot_dir)):
         os.mkdir(plot_dir)
     out_dir = os.path.join(plot_dir)
@@ -164,7 +164,7 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 hists_tmp[hist][sample][tree].SetLineWidth(sc[sample]['width'])
                 if sc[sample]['fill']: hists_tmp[hist][sample][tree].SetFillColor(sc[sample]['fill'])
                 if sc[sample]['fill_style']: hists_tmp[hist][sample][tree].SetFillStyle(sc[sample]['fill_style'])
-                print hist, sample, tree
+                #print hist, sample, tree
                 if 'SMS' in sample:
                     stop_m = tree.split('_')[1]
                     neut_m = tree.split('_')[2]
@@ -179,7 +179,7 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 #hists_tmp[hist][sample][tree].Scale(1/hists_tmp[hist][sample][tree].Integral())
 
                 nbins = hists_tmp[hist][sample][tree].GetNbinsX()
-                print("NBINS: output_name_: {0}, hist: {1}, number of bins: {2}".format(output_name_, hist, nbins))
+                #print("NBINS: output_name_: {0}, hist: {1}, number of bins: {2}".format(output_name_, hist, nbins))
    
                 hists_tmp[hist][sample][tree].SetTitle(title)
                 hists_tmp[hist][sample][tree].GetXaxis().SetTitle(pc[hist]['xlabel'])
@@ -317,7 +317,7 @@ def make_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''):
             hists_tmp[hist][sample].SetLineWidth(sc[sample]['width'])
             if sc[sample]['fill']: hists_tmp[hist][sample].SetFillColor(sc[sample]['fill'])
             if sc[sample]['fill_style']: hists_tmp[hist][sample].SetFillStyle(sc[sample]['fill_style'])
-            print hist, sample
+            #print hist, sample
             leg.AddEntry(hists_tmp[hist][sample], sc[sample]['legend'], 'fl')
         if sig_hists_:
             for sample in sig_hists_tmp[hist]:
@@ -329,7 +329,7 @@ def make_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''):
                     sig_hists_tmp[hist][sample][tree].SetLineWidth(sc[sample]['width'])
                     if sc[sample]['fill']: sig_hists_tmp[hist][sample][tree].SetFillColor(sc[sample]['fill'])
                     if sc[sample]['fill_style']: sig_hists_tmp[hist][sample][tree].SetFillStyle(sc[sample]['fill_style'])
-                    print hist, sample, tree
+                    #print hist, sample, tree
                     if 'Events' in tree:
                         stop_m = '500'
                         neut_m = sample.split('_')[-1]
@@ -515,7 +515,7 @@ def make_stacked_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''
             hists_tmp[hist][sample].SetLineStyle(sc[sample]['style'])
             if sc[sample]['fill']: hists_tmp[hist][sample].SetFillColor(sc[sample]['fill'])
             if sc[sample]['fill_style']: hists_tmp[hist][sample].SetFillStyle(1001)
-            print hist, sample
+            #print hist, sample
             stack[hist].Add(hists_tmp[hist][sample])
             leg.AddEntry(hists_tmp[hist][sample], sc[sample]['legend'], 'fl')
         if sig_hists_:
@@ -527,7 +527,7 @@ def make_stacked_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''
                     sig_hists_tmp[hist][sample][tree].SetLineWidth(sc[sample]['width'])
                     if sc[sample]['fill']: sig_hists_tmp[hist][sample][tree].SetFillColor(sc[sample]['fill'])
                     if sc[sample]['fill_style']: sig_hists_tmp[hist][sample][tree].SetFillStyle(sc[sample]['fill_style'])
-                    print hist, sample, tree
+                    #print hist, sample, tree
                     if 'Events' in tree:
                         stop_m = '500'
                         neut_m = sample.split('_')[-1]
@@ -704,7 +704,7 @@ def make_data_stacked_plots(data_, hists_, sig_hists_ = None, print_plots = True
             hists_tmp[hist][sample].SetLineStyle(sc[sample]['style'])
             if sc[sample]['fill']: hists_tmp[hist][sample].SetFillColor(sc[sample]['fill'])
             if sc[sample]['fill_style']: hists_tmp[hist][sample].SetFillStyle(1001)
-            print hist, sample
+            #print hist, sample
             stack[hist].Add(hists_tmp[hist][sample])
             leg.AddEntry(hists_tmp[hist][sample], sc[sample]['legend'], 'fl')
         if sig_hists_:
@@ -716,7 +716,7 @@ def make_data_stacked_plots(data_, hists_, sig_hists_ = None, print_plots = True
                     sig_hists_tmp[hist][sample][tree].SetLineWidth(sc[sample]['width'])
                     if sc[sample]['fill']: sig_hists_tmp[hist][sample][tree].SetFillColor(sc[sample]['fill'])
                     if sc[sample]['fill_style']: sig_hists_tmp[hist][sample][tree].SetFillStyle(sc[sample]['fill_style'])
-                    print hist, sample, tree
+                    #print hist, sample, tree
                     if 'Events' in tree:
                         stop_m = '500'
                         neut_m = sample.split('_')[-1]
@@ -840,7 +840,7 @@ def make_data_stacked_plots(data_, hists_, sig_hists_ = None, print_plots = True
 
 
 def make_1D_plots(hists_, suffix_):
-    print("make_1D_plots(): start")
+    #print("make_1D_plots(): start")
     tdrstyle.setTDRStyle()
     if not (os.path.isdir('./plots_'+date)): os.mkdir('./plots_'+date)
     for sample in hists_:
@@ -849,7 +849,7 @@ def make_1D_plots(hists_, suffix_):
             if not (os.path.isdir('./plots_'+date+'/'+sample+'/'+tree)): os.mkdir(os.path.join('./plots_'+date, sample, tree))
             out_dir = os.path.join('./plots_'+date, sample, tree)
             for hist_name, hist in hists_[sample][tree].items():
-                print hist_name, sample
+                #print hist_name, sample
                 if not hist.InheritsFrom(rt.TH1.Class()): continue                   
                 if hist.InheritsFrom(rt.TH2.Class()): continue 
                 if hist_name not in pc: continue
@@ -893,11 +893,11 @@ def make_1D_plots(hists_, suffix_):
 
 def read_in_hists(in_file_):
     USE_OLD_VERSION = False
-    print("read_in_hists(): start")
+    #print("read_in_hists(): start")
     in_file = rt.TFile(in_file_, 'r')
     hists = OrderedDict()
     for key in in_file.GetListOfKeys():
-        print key.GetName()
+        #print key.GetName()
         key_name = key.GetName()
         # WARNING: key_name is skipped if it is not in sc
         if key_name not in sc:
@@ -906,12 +906,12 @@ def read_in_hists(in_file_):
         sample_dir = in_file.Get(key.GetName())
         hists[key_name] = OrderedDict()
         for tree_key in sample_dir.GetListOfKeys():
-            print tree_key.GetName()
+            #print tree_key.GetName()
             tree_name = tree_key.GetName()
             tree_dir = sample_dir.Get(tree_key.GetName())
             hists[key_name][tree_name] = OrderedDict()
             for hist_key in tree_dir.GetListOfKeys():
-                print hist_key.GetName()
+                #print hist_key.GetName()
                 hist_name = hist_key.GetName()
                 hist = tree_dir.Get(hist_key.GetName())
                 # debugging
@@ -954,7 +954,7 @@ def read_in_hists(in_file_):
 # Fix error: Error in <TH1D::Divide>: Cannot divide histograms with different number of bins
 # Fix rebinning (works for some ratios, but breaks others)
 def make_new_hists(hists_, output_file_name_):
-    print("make_new_hists(): start")
+    #print("make_new_hists(): start")
     output_file = rt.TFile(output_file_name_, "RECREATE")
     DO_REBIN  = True
     REBIN_NUM = 10
@@ -968,7 +968,7 @@ def make_new_hists(hists_, output_file_name_):
             for hist_name, hist in hists_[sample][tree].items():
                 new_hist = None
                 if 'all' in hist_name:
-                    print sample, tree, hist_name
+                    #print sample, tree, hist_name
                     
                     new_hist = hist_name.replace('all', 'all_div_nojets')
                     temp_new[sample][tree][new_hist] = hist.Clone(hist.GetName().replace('all', 'all_div_nojets'))
@@ -1009,15 +1009,36 @@ def make_new_hists(hists_, output_file_name_):
                         #    hists_[sample][tree][hist_name.replace('discr_ntrk','ntrk')].Rebin(REBIN_NUM)
                         temp_new[sample][tree][new_hist_2].Divide(hists_[sample][tree][hist_name.replace('discr_ntrk','ntrk')])
                     else:
-                        new_hist = hist_name.replace('discr', 'discr_div_nojets')
-                        temp_new[sample][tree][new_hist] = hist.Clone(hist.GetName().replace('discr','discr_div_nojets'))
+                        den_name        = hist_name.replace('discr','nojets')
+                        ratio_name      = hist_name.replace('discr', 'discr_div_nojets')
+                        long_name       = hist.GetName()
+                        new_long_name   = hist.GetName().replace('discr','discr_div_nojets') 
+                        # print names:
+                        print("# --------------------------------------- #")
+                        print("hist_name: {0}".format(hist_name))
+                        print("den_name: {0}".format(den_name))
+                        print("ratio_name: {0}".format(ratio_name))
+                        print("long_name: {0}".format(long_name))
+                        print("new_long_name: {0}".format(new_long_name))
+                        print("# --------------------------------------- #")
+                        temp_new[sample][tree][ratio_name] = hist.Clone(new_long_name)
                         # rebin hists before dividing
                         if DO_REBIN:
-                            temp_new[sample][tree][new_hist].Rebin(REBIN_NUM)
-                            hists_[sample][tree][hist_name.replace('discr','nojets')].Rebin(REBIN_NUM)
-                        temp_new[sample][tree][new_hist].Divide(hists_[sample][tree][hist_name.replace('discr','nojets')])
+                            temp_new[sample][tree][ratio_name].Rebin(REBIN_NUM)
+                            hists_[sample][tree][den_name].Rebin(REBIN_NUM)
+                        # number of bins:
+                        print("{0}: n_bins = {1}".format(ratio_name, temp_new[sample][tree][ratio_name].GetNbinsX()))
+                        print("{0}: n_bins = {1}".format(den_name,   hists_[sample][tree][den_name].GetNbinsX()))
+                        # efficiency: do this before taking ratio!!
+                        # TEfficiency::CheckConsistency(h_pass,h_total)
+                        if rt.TEfficiency.CheckConsistency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name]):
+                            print("PASS CheckConsistency: {0} and {1}".format(ratio_name, den_name))
+                            h_eff = rt.TEfficiency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name])
+                            h_eff.Write()
+                        # ratio
+                        temp_new[sample][tree][ratio_name].Divide(hists_[sample][tree][den_name])
                         # save ratio to file
-                        temp_new[sample][tree][new_hist].Write()
+                        temp_new[sample][tree][ratio_name].Write()
 
                     #zero_value = temp_new[sample][tree][new_hist].GetBinContent(1)
                     #temp_new[sample][tree][new_hist].Scale(1./zero_value)
@@ -1032,7 +1053,7 @@ def read_in_hists_opt(in_file_):
     hists = OrderedDict()
     for key in in_file.GetListOfKeys():
         key_name = key.GetName()
-        print key_name
+        #print key_name
         key_split = key_name.split('__')
         sample = key_split[0]
         tree = key_split[1]
@@ -1081,8 +1102,6 @@ if __name__ == "__main__":
     
     # old 2017 version
     #background_file = 'data/output_background_hist_sv_b_eff_09Dec20.root'
-    # run 2 version
-
     
     #background_file = 'output_background_hist_b_eff_TTJets_FastSim_2016_17May22.root'
     #output_name = "TTJets_FastSim_2016"

@@ -13,10 +13,11 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.TH1.AddDirectory(False)
 
 # TODO:
+# - plot efficiencies for multiple years on the same plot
+# - plot efficiencies for fast sim and full sim on the same plot
 # - add error bars to eff. plots and eff. ratio plots
 # - to get SFs, take weighted average over bins with weights w_i = 1/sig_i^2, where sig_i is the error on each bin
 # - remove extra eta bins
-# - plot efficiencies for multiple years
 # - save output ROOT files of double ratio
 # DONE:
 # - loop over plotting function instead of copy/paste
