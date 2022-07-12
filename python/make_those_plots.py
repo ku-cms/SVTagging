@@ -5,6 +5,7 @@ from plotting_susy_cff import plot_configurables as pc
 from plotting_susy_cff import sample_configurables as sc
 import imp, os
 import tools
+import re
 
 date = strftime('%d%b%y', localtime())
 #date = date + '_eff'
@@ -1034,6 +1035,12 @@ def make_new_hists(hists_, output_file_name_):
                         if rt.TEfficiency.CheckConsistency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name]):
                             print("PASS CheckConsistency: {0} and {1}".format(ratio_name, den_name))
                             h_eff = rt.TEfficiency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name])
+                            print("(1) h_eff.GetName(): {0}".format(h_eff.GetName()))
+                            h_eff_name = h_eff.GetName()
+                            h_eff_name = re.sub('_clone$', '', h_eff_name)
+                            h_eff_name = h_eff_name + "_eff"
+                            h_eff.SetName(h_eff_name)
+                            print("(2) h_eff.GetName(): {0}".format(h_eff.GetName()))
                             h_eff.Write()
                         # ratio
                         temp_new[sample][tree][ratio_name].Divide(hists_[sample][tree][den_name])
