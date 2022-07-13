@@ -1036,9 +1036,7 @@ def make_new_hists(hists_, output_file_name_):
                             print("PASS CheckConsistency: {0} and {1}".format(ratio_name, den_name))
                             h_eff = rt.TEfficiency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name])
                             print("(1) h_eff.GetName(): {0}".format(h_eff.GetName()))
-                            h_eff_name = h_eff.GetName()
-                            h_eff_name = re.sub('_clone$', '', h_eff_name)
-                            h_eff_name = h_eff_name + "_eff"
+                            h_eff_name = new_long_name + "_eff"  
                             h_eff.SetName(h_eff_name)
                             print("(2) h_eff.GetName(): {0}".format(h_eff.GetName()))
                             h_eff.Write()

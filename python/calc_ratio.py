@@ -47,22 +47,52 @@ def getLabel(key):
     }
     return labels[key]
 
+# get hist from TEfficiency object
+def getHistFromEff(eff, name):
+    # assume constant bin widths
+    # get number of bins, x_min, x_max
+    h_total     = eff.GetTotalHistogram()
+    nbins       = h_total.GetNbinsX()
+    x_min       = h_total.GetBinLowEdge(1)
+    x_max       = h_total.GetBinLowEdge(nbins) + h_total.GetBinWidth(nbins)
+    new_name    = name + "_new" 
+    print("In getHistFromEff(): nbins = {0}, x_min = {1}, x_max = {2}".format(nbins, x_min, x_max))
+    # new histogram
+    h_new = ROOT.TH1D(new_name, new_name, nbins, x_min, x_max)
+    for i in range(1, nbins+1):
+        # get values
+        val         = eff.GetEfficiency(i)
+        err_low     = eff.GetEfficiencyErrorLow(i)
+        err_high    = eff.GetEfficiencyErrorUp(i)
+        ave_err     = np.mean([err_low, err_high])
+        print("val = {0:.5f}, err_low = {1:.5f}, err_high = {2:.5f}, ave_err = {3:.5f}".format(val, err_low, err_high, ave_err))
+        # set values
+        h_new.SetBinContent(i, val)
+        h_new.SetBinError(i, ave_err)
+    return h_new
+
 # get names of files and hists for FastOverFull
-def getNamesFastOverFull(input_dir, year, flavor, variable):
+def getNamesFastOverFull(input_dir, year, flavor, variable, use_eff):
+    tag = ""
+    if use_eff:
+        tag = "_eff"
     names = {}
     names["f_num_name"] = "{0}/TTJets_FastSim_{1}_sv_eff.root".format(input_dir, year) 
     names["f_den_name"] = "{0}/TTJets_FullSim_{1}_sv_eff.root".format(input_dir, year)
-    names["h_num_name"] = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis".format(variable, year, flavor) 
-    names["h_den_name"] = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis".format(variable, year, flavor)
+    names["h_num_name"] = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis{3}".format(variable, year, flavor, tag) 
+    names["h_den_name"] = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis{3}".format(variable, year, flavor, tag)
     return names
 
 # get names of files and hists for FullOverFast
-def getNamesFullOverFast(input_dir, year, flavor, variable):
+def getNamesFullOverFast(input_dir, year, flavor, variable, use_eff):
+    tag = ""
+    if use_eff:
+        tag = "_eff"
     names = {}
     names["f_num_name"] = "{0}/TTJets_FullSim_{1}_sv_eff.root".format(input_dir, year) 
     names["f_den_name"] = "{0}/TTJets_FastSim_{1}_sv_eff.root".format(input_dir, year)
-    names["h_num_name"] = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis".format(variable, year, flavor) 
-    names["h_den_name"] = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis".format(variable, year, flavor)
+    names["h_num_name"] = "{0}_discr_div_nojets_TTJets_FullSim_{1}_{2}_KUAnalysis{3}".format(variable, year, flavor, tag) 
+    names["h_den_name"] = "{0}_discr_div_nojets_TTJets_FastSim_{1}_{2}_KUAnalysis{3}".format(variable, year, flavor, tag)
     return names
 
 # get bins values from histogram for a range of bins
@@ -105,7 +135,7 @@ def getRow(hist, plot_name, ratio_name, year, flavor, variable):
     return output_row
 
 # given file names and histogram names, plot a ratio of histograms
-def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer):
+def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     year        = info["year"]
@@ -114,9 +144,9 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer):
     # get file and hist names
     names = {}
     if ratio_name == "FastOverFull":
-        names = getNamesFastOverFull(input_dir, year, flavor, variable)
+        names = getNamesFastOverFull(input_dir, year, flavor, variable, use_eff)
     elif ratio_name == "FullOverFast":
-        names = getNamesFullOverFast(input_dir, year, flavor, variable)
+        names = getNamesFullOverFast(input_dir, year, flavor, variable, use_eff)
     else:
         # print error and quit if ratio name is not supported
         print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
@@ -129,8 +159,14 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer):
     # load files and histos
     f_num = ROOT.TFile(f_num_name)
     f_den = ROOT.TFile(f_den_name)
-    h_num = f_num.Get(h_num_name)
-    h_den = f_den.Get(h_den_name)
+    if use_eff:
+        h_num_eff = f_num.Get(h_num_name)
+        h_den_eff = f_den.Get(h_den_name)
+        h_num = getHistFromEff(h_num_eff, h_num_name)
+        h_den = getHistFromEff(h_den_eff, h_den_name)
+    else:
+        h_num = f_num.Get(h_num_name)
+        h_den = f_den.Get(h_den_name)
     
     # check that histos exist (loaded successfully)
     #print("h_num_name: {0}\nh_num: {1}".format(h_num_name, h_num))
@@ -155,7 +191,8 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer):
     lineWidth   = 3
     tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
     # draw
-    h_ratio.Draw()
+    h_ratio.Draw("error")
+    #h_ratio.Draw()
     # save plot
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
     
@@ -164,7 +201,7 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer):
     output_writer.writerow(output_row)
 
 # plot ratio of histograms for multiple years on one plot
-def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
+def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     flavor      = info["flavor"]
@@ -196,9 +233,9 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
         # get file and hist names
         names = {}
         if ratio_name == "FastOverFull":
-            names = getNamesFastOverFull(input_dir, year, flavor, variable)
+            names = getNamesFastOverFull(input_dir, year, flavor, variable, use_eff)
         elif ratio_name == "FullOverFast":
-            names = getNamesFullOverFast(input_dir, year, flavor, variable)
+            names = getNamesFullOverFast(input_dir, year, flavor, variable, use_eff)
         else:
             # print error and quit if ratio name is not supported
             print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
@@ -211,10 +248,18 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
         # load files and histos
         f_num = ROOT.TFile(f_num_name)
         f_den = ROOT.TFile(f_den_name)
-        histos[year]["h_num"] = f_num.Get(h_num_name)
-        histos[year]["h_den"] = f_den.Get(h_den_name)
-        h_num = histos[year]["h_num"]
-        h_den = histos[year]["h_den"]
+        if use_eff:
+            h_num_eff = f_num.Get(h_num_name)
+            h_den_eff = f_den.Get(h_den_name)
+            histos[year]["h_num"] = getHistFromEff(h_num_eff, h_num_name)
+            histos[year]["h_den"] = getHistFromEff(h_den_eff, h_den_name)
+            h_num = histos[year]["h_num"]
+            h_den = histos[year]["h_den"]
+        else:
+            histos[year]["h_num"] = f_num.Get(h_num_name)
+            histos[year]["h_den"] = f_den.Get(h_den_name)
+            h_num = histos[year]["h_num"]
+            h_den = histos[year]["h_den"]
         
         # check that histos exist (loaded successfully)
         #print("h_num_name: {0}\nh_num: {1}".format(h_num_name, h_num))
@@ -238,7 +283,8 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
         lineWidth   = 3
         tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
         # draw
-        h_ratio.Draw("same")
+        h_ratio.Draw("same error")
+        #h_ratio.Draw("same")
         legend.AddEntry(h_ratio, year, "l")
     
     legend.Draw()
@@ -249,6 +295,7 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
 
 # create plots for different years, flavors, and variables
 def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer):
+    use_eff = True
     # make plot_dir if it does not exist
     tools.makeDir(plot_dir)
     # loop over years, flavors, and variables
@@ -262,7 +309,7 @@ def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_write
                 info["flavor"]      = flavor
                 info["variable"]    = variable
                 plot_name  = "TTJets_{0}_{1}_{2}_{3}".format(ratio_name, year, flavor, variable)
-                plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer)
+                plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff)
     
     # loop over flavors and variables 
     for flavor in flavors:
@@ -271,7 +318,7 @@ def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_write
             info["flavor"]      = flavor
             info["variable"]    = variable
             plot_name  = "TTJets_{0}_AllYears_{1}_{2}".format(ratio_name, flavor, variable)
-            plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info)
+            plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff)
 
 def main():
     # ratio_name:       name of ratio (e.g. FastOverFull, FullOverFast)
