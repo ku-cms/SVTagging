@@ -49,7 +49,7 @@ def get_histograms(list_of_files_, variable_list_, cuts_to_apply_=None):
 
             for sel in selections_str:
                 hist[sample][tree_name.replace('/', '_')]['PT_'+sel]    = rt.TH1D('PT_'+sel+'_'+sample+'_'+tree_name.replace('/', '_'), '', 100, 2, 20)
-                hist[sample][tree_name.replace('/', '_')]['Eta_'+sel]   = rt.TH1D('Eta_'+sel+'_'+sample+'_'+tree_name.replace('/', '_'), '', 100, -np.pi, np.pi)
+                hist[sample][tree_name.replace('/', '_')]['Eta_'+sel]   = rt.TH1D('Eta_'+sel+'_'+sample+'_'+tree_name.replace('/', '_'), '', 100, -2.4, 2.4)
 
 
         for ifile, in_file in enumerate(list_of_files_[sample]['files']):
