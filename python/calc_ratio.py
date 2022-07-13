@@ -15,11 +15,11 @@ ROOT.TH1.AddDirectory(False)
 # TODO:
 # - plot efficiencies for multiple years on the same plot
 # - plot efficiencies for fast sim and full sim on the same plot
-# - add error bars to eff. plots and eff. ratio plots
-# - to get SFs, take weighted average over bins with weights w_i = 1/sig_i^2, where sig_i is the error on each bin
-# - remove extra eta bins
 # - save output ROOT files of double ratio
 # DONE:
+# - remove extra eta bins
+# - add error bars to eff. plots and eff. ratio plots
+# - to get SFs, take weighted average over bins with weights w_i = 1/sig_i^2, where sig_i is the error on each bin
 # - loop over plotting function instead of copy/paste
 # - move input ROOT files to directory
 # - add labels to plots (title, axis, name, etc)
@@ -28,6 +28,9 @@ ROOT.TH1.AddDirectory(False)
 # - plot (fast sim eff) / (full sim eff) for multiple years
 # - invert ratio: use (full sim eff) / (fast sim eff)
 # - use less bins: try 10 bins instead of 20
+# NOTES:
+# - Currently for errors on eff. histos, the average of high and low errors from TEfficiency are used. The double ratio has symmetric errors; could maintain asymmetric errors.
+# - Currently for SF, std_dev is used; could instead propagate unc. through calc. of weighted average.
 
 # check that histogram exists
 def histExists(hist_name, hist):
