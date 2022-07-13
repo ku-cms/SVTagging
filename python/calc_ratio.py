@@ -49,6 +49,7 @@ def getLabel(key):
 
 # get hist from TEfficiency object
 def getHistFromEff(eff, name):
+    verbose = False
     # assume constant bin widths
     # get number of bins, x_min, x_max
     h_total     = eff.GetTotalHistogram()
@@ -56,7 +57,8 @@ def getHistFromEff(eff, name):
     x_min       = h_total.GetBinLowEdge(1)
     x_max       = h_total.GetBinLowEdge(nbins) + h_total.GetBinWidth(nbins)
     new_name    = name + "_new" 
-    print("In getHistFromEff(): nbins = {0}, x_min = {1}, x_max = {2}".format(nbins, x_min, x_max))
+    if verbose:
+        print("In getHistFromEff(): nbins = {0}, x_min = {1}, x_max = {2}".format(nbins, x_min, x_max))
     # new histogram
     h_new = ROOT.TH1D(new_name, new_name, nbins, x_min, x_max)
     for i in range(1, nbins+1):
@@ -65,7 +67,8 @@ def getHistFromEff(eff, name):
         err_low     = eff.GetEfficiencyErrorLow(i)
         err_high    = eff.GetEfficiencyErrorUp(i)
         ave_err     = np.mean([err_low, err_high])
-        print("val = {0:.5f}, err_low = {1:.5f}, err_high = {2:.5f}, ave_err = {3:.5f}".format(val, err_low, err_high, ave_err))
+        if verbose:
+            print("val = {0:.5f}, err_low = {1:.5f}, err_high = {2:.5f}, ave_err = {3:.5f}".format(val, err_low, err_high, ave_err))
         # set values
         h_new.SetBinContent(i, val)
         h_new.SetBinError(i, ave_err)
@@ -98,23 +101,31 @@ def getNamesFullOverFast(input_dir, year, flavor, variable, use_eff):
 # get bins values from histogram for a range of bins
 # include values from start and end bins
 def getBinValues(hist, start_bin, end_bin):
-    values = []
-    for i in range(start_bin, end_bin + 1, 1):
-        values.append(hist.GetBinContent(i))
+    values = [hist.GetBinContent(i) for i in range(start_bin, end_bin + 1, 1)]
     return values
+
+# get bins errors from histogram for a range of bins
+# include errors from start and end bins
+def getBinErrors(hist, start_bin, end_bin):
+    errors = [hist.GetBinError(i) for i in range(start_bin, end_bin + 1, 1)]
+    return errors
 
 # get row for csv output
 def getRow(hist, plot_name, ratio_name, year, flavor, variable):
-    start_bin   = 1
-    end_bin     = hist.GetNbinsX()
-    values      = getBinValues(hist, start_bin, end_bin)
-    n_values    = len(values)
-    mean        = np.mean(values)
-    std_dev     = np.std(values)
-    mean_rnd    = round(mean, 3)
-    std_dev_rnd = round(std_dev, 3)
-    # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev"]
-    output_row = [ratio_name, year, flavor, variable, n_values, mean_rnd, std_dev_rnd]
+    start_bin           = 1
+    end_bin             = hist.GetNbinsX()
+    values              = getBinValues(hist, start_bin, end_bin)
+    errors              = getBinErrors(hist, start_bin, end_bin)
+    weights             = [1/(err ** 2) for err in errors]
+    n_values            = len(values)
+    mean                = np.mean(values)
+    std_dev             = np.std(values)
+    weighted_avg        = np.average(values, weights=weights)
+    mean_rnd            = round(mean, 3)
+    std_dev_rnd         = round(std_dev, 3)
+    weighted_avg_rnd    = round(weighted_avg, 3)
+    # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev", "weighted_avg"]
+    output_row = [ratio_name, year, flavor, variable, n_values, mean_rnd, std_dev_rnd, weighted_avg_rnd]
     return output_row
 
 # given file names and histogram names, plot a ratio of histograms
@@ -324,7 +335,7 @@ def main():
         plot_dir        = "plots_{0}".format(ratio_name)
         csv_output_name = "sv_{0}.csv".format(ratio_name)
 
-        output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev"]
+        output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev", "weighted_avg"]
         with open(csv_output_name, 'w') as output_csv:
             output_writer = csv.writer(output_csv)
             output_writer.writerow(output_column_titles)
