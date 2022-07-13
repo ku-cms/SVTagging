@@ -1,14 +1,13 @@
-import ROOT as rt
-from time import strftime, localtime
+from datetime import datetime
 from collections import OrderedDict
 from plotting_susy_cff import plot_configurables as pc
 from plotting_susy_cff import sample_configurables as sc
+import ROOT as rt
 import imp, os
 import tools
 import re
 
-date = strftime('%d%b%y', localtime())
-#date = date + '_eff'
+date = datetime.today().strftime('%Y_%m_%d')
 
 rt.gROOT.SetBatch()
 rt.gROOT.SetStyle('Plain')
@@ -1128,7 +1127,7 @@ if __name__ == "__main__":
         "TTJets_FullSim_2018" : "output_files_23May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
     # v6 ntuples
-    file_map_v6 = {
+    file_map_v6p0 = {
         "TTJets_FastSim_2016" : "output_files_24May22/output_background_hist_b_eff_TTJets_FastSim_2016.root",
         "TTJets_FastSim_2017" : "output_files_24May22/output_background_hist_b_eff_TTJets_FastSim_2017.root",
         "TTJets_FastSim_2018" : "output_files_24May22/output_background_hist_b_eff_TTJets_FastSim_2018.root",
@@ -1136,8 +1135,16 @@ if __name__ == "__main__":
         "TTJets_FullSim_2017" : "output_files_24May22/output_background_hist_b_eff_TTJets_FullSim_2017.root",
         "TTJets_FullSim_2018" : "output_files_24May22/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
+    file_map_v6p1 = {
+        "TTJets_FastSim_2016" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FastSim_2016.root",
+        "TTJets_FastSim_2017" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FastSim_2017.root",
+        "TTJets_FastSim_2018" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FastSim_2018.root",
+        "TTJets_FullSim_2016" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FullSim_2016.root",
+        "TTJets_FullSim_2017" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FullSim_2017.root",
+        "TTJets_FullSim_2018" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FullSim_2018.root",
+    }
 
-    the_map     = file_map_v6
+    the_map     = file_map_v6p1
     output_dir  = "sv_eff"
     tools.makeDir(output_dir)
     

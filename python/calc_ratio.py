@@ -105,26 +105,9 @@ def getBinValues(hist, start_bin, end_bin):
 
 # get row for csv output
 def getRow(hist, plot_name, ratio_name, year, flavor, variable):
-    # default: use all bins
-    start_bin = 1
-    end_bin   = hist.GetNbinsX()
-    
-    # use different start/end bins for isC (PT) and Eta (all flavors)
-    
-    # old binning
-    # if "isC" in plot_name:
-    #     start_bin = 1
-    #     end_bin   = 18
-    # if "Eta" in plot_name:
-    #     start_bin = 3
-    #     end_bin   = 18
-    
-    # new binning
-    if "Eta" in plot_name:
-        start_bin += 1
-        end_bin   -= 1
-
-    values = getBinValues(hist, start_bin, end_bin)
+    start_bin   = 1
+    end_bin     = hist.GetNbinsX()
+    values      = getBinValues(hist, start_bin, end_bin)
     n_values    = len(values)
     mean        = np.mean(values)
     std_dev     = np.std(values)
