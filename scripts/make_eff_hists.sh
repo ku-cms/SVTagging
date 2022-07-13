@@ -4,9 +4,9 @@
 # May 23, 2022
 
 # Script to run make_b_eff_hists_batch.py and then ahadd.py
-
-input_dir=output_condor_hists_2D_proposal_24May22
-output_dir=output_files_24May22
+today=$(date "+%Y_%m_%d")
+input_dir=output_condor_hists_2D_proposal_${today}
+output_dir=output_files_${today}
 
 # delete directory if it exists
 if [ -d ${output_dir} ]; then

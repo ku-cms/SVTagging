@@ -1,4 +1,4 @@
-from time import strftime, localtime
+from datetime import datetime
 import argparse as arg
 import os, re
 from file_table_functions import *
@@ -8,8 +8,7 @@ import root_numpy as rnp
 from collections import OrderedDict
 import pickle
 
-date = strftime('%d%b%y', localtime())
-
+date = datetime.today().strftime('%Y_%m_%d')
 
 def write_sub(output_dir, src_file, script, file_list, ofile_name, queue_num):
     fsrc = open(os.path.join(output_dir, "submit", src_file+'_'+script+'.submit'), 'w')
