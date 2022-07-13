@@ -135,7 +135,7 @@ def getRow(hist, plot_name, ratio_name, year, flavor, variable):
     return output_row
 
 # given file names and histogram names, plot a ratio of histograms
-def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff):
+def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     year        = info["year"]
@@ -191,8 +191,10 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
     lineWidth   = 3
     tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
     # draw
-    h_ratio.Draw("error")
-    #h_ratio.Draw()
+    if draw_err:
+        h_ratio.Draw("error")
+    else:
+        h_ratio.Draw()
     # save plot
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
     
@@ -201,7 +203,7 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
     output_writer.writerow(output_row)
 
 # plot ratio of histograms for multiple years on one plot
-def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff):
+def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff, draw_err):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     flavor      = info["flavor"]
@@ -283,8 +285,10 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
         lineWidth   = 3
         tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
         # draw
-        h_ratio.Draw("same error")
-        #h_ratio.Draw("same")
+        if draw_err:
+            h_ratio.Draw("same error")
+        else:
+            h_ratio.Draw("same")
         legend.AddEntry(h_ratio, year, "l")
     
     legend.Draw()
@@ -295,7 +299,8 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
 
 # create plots for different years, flavors, and variables
 def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer):
-    use_eff = True
+    use_eff  = True
+    draw_err = True
     # make plot_dir if it does not exist
     tools.makeDir(plot_dir)
     # loop over years, flavors, and variables
@@ -309,7 +314,7 @@ def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_write
                 info["flavor"]      = flavor
                 info["variable"]    = variable
                 plot_name  = "TTJets_{0}_{1}_{2}_{3}".format(ratio_name, year, flavor, variable)
-                plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff)
+                plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err)
     
     # loop over flavors and variables 
     for flavor in flavors:
@@ -318,7 +323,7 @@ def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_write
             info["flavor"]      = flavor
             info["variable"]    = variable
             plot_name  = "TTJets_{0}_AllYears_{1}_{2}".format(ratio_name, flavor, variable)
-            plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff)
+            plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff, draw_err)
 
 def main():
     # ratio_name:       name of ratio (e.g. FastOverFull, FullOverFast)
