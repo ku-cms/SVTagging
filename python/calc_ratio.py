@@ -240,8 +240,15 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
         h_ratio.Draw("same error")
     else:
         h_ratio.Draw("same")
+
+    # text
+    text_x = 0.80 * (x_max - x_min)
+    text_y = 0.80 * (y_max - y_min)
+    text = ROOT.TLatex()
+    text.DrawLatex(text_x, text_y, "text")
     
     # save plot
+    c.Update()
     c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
 
 # plot ratio of histograms for multiple years on one plot
