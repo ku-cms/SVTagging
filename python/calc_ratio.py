@@ -4,6 +4,7 @@ import ROOT
 import numpy as np
 import tools
 import csv
+import colors
 
 # Make sure ROOT.TFile.Open(fileURL) does not seg fault when $ is in sys.argv (e.g. $ passed in as argument)
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -15,6 +16,7 @@ ROOT.TH1.AddDirectory(False)
 # TODO:
 # - plot efficiencies for multiple years on the same plot
 # - plot efficiencies for fast sim and full sim on the same plot
+# - add weighted avg. and unc. to plots
 # - save output ROOT files of double ratio
 # DONE:
 # - remove extra eta bins
@@ -50,15 +52,30 @@ def getLabel(key):
     }
     return labels[key]
 
+# get x_min and x_max for hist
+def getHistRange(hist):
+    nbins   = hist.GetNbinsX()
+    x_min   = hist.GetBinLowEdge(1)
+    x_max   = hist.GetBinLowEdge(nbins) + hist.GetBinWidth(nbins)
+    return [x_min, x_max]
+
+# get empty dummy hist to draw
+def getDummyFromHist(hist):
+    nbins           = hist.GetNbinsX()
+    x_min, x_max    = getHistRange(hist)
+    dummy           = ROOT.TH1D("dummy", "dummy", nbins, x_min, x_max)
+    return dummy
+
 # get hist from TEfficiency object
 def getHistFromEff(eff, name):
     verbose = False
     # assume constant bin widths
     # get number of bins, x_min, x_max
-    h_total     = eff.GetTotalHistogram()
-    nbins       = h_total.GetNbinsX()
-    x_min       = h_total.GetBinLowEdge(1)
-    x_max       = h_total.GetBinLowEdge(nbins) + h_total.GetBinWidth(nbins)
+    h_total         = eff.GetTotalHistogram()
+    nbins           = h_total.GetNbinsX()
+    #x_min           = h_total.GetBinLowEdge(1)
+    #x_max           = h_total.GetBinLowEdge(nbins) + h_total.GetBinWidth(nbins)
+    x_min, x_max    = getHistRange(h_total) 
     new_name    = name + "_new" 
     if verbose:
         print("In getHistFromEff(): nbins = {0}, x_min = {1}, x_max = {2}".format(nbins, x_min, x_max))
@@ -132,7 +149,7 @@ def getRow(hist, plot_name, ratio_name, year, flavor, variable):
     return output_row
 
 # given file names and histogram names, plot a ratio of histograms
-def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err):
+def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err, draw_w_avg):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     year        = info["year"]
@@ -179,25 +196,58 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
     h_ratio = h_num.Clone("h_ratio")
     h_ratio.Divide(h_den)
     # setup hist for plot
-    title       = plot_name
-    x_title     = getLabel(variable)
-    y_title     = getLabel(ratio_name)
-    y_min       = 0.0
-    y_max       = 2.0
-    color       = "black"
-    lineWidth   = 3
+    title           = plot_name
+    x_title         = getLabel(variable)
+    y_title         = getLabel(ratio_name)
+    x_min, x_max    = getHistRange(h_ratio) 
+    y_min           = 0.0
+    y_max           = 2.0
+    color           = "black"
+    lineWidth       = 3
     tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
-    # draw
-    if draw_err:
-        h_ratio.Draw("error")
-    else:
-        h_ratio.Draw()
-    # save plot
-    c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
     
     # save stats to csv file
     output_row = getRow(h_ratio, plot_name, ratio_name, year, flavor, variable)
     output_writer.writerow(output_row)
+
+    # draw dummy hist
+    dummy = getDummyFromHist(h_ratio)
+    tools.setupHist(dummy, title, x_title, y_title, y_min, y_max, color, lineWidth)
+    dummy.Draw()
+    
+    # draw weighted avg. with unc.
+    if draw_w_avg:
+        w_avg       = output_row[-1]
+        std_dev     = output_row[-2]
+        w_avg_up    = w_avg + std_dev
+        w_avg_down  = w_avg - std_dev
+        #line_color  = "bright blue"
+        line_color  = "azure"
+        # TLine (Double_t x1, Double_t y1, Double_t x2, Double_t y2)
+        line_w_avg      = ROOT.TLine(x_min, w_avg, x_max, w_avg)
+        line_w_avg_up   = ROOT.TLine(x_min, w_avg_up, x_max, w_avg_up)
+        line_w_avg_down = ROOT.TLine(x_min, w_avg_down, x_max, w_avg_down)
+        line_w_avg.SetLineColor(colors.getColorIndex(line_color))
+        line_w_avg_up.SetLineColor(colors.getColorIndex(line_color))
+        line_w_avg_down.SetLineColor(colors.getColorIndex(line_color))
+        line_w_avg.SetLineWidth(3)
+        line_w_avg_up.SetLineWidth(3)
+        line_w_avg_down.SetLineWidth(3)
+        line_w_avg.SetLineStyle(7)
+        line_w_avg_up.SetLineStyle(7)
+        line_w_avg_down.SetLineStyle(7)
+        line_w_avg.Draw()
+        line_w_avg_up.Draw()
+        line_w_avg_down.Draw()
+    
+    # draw
+    if draw_err:
+        h_ratio.Draw("same error")
+    else:
+        h_ratio.Draw("same")
+    
+    # save plot
+    c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
 
 # plot ratio of histograms for multiple years on one plot
 def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff, draw_err):
@@ -296,8 +346,9 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
 
 # create plots for different years, flavors, and variables
 def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer):
-    use_eff  = True
-    draw_err = True
+    use_eff     = True
+    draw_err    = True
+    draw_w_avg  = True
     # make plot_dir if it does not exist
     tools.makeDir(plot_dir)
     # loop over years, flavors, and variables
@@ -311,7 +362,7 @@ def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_write
                 info["flavor"]      = flavor
                 info["variable"]    = variable
                 plot_name  = "TTJets_{0}_{1}_{2}_{3}".format(ratio_name, year, flavor, variable)
-                plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err)
+                plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err, draw_w_avg)
     
     # loop over flavors and variables 
     for flavor in flavors:
