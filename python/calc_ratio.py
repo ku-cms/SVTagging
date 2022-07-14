@@ -195,24 +195,22 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
     c = ROOT.TCanvas("c", "c", 800, 800)
     h_ratio = h_num.Clone("h_ratio")
     h_ratio.Divide(h_den)
-    # setup hist for plot
+    dummy = getDummyFromHist(h_ratio)
+    # setup hists for plot
     title           = plot_name
     x_title         = getLabel(variable)
     y_title         = getLabel(ratio_name)
     x_min, x_max    = getHistRange(h_ratio) 
     y_min           = 0.0
     y_max           = 2.0
-    color           = "black"
-    lineWidth       = 3
-    tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
-    
+    h_color         = "black"
+    h_line_width    = 3
+    tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, h_color, h_line_width)
+    tools.setupHist(dummy, title, x_title, y_title, y_min, y_max, h_color, 0)
     # save stats to csv file
     output_row = getRow(h_ratio, plot_name, ratio_name, year, flavor, variable)
     output_writer.writerow(output_row)
-
     # draw dummy hist
-    dummy = getDummyFromHist(h_ratio)
-    tools.setupHist(dummy, title, x_title, y_title, y_min, y_max, color, lineWidth)
     dummy.Draw()
     
     # draw weighted avg. with unc.
@@ -221,21 +219,18 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
         std_dev     = output_row[-2]
         w_avg_up    = w_avg + std_dev
         w_avg_down  = w_avg - std_dev
-        #line_color  = "bright blue"
-        line_color  = "azure"
         # TLine (Double_t x1, Double_t y1, Double_t x2, Double_t y2)
-        line_w_avg      = ROOT.TLine(x_min, w_avg, x_max, w_avg)
-        line_w_avg_up   = ROOT.TLine(x_min, w_avg_up, x_max, w_avg_up)
+        line_w_avg      = ROOT.TLine(x_min, w_avg,      x_max, w_avg)
+        line_w_avg_up   = ROOT.TLine(x_min, w_avg_up,   x_max, w_avg_up)
         line_w_avg_down = ROOT.TLine(x_min, w_avg_down, x_max, w_avg_down)
-        line_w_avg.SetLineColor(colors.getColorIndex(line_color))
-        line_w_avg_up.SetLineColor(colors.getColorIndex(line_color))
-        line_w_avg_down.SetLineColor(colors.getColorIndex(line_color))
-        line_w_avg.SetLineWidth(3)
-        line_w_avg_up.SetLineWidth(3)
-        line_w_avg_down.SetLineWidth(3)
-        line_w_avg.SetLineStyle(7)
-        line_w_avg_up.SetLineStyle(7)
-        line_w_avg_down.SetLineStyle(7)
+        # setup lines
+        line_color  = "azure"
+        line_width  = 3
+        line_style  = 7
+        tools.setupLine(line_w_avg,         line_color, line_width, line_style)
+        tools.setupLine(line_w_avg_up,      line_color, line_width, line_style)
+        tools.setupLine(line_w_avg_down,    line_color, line_width, line_style)
+        # draw lines
         line_w_avg.Draw()
         line_w_avg_up.Draw()
         line_w_avg_down.Draw()
@@ -329,8 +324,8 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
         y_min       = 0.0
         y_max       = 2.0
         color       = colors[year]
-        lineWidth   = 3
-        tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
+        line_width  = 3
+        tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, line_width)
         # draw
         if draw_err:
             h_ratio.Draw("same error")
