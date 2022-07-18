@@ -201,8 +201,10 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
     x_title         = getLabel(variable)
     y_title         = getLabel(ratio_name)
     x_min, x_max    = getHistRange(h_ratio) 
-    y_min           = 0.0
-    y_max           = 2.0
+    #y_min           = 0.0
+    #y_max           = 2.0
+    y_min           = 0.5
+    y_max           = 1.5
     h_color         = "black"
     h_line_width    = 3
     tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, h_color, h_line_width)
@@ -335,8 +337,10 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
         title       = plot_name
         x_title     = getLabel(variable)
         y_title     = getLabel(ratio_name)
-        y_min       = 0.0
-        y_max       = 2.0
+        #y_min       = 0.0
+        #y_max       = 2.0
+        y_min       = 0.5
+        y_max       = 1.5
         color       = colors[year]
         line_width  = 3
         tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, line_width)
