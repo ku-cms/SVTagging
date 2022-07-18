@@ -245,10 +245,14 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
     if draw_w_avg:
         text_x = x_min + 0.10 * (x_max - x_min)
         text_y = y_min + 0.90 * (y_max - y_min)
-        print("x_min = {0:.3f}, x_max = {1:.3f}, text_x = {2:.3f}".format(x_min, x_max, text_x))
-        print("y_min = {0:.3f}, y_max = {1:.3f}, text_y = {2:.3f}".format(y_min, y_max, text_y))
+        #print("x_min = {0:.3f}, x_max = {1:.3f}, text_x = {2:.3f}".format(x_min, x_max, text_x))
+        #print("y_min = {0:.3f}, y_max = {1:.3f}, text_y = {2:.3f}".format(y_min, y_max, text_y))
         text = ROOT.TLatex()
-        text.DrawLatex(text_x, text_y, "text")
+        text.SetTextAlign(11) # left aligned
+        text.SetTextFont(42)
+        text.SetTextSize(0.05)
+        content = "#mu = {0:.3f} #pm {1:.3f}".format(w_avg, std_dev)
+        text.DrawLatex(text_x, text_y, content)
     
     # save plot
     c.Update()
