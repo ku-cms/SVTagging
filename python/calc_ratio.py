@@ -14,11 +14,13 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.TH1.AddDirectory(False)
 
 # TODO:
+# - increase axis label sizes
 # - plot efficiencies for multiple years on the same plot
 # - plot efficiencies for fast sim and full sim on the same plot
-# - add weighted avg. and unc. to plots
 # - save output ROOT files of double ratio
 # DONE:
+# - change color of central weighted avg. line
+# - add weighted avg. and unc. to plots
 # - remove extra eta bins
 # - add error bars to eff. plots and eff. ratio plots
 # - to get SFs, take weighted average over bins with weights w_i = 1/sig_i^2, where sig_i is the error on each bin
@@ -226,12 +228,13 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
         line_w_avg_up   = ROOT.TLine(x_min, w_avg_up,   x_max, w_avg_up)
         line_w_avg_down = ROOT.TLine(x_min, w_avg_down, x_max, w_avg_down)
         # setup lines
-        line_color  = "azure"
+        mean_color  = "tomato red"
+        unc_color   = "azure"
         line_width  = 3
         line_style  = 7
-        tools.setupLine(line_w_avg,         line_color, line_width, line_style)
-        tools.setupLine(line_w_avg_up,      line_color, line_width, line_style)
-        tools.setupLine(line_w_avg_down,    line_color, line_width, line_style)
+        tools.setupLine(line_w_avg,         mean_color, line_width, line_style)
+        tools.setupLine(line_w_avg_up,      unc_color,  line_width, line_style)
+        tools.setupLine(line_w_avg_down,    unc_color,  line_width, line_style)
         # draw lines
         line_w_avg.Draw()
         line_w_avg_up.Draw()
@@ -268,7 +271,7 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
     variable    = info["variable"]
     # xkcd colors: https://xkcd.com/color/rgb/
     colors = {
-        "2016" : "tomato",
+        "2016" : "tomato red",
         "2017" : "kelly green",
         "2018" : "azure",
     }
