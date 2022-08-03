@@ -14,11 +14,11 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.TH1.AddDirectory(False)
 
 # TODO:
-# - plot efficiencies for multiple years on the same plot
-# - change scale factor to number from total ratio of events (instead of weighted avg. across bins)
+# - change scale factor and unc. to be based on the total number of events (instead of weighted avg. across bins)
 # - increase axis label sizes
 # - save output ROOT files of double ratio
 # DONE:
+# - plot efficiencies for multiple years on the same plot
 # - plot efficiencies for fast sim and full sim on the same plot
 # - change color of central weighted avg. line
 # - add weighted avg. and unc. to plots
