@@ -251,7 +251,75 @@ def plotEff(ratio_name, input_dir, plot_dir, plot_name, info):
 
 # given file names and histogram names, plot efficiencies (multiple years)
 def plotEffMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
-    pass
+    use_eff = True
+    # get info from info :-)
+    flavor      = info["flavor"]
+    variable    = info["variable"]
+    
+    # plot ratio; save as pdf
+    c = ROOT.TCanvas("c", "c", 800, 800)
+    
+    # legend
+    legend_x1 = 0.70
+    legend_x2 = 0.90
+    legend_y1 = 0.70
+    legend_y2 = 0.90
+    # legend: TLegend(x1,y1,x2,y2)
+    legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+    tools.setupLegend(legend)
+    
+    # loop over years
+    # store histos in map so that they are not overwritten 
+    histos = {}
+    for year in years:
+        # get file and hist names
+        names = {}
+        if ratio_name == "FastOverFull":
+            names = getNamesFastOverFull(input_dir, year, flavor, variable, use_eff)
+        elif ratio_name == "FullOverFast":
+            names = getNamesFullOverFast(input_dir, year, flavor, variable, use_eff)
+        else:
+            # print error and quit if ratio name is not supported
+            print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
+            return
+        # Only use numberator (only need to plot one set, either fullsim or fastim, not both)
+        f_num_name = names["f_num_name"]
+        h_num_name = names["h_num_name"]
+        # load files and histos
+        f_num = ROOT.TFile(f_num_name)
+        if use_eff:
+            h_num_eff = f_num.Get(h_num_name)
+            histos[year] = getHistFromEff(h_num_eff, h_num_name)
+            h_num = histos[year]
+        else:
+            histos[year] = f_num.Get(h_num_name)
+            h_num = histos[year]
+        
+        # check that histos exist (loaded successfully)
+        #print("h_num_name: {0}\nh_num: {1}".format(h_num_name, h_num))
+        h_num_exists = histExists(h_num_name, h_num) 
+        if not h_num_exists:
+            print("The histogram(s) did not load properly. Quitting now.")
+            return
+        
+        # setup hist for plot
+        title       = plot_name
+        x_title     = getLabel(variable)
+        y_title     = "Efficiency"
+        y_min       = 0.0
+        y_max       = 1.5
+        color       = getColor(year)
+        line_width  = 3
+        tools.setupHist(h_num, title, x_title, y_title, y_min, y_max, color, line_width)
+        # draw
+        h_num.Draw("same error")
+        legend.AddEntry(h_num, year, "l")
+    
+    legend.Draw()
+    
+    # save plot
+    c.Update()
+    c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
 
 # given file names and histogram names, plot a ratio of histograms
 def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err, draw_w_avg):
@@ -496,19 +564,34 @@ def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_write
     # loop over flavors and variables 
     for flavor in flavors:
         for variable in variables:
+            # determine MC name for multi year plot (use numerator) 
+            mc_name = ""
+            if ratio_name == "FastOverFull":
+                mc_name = "FastSim"
+            elif ratio_name == "FullOverFast":
+                mc_name = "FullSim"
+            else:
+                # print error and quit if ratio name is not supported
+                print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
+                return
             info = {}
-            info["flavor"]      = flavor
-            info["variable"]    = variable
-            plot_name  = "TTJets_{0}_AllYears_{1}_{2}".format(ratio_name, flavor, variable)
-            # plot ratios for multiple years
-            plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff, draw_err)
+            info["flavor"]          = flavor
+            info["variable"]        = variable
+            plot_name_eff           = "TTJets_{0}_AllYears_{1}_{2}_eff".format(mc_name, flavor, variable)
+            plot_name_eff_ratios    = "TTJets_{0}_AllYears_{1}_{2}_eff_ratios".format(ratio_name, flavor, variable)
+            # plot efficiencies for multiple years
+            plotEffMultiYear(ratio_name, input_dir, plot_dir, plot_name_eff, years, info)
+            # plot ratio of efficiencies for multiple years
+            plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name_eff_ratios, years, info, use_eff, draw_err)
 
 def main():
-    # ratio_name:       name of ratio (e.g. FastOverFull, FullOverFast): determines numerator and denominator for ratio
-    # input_dir:        directory for input SV eff. ROOT files
-    # plot_dir:         directory for output plots
-    # csv_output_name:  name of output csv file with mean and std dev of scale factors
-    
+    # --------------------------------------------------------------------------------- #
+    # ratio_name:       name of ratio (e.g. FastOverFull, FullOverFast);                #
+    #                   determines numerator and denominator for ratio                  #
+    # input_dir:        directory for input SV eff. ROOT files                          #
+    # plot_dir:         directory for output plots                                      #
+    # csv_output_name:  name of output csv file with mean and std dev of scale factors  #
+    # --------------------------------------------------------------------------------- #
     ratio_names     = ["FastOverFull", "FullOverFast"]
     input_dir       = "sv_eff"
     years           = ["2016", "2017", "2018"]
@@ -518,7 +601,6 @@ def main():
     for ratio_name in ratio_names:
         plot_dir        = "plots_{0}".format(ratio_name)
         csv_output_name = "sv_{0}.csv".format(ratio_name)
-
         output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev", "weighted_avg"]
         with open(csv_output_name, 'w') as output_csv:
             output_writer = csv.writer(output_csv)
