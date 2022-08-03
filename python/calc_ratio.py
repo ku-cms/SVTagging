@@ -589,6 +589,9 @@ def main():
     # ratio_name:       name of ratio (e.g. FastOverFull, FullOverFast);                #
     #                   determines numerator and denominator for ratio                  #
     # input_dir:        directory for input SV eff. ROOT files                          #
+    # years:            data-taking years                                               #
+    # flavors:          quark flavors from gen matching                                 #
+    # variables:        kinematic variables used to bin histograms                      #
     # plot_dir:         directory for output plots                                      #
     # csv_output_name:  name of output csv file with mean and std dev of scale factors  #
     # --------------------------------------------------------------------------------- #
