@@ -156,6 +156,8 @@ def getRow(hist, plot_name, ratio_name, year, flavor, variable):
 # given file names and histogram names, plot efficiencies (fullsim and fastsim)
 def plotEff(ratio_name, input_dir, plot_dir, plot_name, info):
     use_eff = True
+    num_legend_name = ""
+    den_legend_name = ""
     # get info from info :-)
     year        = info["year"]
     flavor      = info["flavor"]
@@ -164,8 +166,12 @@ def plotEff(ratio_name, input_dir, plot_dir, plot_name, info):
     names = {}
     if ratio_name == "FastOverFull":
         names = getNamesFastOverFull(input_dir, year, flavor, variable, use_eff)
+        num_legend_name = "fast sim"
+        den_legend_name = "full sim"
     elif ratio_name == "FullOverFast":
         names = getNamesFullOverFast(input_dir, year, flavor, variable, use_eff)
+        num_legend_name = "full sim"
+        den_legend_name = "fast sim"
     else:
         # print error and quit if ratio name is not supported
         print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
@@ -192,6 +198,15 @@ def plotEff(ratio_name, input_dir, plot_dir, plot_name, info):
     
     c = ROOT.TCanvas("c", "c", 800, 800)
     
+    # legend
+    legend_x1 = 0.70
+    legend_x2 = 0.90
+    legend_y1 = 0.70
+    legend_y2 = 0.90
+    # legend: TLegend(x1,y1,x2,y2)
+    legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+    tools.setupLegend(legend)
+    
     # setup hists for plot
     h_num_total     = getHistFromEff(h_num_eff, h_num_name)
     dummy           = getDummyFromHist(h_num_total)
@@ -200,20 +215,25 @@ def plotEff(ratio_name, input_dir, plot_dir, plot_name, info):
     y_title         = "Efficiency"
     x_min, x_max    = getHistRange(h_num_total) 
     y_min           = 0.0
-    y_max           = 1.0
+    y_max           = 1.5
     h_dummy_color   = "black"
     h_num_eff_color = "tomato red"
     h_den_eff_color = "azure"
     h_line_width    = 3
-    print("x_min = {0}, x_max = {1}, y_min = {2}, y_max = {3}".format(x_min, x_max, y_min, y_max))
+    #print("x_min = {0}, x_max = {1}, y_min = {2}, y_max = {3}".format(x_min, x_max, y_min, y_max))
     tools.setupHist(dummy, title, x_title, y_title, y_min, y_max, h_dummy_color, 0)
     tools.setupEff(h_num_eff, h_num_eff_color, h_line_width)
     tools.setupEff(h_den_eff, h_den_eff_color, h_line_width)
+        
+    legend.AddEntry(h_num_eff, num_legend_name, "l")
+    legend.AddEntry(h_den_eff, den_legend_name, "l")
     
     # draw dummy hist
     dummy.Draw()
     h_num_eff.Draw("same error")
     h_den_eff.Draw("same error")
+    
+    legend.Draw()
     
     # save plot
     c.Update()
@@ -312,6 +332,20 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
         line_w_avg.Draw()
         line_w_avg_up.Draw()
         line_w_avg_down.Draw()
+        
+        # legend
+        legend_x1 = 0.70
+        legend_x2 = 0.90
+        legend_y1 = 0.70
+        legend_y2 = 0.90
+        # legend: TLegend(x1,y1,x2,y2)
+        legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+        tools.setupLegend(legend)
+        
+        legend.AddEntry(h_ratio,        "eff. ratio",       "l")
+        legend.AddEntry(line_w_avg,     "#mu",              "l")
+        legend.AddEntry(line_w_avg_up,  "#mu #pm #sigma",   "l")
+        legend.Draw()
     
     # draw
     if draw_err:
@@ -329,7 +363,7 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
         text.SetTextAlign(11) # left aligned
         text.SetTextFont(42)
         text.SetTextSize(0.05)
-        content = "#mu = {0:.3f} #pm {1:.3f}".format(w_avg, std_dev)
+        content = "#mu #pm #sigma = {0:.3f} #pm {1:.3f}".format(w_avg, std_dev)
         text.DrawLatex(text_x, text_y, content)
     
     # save plot
