@@ -31,6 +31,10 @@ def setupHist(hist, title, x_title, y_title, y_min, y_max, color, lineWidth):
     hist.SetLineColor(colors.getColorIndex(color))
     hist.SetLineWidth(lineWidth)
 
+def setupEff(eff, color, lineWidth):
+    eff.SetLineColor(colors.getColorIndex(color))
+    eff.SetLineWidth(lineWidth)
+
 def setupLine(line, color, width, style):
     line.SetLineColor(colors.getColorIndex(color))
     line.SetLineWidth(width)
