@@ -4,6 +4,7 @@ import ROOT
 import numpy as np
 import tools
 import csv
+import colors
 
 # Make sure ROOT.TFile.Open(fileURL) does not seg fault when $ is in sys.argv (e.g. $ passed in as argument)
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -13,10 +14,14 @@ ROOT.gROOT.SetBatch(ROOT.kTRUE)
 ROOT.TH1.AddDirectory(False)
 
 # TODO:
-# - plot efficiencies for multiple years on the same plot
-# - plot efficiencies for fast sim and full sim on the same plot
+# - change scale factor and unc. to be based on the total number of events (instead of weighted avg. across bins)
+# - increase axis label sizes
 # - save output ROOT files of double ratio
 # DONE:
+# - plot efficiencies for multiple years on the same plot
+# - plot efficiencies for fast sim and full sim on the same plot
+# - change color of central weighted avg. line
+# - add weighted avg. and unc. to plots
 # - remove extra eta bins
 # - add error bars to eff. plots and eff. ratio plots
 # - to get SFs, take weighted average over bins with weights w_i = 1/sig_i^2, where sig_i is the error on each bin
@@ -50,15 +55,40 @@ def getLabel(key):
     }
     return labels[key]
 
+# get color based on a key
+def getColor(key):
+    # xkcd colors: https://xkcd.com/color/rgb/
+    colors = {
+        "2016" : "tomato red",
+        "2017" : "kelly green",
+        "2018" : "azure",
+    }
+    return colors[key]
+
+# get x_min and x_max for hist
+def getHistRange(hist):
+    nbins   = hist.GetNbinsX()
+    x_min   = hist.GetBinLowEdge(1)
+    x_max   = hist.GetBinLowEdge(nbins) + hist.GetBinWidth(nbins)
+    return [x_min, x_max]
+
+# get empty dummy hist to draw
+def getDummyFromHist(hist):
+    nbins           = hist.GetNbinsX()
+    x_min, x_max    = getHistRange(hist)
+    dummy           = ROOT.TH1D("dummy", "dummy", nbins, x_min, x_max)
+    return dummy
+
 # get hist from TEfficiency object
 def getHistFromEff(eff, name):
     verbose = False
     # assume constant bin widths
     # get number of bins, x_min, x_max
-    h_total     = eff.GetTotalHistogram()
-    nbins       = h_total.GetNbinsX()
-    x_min       = h_total.GetBinLowEdge(1)
-    x_max       = h_total.GetBinLowEdge(nbins) + h_total.GetBinWidth(nbins)
+    h_total         = eff.GetTotalHistogram()
+    nbins           = h_total.GetNbinsX()
+    #x_min           = h_total.GetBinLowEdge(1)
+    #x_max           = h_total.GetBinLowEdge(nbins) + h_total.GetBinWidth(nbins)
+    x_min, x_max    = getHistRange(h_total) 
     new_name    = name + "_new" 
     if verbose:
         print("In getHistFromEff(): nbins = {0}, x_min = {1}, x_max = {2}".format(nbins, x_min, x_max))
@@ -79,6 +109,7 @@ def getHistFromEff(eff, name):
 
 # get names of files and hists for FastOverFull
 def getNamesFastOverFull(input_dir, year, flavor, variable, use_eff):
+    # If use_eff is true, then load TEfficiency objects instead of histograms.
     tag = ""
     if use_eff:
         tag = "_eff"
@@ -91,6 +122,7 @@ def getNamesFastOverFull(input_dir, year, flavor, variable, use_eff):
 
 # get names of files and hists for FullOverFast
 def getNamesFullOverFast(input_dir, year, flavor, variable, use_eff):
+    # If use_eff is true, then load TEfficiency objects instead of histograms.
     tag = ""
     if use_eff:
         tag = "_eff"
@@ -131,8 +163,166 @@ def getRow(hist, plot_name, ratio_name, year, flavor, variable):
     output_row = [ratio_name, year, flavor, variable, n_values, mean_rnd, std_dev_rnd, weighted_avg_rnd]
     return output_row
 
+# given file names and histogram names, plot efficiencies (fullsim and fastsim)
+def plotEff(ratio_name, input_dir, plot_dir, plot_name, info):
+    use_eff = True
+    num_legend_name = ""
+    den_legend_name = ""
+    # get info from info :-)
+    year        = info["year"]
+    flavor      = info["flavor"]
+    variable    = info["variable"]
+    # get file and hist names
+    names = {}
+    if ratio_name == "FastOverFull":
+        names = getNamesFastOverFull(input_dir, year, flavor, variable, use_eff)
+        num_legend_name = "fast sim"
+        den_legend_name = "full sim"
+    elif ratio_name == "FullOverFast":
+        names = getNamesFullOverFast(input_dir, year, flavor, variable, use_eff)
+        num_legend_name = "full sim"
+        den_legend_name = "fast sim"
+    else:
+        # print error and quit if ratio name is not supported
+        print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
+        return
+    f_num_name = names["f_num_name"]
+    f_den_name = names["f_den_name"]
+    h_num_name = names["h_num_name"]
+    h_den_name = names["h_den_name"]
+    
+    # load files and histos
+    f_num = ROOT.TFile(f_num_name)
+    f_den = ROOT.TFile(f_den_name)
+    h_num_eff = f_num.Get(h_num_name)
+    h_den_eff = f_den.Get(h_den_name)
+    
+    # check that histos exist (loaded successfully)
+    #print("h_num_name: {0}\nh_num_eff: {1}".format(h_num_name, h_num_eff))
+    #print("h_den_name: {0}\nh_den_eff: {1}".format(h_den_name, h_den_eff))
+    h_num_exists = histExists(h_num_name, h_num_eff) 
+    h_den_exists = histExists(h_den_name, h_den_eff) 
+    if not h_num_exists or not h_den_exists:
+        print("The TEfficiency objects did not load properly. Quitting now.")
+        return
+    
+    c = ROOT.TCanvas("c", "c", 800, 800)
+    
+    # legend
+    legend_x1 = 0.70
+    legend_x2 = 0.90
+    legend_y1 = 0.70
+    legend_y2 = 0.90
+    # legend: TLegend(x1,y1,x2,y2)
+    legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+    tools.setupLegend(legend)
+    
+    # setup hists for plot
+    h_num_total     = getHistFromEff(h_num_eff, h_num_name)
+    dummy           = getDummyFromHist(h_num_total)
+    title           = plot_name
+    x_title         = getLabel(variable)
+    y_title         = "Efficiency"
+    x_min, x_max    = getHistRange(h_num_total) 
+    y_min           = 0.0
+    y_max           = 1.5
+    h_dummy_color   = "black"
+    h_num_eff_color = "tomato red"
+    h_den_eff_color = "azure"
+    h_line_width    = 3
+    #print("x_min = {0}, x_max = {1}, y_min = {2}, y_max = {3}".format(x_min, x_max, y_min, y_max))
+    tools.setupHist(dummy, title, x_title, y_title, y_min, y_max, h_dummy_color, 0)
+    tools.setupEff(h_num_eff, h_num_eff_color, h_line_width)
+    tools.setupEff(h_den_eff, h_den_eff_color, h_line_width)
+        
+    legend.AddEntry(h_num_eff, num_legend_name, "l")
+    legend.AddEntry(h_den_eff, den_legend_name, "l")
+    
+    # draw dummy hist
+    dummy.Draw()
+    h_num_eff.Draw("same error")
+    h_den_eff.Draw("same error")
+    
+    legend.Draw()
+    
+    # save plot
+    c.Update()
+    c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
+
+# given file names and histogram names, plot efficiencies (multiple years)
+def plotEffMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
+    use_eff = True
+    # get info from info :-)
+    flavor      = info["flavor"]
+    variable    = info["variable"]
+    
+    # plot ratio; save as pdf
+    c = ROOT.TCanvas("c", "c", 800, 800)
+    
+    # legend
+    legend_x1 = 0.70
+    legend_x2 = 0.90
+    legend_y1 = 0.70
+    legend_y2 = 0.90
+    # legend: TLegend(x1,y1,x2,y2)
+    legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+    tools.setupLegend(legend)
+    
+    # loop over years
+    # store histos in map so that they are not overwritten 
+    histos = {}
+    for year in years:
+        # get file and hist names
+        names = {}
+        if ratio_name == "FastOverFull":
+            names = getNamesFastOverFull(input_dir, year, flavor, variable, use_eff)
+        elif ratio_name == "FullOverFast":
+            names = getNamesFullOverFast(input_dir, year, flavor, variable, use_eff)
+        else:
+            # print error and quit if ratio name is not supported
+            print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
+            return
+        # Only use numberator (only need to plot one set, either fullsim or fastim, not both)
+        f_num_name = names["f_num_name"]
+        h_num_name = names["h_num_name"]
+        # load files and histos
+        f_num = ROOT.TFile(f_num_name)
+        if use_eff:
+            h_num_eff = f_num.Get(h_num_name)
+            histos[year] = getHistFromEff(h_num_eff, h_num_name)
+            h_num = histos[year]
+        else:
+            histos[year] = f_num.Get(h_num_name)
+            h_num = histos[year]
+        
+        # check that histos exist (loaded successfully)
+        #print("h_num_name: {0}\nh_num: {1}".format(h_num_name, h_num))
+        h_num_exists = histExists(h_num_name, h_num) 
+        if not h_num_exists:
+            print("The histogram(s) did not load properly. Quitting now.")
+            return
+        
+        # setup hist for plot
+        title       = plot_name
+        x_title     = getLabel(variable)
+        y_title     = "Efficiency"
+        y_min       = 0.0
+        y_max       = 1.5
+        color       = getColor(year)
+        line_width  = 3
+        tools.setupHist(h_num, title, x_title, y_title, y_min, y_max, color, line_width)
+        # draw
+        h_num.Draw("same error")
+        legend.AddEntry(h_num, year, "l")
+    
+    legend.Draw()
+    
+    # save plot
+    c.Update()
+    c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
+
 # given file names and histogram names, plot a ratio of histograms
-def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err):
+def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err, draw_w_avg):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     year        = info["year"]
@@ -178,26 +368,85 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
     c = ROOT.TCanvas("c", "c", 800, 800)
     h_ratio = h_num.Clone("h_ratio")
     h_ratio.Divide(h_den)
-    # setup hist for plot
-    title       = plot_name
-    x_title     = getLabel(variable)
-    y_title     = getLabel(ratio_name)
-    y_min       = 0.0
-    y_max       = 2.0
-    color       = "black"
-    lineWidth   = 3
-    tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
-    # draw
-    if draw_err:
-        h_ratio.Draw("error")
-    else:
-        h_ratio.Draw()
-    # save plot
-    c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
-    
+    dummy = getDummyFromHist(h_ratio)
+    # setup hists for plot
+    title           = plot_name
+    x_title         = getLabel(variable)
+    y_title         = getLabel(ratio_name)
+    x_min, x_max    = getHistRange(h_ratio) 
+    #y_min           = 0.0
+    #y_max           = 2.0
+    y_min           = 0.5
+    y_max           = 1.5
+    h_color         = "black"
+    h_line_width    = 3
+    tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, h_color, h_line_width)
+    tools.setupHist(dummy, title, x_title, y_title, y_min, y_max, h_color, 0)
     # save stats to csv file
     output_row = getRow(h_ratio, plot_name, ratio_name, year, flavor, variable)
     output_writer.writerow(output_row)
+    # draw dummy hist
+    dummy.Draw()
+    
+    # draw weighted avg. with unc.
+    if draw_w_avg:
+        w_avg       = output_row[-1]
+        std_dev     = output_row[-2]
+        w_avg_up    = w_avg + std_dev
+        w_avg_down  = w_avg - std_dev
+        # TLine (Double_t x1, Double_t y1, Double_t x2, Double_t y2)
+        line_w_avg      = ROOT.TLine(x_min, w_avg,      x_max, w_avg)
+        line_w_avg_up   = ROOT.TLine(x_min, w_avg_up,   x_max, w_avg_up)
+        line_w_avg_down = ROOT.TLine(x_min, w_avg_down, x_max, w_avg_down)
+        # setup lines
+        mean_color  = "tomato red"
+        unc_color   = "azure"
+        line_width  = 3
+        line_style  = 7
+        tools.setupLine(line_w_avg,         mean_color, line_width, line_style)
+        tools.setupLine(line_w_avg_up,      unc_color,  line_width, line_style)
+        tools.setupLine(line_w_avg_down,    unc_color,  line_width, line_style)
+        # draw lines
+        line_w_avg.Draw()
+        line_w_avg_up.Draw()
+        line_w_avg_down.Draw()
+        
+        # legend
+        legend_x1 = 0.70
+        legend_x2 = 0.90
+        legend_y1 = 0.70
+        legend_y2 = 0.90
+        # legend: TLegend(x1,y1,x2,y2)
+        legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
+        tools.setupLegend(legend)
+        
+        legend.AddEntry(h_ratio,        "eff. ratio",       "l")
+        legend.AddEntry(line_w_avg,     "#mu",              "l")
+        legend.AddEntry(line_w_avg_up,  "#mu #pm #sigma",   "l")
+        legend.Draw()
+    
+    # draw
+    if draw_err:
+        h_ratio.Draw("same error")
+    else:
+        h_ratio.Draw("same")
+
+    # text
+    if draw_w_avg:
+        text_x = x_min + 0.10 * (x_max - x_min)
+        text_y = y_min + 0.90 * (y_max - y_min)
+        #print("x_min = {0:.3f}, x_max = {1:.3f}, text_x = {2:.3f}".format(x_min, x_max, text_x))
+        #print("y_min = {0:.3f}, y_max = {1:.3f}, text_y = {2:.3f}".format(y_min, y_max, text_y))
+        text = ROOT.TLatex()
+        text.SetTextAlign(11) # left aligned
+        text.SetTextFont(42)
+        text.SetTextSize(0.05)
+        content = "#mu #pm #sigma = {0:.3f} #pm {1:.3f}".format(w_avg, std_dev)
+        text.DrawLatex(text_x, text_y, content)
+    
+    # save plot
+    c.Update()
+    c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
 
 # plot ratio of histograms for multiple years on one plot
 def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff, draw_err):
@@ -205,12 +454,6 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
     # get info from info :-)
     flavor      = info["flavor"]
     variable    = info["variable"]
-    # xkcd colors: https://xkcd.com/color/rgb/
-    colors = {
-        "2016" : "tomato",
-        "2017" : "kelly green",
-        "2018" : "azure",
-    }
     
     # plot ratio; save as pdf
     c = ROOT.TCanvas("c", "c", 800, 800)
@@ -276,11 +519,13 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
         title       = plot_name
         x_title     = getLabel(variable)
         y_title     = getLabel(ratio_name)
-        y_min       = 0.0
-        y_max       = 2.0
-        color       = colors[year]
-        lineWidth   = 3
-        tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, lineWidth)
+        #y_min       = 0.0
+        #y_max       = 2.0
+        y_min       = 0.5
+        y_max       = 1.5
+        color       = getColor(year)
+        line_width  = 3
+        tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, line_width)
         # draw
         if draw_err:
             h_ratio.Draw("same error")
@@ -292,42 +537,61 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
     
     # save plot
     c.Update()
-    c.SaveAs(plot_dir + "/" + plot_name + ".pdf")
+    c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
 
 # create plots for different years, flavors, and variables
 def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer):
-    use_eff  = True
-    draw_err = True
+    use_eff     = True
+    draw_err    = True
+    draw_w_avg  = True
     # make plot_dir if it does not exist
     tools.makeDir(plot_dir)
     # loop over years, flavors, and variables
     for year in years:
         for flavor in flavors:
             for variable in variables:
-                # numerator:    FastSim SV eff.
-                # denominator:  FullSim SV eff.
                 info = {}
-                info["year"]        = year
-                info["flavor"]      = flavor
-                info["variable"]    = variable
-                plot_name  = "TTJets_{0}_{1}_{2}_{3}".format(ratio_name, year, flavor, variable)
-                plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err)
+                info["year"]            = year
+                info["flavor"]          = flavor
+                info["variable"]        = variable
+                plot_name_eff           = "TTJets_{0}_{1}_{2}_{3}_eff".format(ratio_name, year, flavor, variable)
+                plot_name_eff_ratios    = "TTJets_{0}_{1}_{2}_{3}_eff_ratios".format(ratio_name, year, flavor, variable)
+                # plot efficiencies (fullsim and fastsim)
+                plotEff(ratio_name, input_dir, plot_dir, plot_name_eff, info)
+                # plot ratio of efficiencies
+                plotRatio(ratio_name, input_dir, plot_dir, plot_name_eff_ratios, info, output_writer, use_eff, draw_err, draw_w_avg)
     
     # loop over flavors and variables 
     for flavor in flavors:
         for variable in variables:
+            # determine MC name for multi year plot (use numerator) 
+            mc_name = ""
+            if ratio_name == "FastOverFull":
+                mc_name = "FastSim"
+            elif ratio_name == "FullOverFast":
+                mc_name = "FullSim"
+            else:
+                # print error and quit if ratio name is not supported
+                print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
+                return
             info = {}
-            info["flavor"]      = flavor
-            info["variable"]    = variable
-            plot_name  = "TTJets_{0}_AllYears_{1}_{2}".format(ratio_name, flavor, variable)
-            plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, use_eff, draw_err)
+            info["flavor"]          = flavor
+            info["variable"]        = variable
+            plot_name_eff           = "TTJets_{0}_AllYears_{1}_{2}_eff".format(mc_name, flavor, variable)
+            plot_name_eff_ratios    = "TTJets_{0}_AllYears_{1}_{2}_eff_ratios".format(ratio_name, flavor, variable)
+            # plot efficiencies for multiple years
+            plotEffMultiYear(ratio_name, input_dir, plot_dir, plot_name_eff, years, info)
+            # plot ratio of efficiencies for multiple years
+            plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name_eff_ratios, years, info, use_eff, draw_err)
 
 def main():
-    # ratio_name:       name of ratio (e.g. FastOverFull, FullOverFast)
-    # input_dir:        directory for input SV eff. ROOT files
-    # plot_dir:         directory for output plots
-    # csv_output_name:  name of output csv file with mean and std dev of scale factors
-    
+    # --------------------------------------------------------------------------------- #
+    # ratio_name:       name of ratio (e.g. FastOverFull, FullOverFast);                #
+    #                   determines numerator and denominator for ratio                  #
+    # input_dir:        directory for input SV eff. ROOT files                          #
+    # plot_dir:         directory for output plots                                      #
+    # csv_output_name:  name of output csv file with mean and std dev of scale factors  #
+    # --------------------------------------------------------------------------------- #
     ratio_names     = ["FastOverFull", "FullOverFast"]
     input_dir       = "sv_eff"
     years           = ["2016", "2017", "2018"]
@@ -337,7 +601,6 @@ def main():
     for ratio_name in ratio_names:
         plot_dir        = "plots_{0}".format(ratio_name)
         csv_output_name = "sv_{0}.csv".format(ratio_name)
-
         output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev", "weighted_avg"]
         with open(csv_output_name, 'w') as output_csv:
             output_writer = csv.writer(output_csv)

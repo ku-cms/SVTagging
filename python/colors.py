@@ -12,7 +12,8 @@ import ROOT
 
 # print color, RGB, and index
 def printColors():
-    with open("rgb.json", "r") as input_file:
+    json_file = "rgb.json"
+    with open(json_file, "r") as input_file:
         data = json.load(input_file)
         for color in data:
             index = ROOT.TColor.GetColor(data[color])
@@ -20,15 +21,17 @@ def printColors():
 
 # return TColor index given xkcd color using RGB json file 
 def getColorIndex(color):
-    with open("rgb.json", "r") as input_file:
+    json_file = "rgb.json"
+    with open(json_file, "r") as input_file:
         data = json.load(input_file)
         # if color in map, get RGB from map
         if color in data:
             index = ROOT.TColor.GetColor(data[color])
+            #print("{0}: {1}: {2}".format(color, data[color], index)) 
         # otherwise, assume RBG are provided
         else:
+            print("WARNING: The color '{0}' is not found in the map loaded from {1}. Assuming '{0}' is an RGB color and passing to ROOT.TColor.GetColor(color).".format(color, json_file))
             index = ROOT.TColor.GetColor(color)
-        #print("{0}: {1}: {2}".format(color, data[color], index)) 
         return index
 
 # make RGB json file from xkcd colors text file
