@@ -15,11 +15,11 @@ ROOT.TH1.AddDirectory(False)
 
 # TODO:
 # - plot efficiencies for multiple years on the same plot
-# - plot efficiencies for fast sim and full sim on the same plot
 # - change scale factor to number from total ratio of events (instead of weighted avg. across bins)
 # - increase axis label sizes
 # - save output ROOT files of double ratio
 # DONE:
+# - plot efficiencies for fast sim and full sim on the same plot
 # - change color of central weighted avg. line
 # - add weighted avg. and unc. to plots
 # - remove extra eta bins
@@ -54,6 +54,16 @@ def getLabel(key):
         "FullOverFast"  : "(full sim eff) / (fast sim eff)"
     }
     return labels[key]
+
+# get color based on a key
+def getColor(key):
+    # xkcd colors: https://xkcd.com/color/rgb/
+    colors = {
+        "2016" : "tomato red",
+        "2017" : "kelly green",
+        "2018" : "azure",
+    }
+    return colors[key]
 
 # get x_min and x_max for hist
 def getHistRange(hist):
@@ -240,8 +250,8 @@ def plotEff(ratio_name, input_dir, plot_dir, plot_name, info):
     c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
 
 # given file names and histogram names, plot efficiencies (multiple years)
-def plotEffMultiYear():
-    return
+def plotEffMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
+    pass
 
 # given file names and histogram names, plot a ratio of histograms
 def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err, draw_w_avg):
@@ -376,12 +386,6 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
     # get info from info :-)
     flavor      = info["flavor"]
     variable    = info["variable"]
-    # xkcd colors: https://xkcd.com/color/rgb/
-    colors = {
-        "2016" : "tomato red",
-        "2017" : "kelly green",
-        "2018" : "azure",
-    }
     
     # plot ratio; save as pdf
     c = ROOT.TCanvas("c", "c", 800, 800)
@@ -451,7 +455,7 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
         #y_max       = 2.0
         y_min       = 0.5
         y_max       = 1.5
-        color       = colors[year]
+        color       = getColor(year)
         line_width  = 3
         tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, color, line_width)
         # draw
