@@ -24,6 +24,11 @@ CMS_lumi = imp.load_source('CMS_lumi', './python/CMS_lumi.py')
 
 #tdrstyle.setTDRStyle()
 
+def getIntegral(hist):
+    bin1 = 1
+    bin2 = hist.GetNbinsX()
+    return hist.Integral(bin1, bin2)
+
 def make_me_a_canvas():
    can = rt.TCanvas('canvas', 'canvas', 800, 600)
    can.SetLeftMargin(0.15)
@@ -1029,6 +1034,13 @@ def make_new_hists(hists_, output_file_name_):
                         # number of bins:
                         print("{0}: n_bins = {1}".format(ratio_name, temp_new[sample][tree][ratio_name].GetNbinsX()))
                         print("{0}: n_bins = {1}".format(den_name,   hists_[sample][tree][den_name].GetNbinsX()))
+                        # number of events:
+                        num_events = getIntegral(temp_new[sample][tree][ratio_name])
+                        den_events = getIntegral(hists_[sample][tree][den_name])
+                        ratio = num_events / den_events
+                        print("CALC: numerator number of events = {0}".format(num_events))
+                        print("CALC: denominator number of events = {0}".format(den_events))
+                        print("CALC: ratio = {0:.3f}".format(ratio))
                         # efficiency: do this before taking ratio!!
                         # TEfficiency::CheckConsistency(h_pass,h_total)
                         if rt.TEfficiency.CheckConsistency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name]):
