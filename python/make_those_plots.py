@@ -6,6 +6,7 @@ import ROOT as rt
 import imp, os
 import tools
 import re
+import json
 
 date = datetime.today().strftime('%Y_%m_%d')
 
@@ -958,9 +959,9 @@ def read_in_hists(in_file_):
 # TODO:
 # Fix error: Error in <TH1D::Divide>: Cannot divide histograms with different number of bins
 # Fix rebinning (works for some ratios, but breaks others)
-def make_new_hists(hists_, output_file_name_):
+def make_new_hists(hists_, output_root_file_name):
     #print("make_new_hists(): start")
-    output_file = rt.TFile(output_file_name_, "RECREATE")
+    output_file = rt.TFile(output_root_file_name, "RECREATE")
     DO_REBIN  = True
     REBIN_NUM = 10
     temp_new = OrderedDict()
@@ -1156,15 +1157,21 @@ if __name__ == "__main__":
         "TTJets_FullSim_2018" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
 
-    the_map     = file_map_v6p1
-    output_dir  = "sv_eff"
+    input_file_map          = file_map_v6p1
+    output_dir              = "sv_eff"
+    output_json_file_name   = "{0}/sv_sf.json".format(output_dir)
     tools.makeDir(output_dir)
+
+    results = {}
     
-    for output_name in the_map:
+    for output_name in input_file_map:
         print(" - Process {0}".format(output_name))
-        background_file = the_map[output_name]
-        output_file_name = "{0}/{1}_sv_eff.root".format(output_dir, output_name)
-        b_hists         = read_in_hists(background_file)
-        b_hists_new     = make_new_hists(b_hists, output_file_name)
+        background_file         = input_file_map[output_name]
+        output_root_file_name   = "{0}/{1}_sv_eff.root".format(output_dir, output_name)
+        b_hists                 = read_in_hists(background_file)
+        b_hists_new             = make_new_hists(b_hists, output_root_file_name)
         make_overlay_plot(b_hists_new, suffix, output_name)
-    
+
+    with open(output_json_file_name, 'w') as output_json:
+        json.dump(results, output_json, indent=4)
+
