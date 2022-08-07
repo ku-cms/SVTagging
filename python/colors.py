@@ -70,7 +70,7 @@ def main():
                 color_map[key] = value
     
     with open(output_name, "w") as output_file:
-        json.dump(color_map, output_file, indent=4)
+        json.dump(color_map, output_file, indent=4, sort_keys=True)
     
     print("Created {0}".format(output_name))
 

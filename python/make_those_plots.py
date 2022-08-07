@@ -959,7 +959,7 @@ def read_in_hists(in_file_):
 # TODO:
 # Fix error: Error in <TH1D::Divide>: Cannot divide histograms with different number of bins
 # Fix rebinning (works for some ratios, but breaks others)
-def make_new_hists(hists_, output_root_file_name):
+def make_new_hists(hists_, output_root_file_name, process, results):
     #print("make_new_hists(): start")
     output_file = rt.TFile(output_root_file_name, "RECREATE")
     DO_REBIN  = True
@@ -1042,6 +1042,9 @@ def make_new_hists(hists_, output_root_file_name):
                         print("CALC: numerator number of events = {0}".format(num_events))
                         print("CALC: denominator number of events = {0}".format(den_events))
                         print("CALC: ratio = {0:.3f}".format(ratio))
+                        results[process]["num_events"]  = num_events
+                        results[process]["den_events"]  = den_events
+                        results[process]["ratio"]       = ratio
                         # efficiency: do this before taking ratio!!
                         # TEfficiency::CheckConsistency(h_pass,h_total)
                         if rt.TEfficiency.CheckConsistency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name]):
@@ -1159,19 +1162,20 @@ if __name__ == "__main__":
 
     input_file_map          = file_map_v6p1
     output_dir              = "sv_eff"
-    output_json_file_name   = "{0}/sv_sf.json".format(output_dir)
+    output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
     tools.makeDir(output_dir)
 
     results = {}
     
-    for output_name in input_file_map:
-        print(" - Process {0}".format(output_name))
-        background_file         = input_file_map[output_name]
-        output_root_file_name   = "{0}/{1}_sv_eff.root".format(output_dir, output_name)
+    for process in input_file_map:
+        print(" - Process {0}".format(process))
+        results[process]        = {}
+        background_file         = input_file_map[process]
+        output_root_file_name   = "{0}/{1}_sv_eff.root".format(output_dir, process)
         b_hists                 = read_in_hists(background_file)
-        b_hists_new             = make_new_hists(b_hists, output_root_file_name)
-        make_overlay_plot(b_hists_new, suffix, output_name)
+        b_hists_new             = make_new_hists(b_hists, output_root_file_name, process, results)
+        make_overlay_plot(b_hists_new, suffix, process)
 
     with open(output_json_file_name, 'w') as output_json:
-        json.dump(results, output_json, indent=4)
+        json.dump(results, output_json, indent=4, sort_keys=True)
 
