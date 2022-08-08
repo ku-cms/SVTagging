@@ -1035,16 +1035,18 @@ def make_new_hists(hists_, output_root_file_name, process, results):
                         # number of bins:
                         print("{0}: n_bins = {1}".format(ratio_name, temp_new[sample][tree][ratio_name].GetNbinsX()))
                         print("{0}: n_bins = {1}".format(den_name,   hists_[sample][tree][den_name].GetNbinsX()))
-                        # number of events:
-                        num_events = getIntegral(temp_new[sample][tree][ratio_name])
-                        den_events = getIntegral(hists_[sample][tree][den_name])
-                        ratio = num_events / den_events
-                        print("CALC: numerator number of events = {0}".format(num_events))
-                        print("CALC: denominator number of events = {0}".format(den_events))
-                        print("CALC: ratio = {0:.3f}".format(ratio))
-                        results[process]["num_events"]  = num_events
-                        results[process]["den_events"]  = den_events
-                        results[process]["ratio"]       = ratio
+                        # calc eff for isB
+                        if "isB" in new_long_name:
+                            # number of events:
+                            num_events  = getIntegral(temp_new[sample][tree][ratio_name])
+                            den_events  = getIntegral(hists_[sample][tree][den_name])
+                            ratio       = num_events / den_events
+                            print("CALC: number of events (numerator) = {0}".format(num_events))
+                            print("CALC: number of events (denominator) = {0}".format(den_events))
+                            print("CALC: ratio = {0:.3f}".format(ratio))
+                            results[process]["num_events"]  = num_events
+                            results[process]["den_events"]  = den_events
+                            results[process]["ratio"]       = ratio
                         # efficiency: do this before taking ratio!!
                         # TEfficiency::CheckConsistency(h_pass,h_total)
                         if rt.TEfficiency.CheckConsistency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name]):

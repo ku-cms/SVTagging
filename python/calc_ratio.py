@@ -5,6 +5,8 @@ import numpy as np
 import tools
 import csv
 import colors
+import json
+import os
 
 # Make sure ROOT.TFile.Open(fileURL) does not seg fault when $ is in sys.argv (e.g. $ passed in as argument)
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -36,6 +38,14 @@ ROOT.TH1.AddDirectory(False)
 # NOTES:
 # - Currently for errors on eff. histos, the average of high and low errors from TEfficiency are used. The double ratio has symmetric errors; could maintain asymmetric errors.
 # - Currently for SF, std_dev is used; could instead propagate unc. through calc. of weighted average.
+
+# check that file exists
+def fileExists(file_name):
+    if not os.path.isfile(file_name):
+        print("ERROR: the file \"{0}\" does not exist.".format(file_name))
+        return False
+    else:
+        return True
 
 # check that histogram exists
 def histExists(hist_name, hist):
@@ -146,21 +156,22 @@ def getBinErrors(hist, start_bin, end_bin):
     return errors
 
 # get row for csv output
-def getRow(hist, plot_name, ratio_name, year, flavor, variable):
+def getRow(hist, plot_name, ratio_name, year, flavor, variable, scale_factor):
     start_bin           = 1
     end_bin             = hist.GetNbinsX()
     values              = getBinValues(hist, start_bin, end_bin)
     errors              = getBinErrors(hist, start_bin, end_bin)
     weights             = [1/(err ** 2) for err in errors]
     n_values            = len(values)
+    weighted_avg        = np.average(values, weights=weights)
     mean                = np.mean(values)
     std_dev             = np.std(values)
-    weighted_avg        = np.average(values, weights=weights)
+    scale_factor_rnd    = round(scale_factor, 3)
+    weighted_avg_rnd    = round(weighted_avg, 3)
     mean_rnd            = round(mean, 3)
     std_dev_rnd         = round(std_dev, 3)
-    weighted_avg_rnd    = round(weighted_avg, 3)
-    # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev", "weighted_avg"]
-    output_row = [ratio_name, year, flavor, variable, n_values, mean_rnd, std_dev_rnd, weighted_avg_rnd]
+    # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "scale_factor", "weighted_avg", "mean", "std_dev"]
+    output_row = [ratio_name, year, flavor, variable, n_values, scale_factor_rnd, weighted_avg_rnd, mean_rnd, std_dev_rnd]
     return output_row
 
 # given file names and histogram names, plot efficiencies (fullsim and fastsim)
@@ -322,22 +333,33 @@ def plotEffMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
     c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
 
 # given file names and histogram names, plot a ratio of histograms
-def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, use_eff, draw_err, draw_w_avg):
+def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, eff_map, use_eff, draw_err, draw_w_avg):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     year        = info["year"]
     flavor      = info["flavor"]
     variable    = info["variable"]
+    # get efficiencies
+    eff_key_fastsim = "TTJets_FastSim_{0}".format(year)
+    eff_key_fullsim = "TTJets_FullSim_{0}".format(year)
+    eff_fastsim     = eff_map[eff_key_fastsim]["ratio"]
+    eff_fullsim     = eff_map[eff_key_fullsim]["ratio"]
+    scale_factor    = -1
     # get file and hist names
     names = {}
     if ratio_name == "FastOverFull":
         names = getNamesFastOverFull(input_dir, year, flavor, variable, use_eff)
+        scale_factor = eff_fastsim / eff_fullsim
     elif ratio_name == "FullOverFast":
         names = getNamesFullOverFast(input_dir, year, flavor, variable, use_eff)
+        scale_factor = eff_fullsim / eff_fastsim
     else:
         # print error and quit if ratio name is not supported
         print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
         return
+    
+    print("ratio_name: {0}, year: {1}, scale_factor: {2}".format(ratio_name, year, scale_factor))
+    
     f_num_name = names["f_num_name"]
     f_den_name = names["f_den_name"]
     h_num_name = names["h_num_name"]
@@ -383,15 +405,17 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, u
     tools.setupHist(h_ratio, title, x_title, y_title, y_min, y_max, h_color, h_line_width)
     tools.setupHist(dummy, title, x_title, y_title, y_min, y_max, h_color, 0)
     # save stats to csv file
-    output_row = getRow(h_ratio, plot_name, ratio_name, year, flavor, variable)
+    output_row = getRow(h_ratio, plot_name, ratio_name, year, flavor, variable, scale_factor)
     output_writer.writerow(output_row)
     # draw dummy hist
     dummy.Draw()
     
     # draw weighted avg. with unc.
     if draw_w_avg:
-        w_avg       = output_row[-1]
-        std_dev     = output_row[-2]
+        # WARNING: hardcoded row indices... needs to match positions of values in row
+        # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "scale_factor", "weighted_avg", "mean", "std_dev"]
+        w_avg       = output_row[-3]
+        std_dev     = output_row[-1]
         w_avg_up    = w_avg + std_dev
         w_avg_down  = w_avg - std_dev
         # TLine (Double_t x1, Double_t y1, Double_t x2, Double_t y2)
@@ -540,7 +564,7 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
     c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
 
 # create plots for different years, flavors, and variables
-def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer):
+def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer, eff_map):
     use_eff     = True
     draw_err    = True
     draw_w_avg  = True
@@ -559,7 +583,7 @@ def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_write
                 # plot efficiencies (fullsim and fastsim)
                 plotEff(ratio_name, input_dir, plot_dir, plot_name_eff, info)
                 # plot ratio of efficiencies
-                plotRatio(ratio_name, input_dir, plot_dir, plot_name_eff_ratios, info, output_writer, use_eff, draw_err, draw_w_avg)
+                plotRatio(ratio_name, input_dir, plot_dir, plot_name_eff_ratios, info, output_writer, eff_map, use_eff, draw_err, draw_w_avg)
     
     # loop over flavors and variables 
     for flavor in flavors:
@@ -600,15 +624,25 @@ def main():
     years           = ["2016", "2017", "2018"]
     flavors         = ["isB", "isC", "isLight"]
     variables       = ["PT", "Eta"]
+
+    eff_map     = {}
+    json_file   = "sv_eff/sv_eff.json"
+    json_exists = fileExists(json_file)
+    
+    if json_exists:
+        with open(json_file, 'r') as input_file:
+            eff_map = json.load(input_file)
+    else:
+        return
     
     for ratio_name in ratio_names:
         plot_dir        = "plots_{0}".format(ratio_name)
         csv_output_name = "sv_{0}.csv".format(ratio_name)
-        output_column_titles = ["name", "year", "flavor", "variable", "n_values", "mean", "std_dev", "weighted_avg"]
+        output_column_titles = ["name", "year", "flavor", "variable", "n_values", "scale_factor", "weighted_avg", "mean", "std_dev"]
         with open(csv_output_name, 'w') as output_csv:
             output_writer = csv.writer(output_csv)
             output_writer.writerow(output_column_titles)
-            run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer)
+            run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer, eff_map)
 
 if __name__ == "__main__":
     main()
