@@ -220,8 +220,8 @@ def plotEff(ratio_name, input_dir, plot_dir, plot_name, info):
     c = ROOT.TCanvas("c", "c", 800, 800)
     
     # legend
-    legend_x1 = 0.70
-    legend_x2 = 0.90
+    legend_x1 = 0.65
+    legend_x2 = 0.85
     legend_y1 = 0.70
     legend_y2 = 0.90
     # legend: TLegend(x1,y1,x2,y2)
@@ -271,8 +271,8 @@ def plotEffMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
     c = ROOT.TCanvas("c", "c", 800, 800)
     
     # legend
-    legend_x1 = 0.70
-    legend_x2 = 0.90
+    legend_x1 = 0.65
+    legend_x2 = 0.85
     legend_y1 = 0.70
     legend_y2 = 0.90
     # legend: TLegend(x1,y1,x2,y2)
@@ -333,7 +333,7 @@ def plotEffMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info):
     c.SaveAs("{0}/{1}.pdf".format(plot_dir, plot_name))
 
 # given file names and histogram names, plot a ratio of histograms
-def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, eff_map, use_eff, draw_err, draw_w_avg):
+def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, eff_map, use_eff, draw_err, draw_line):
     # TODO: save num, den, and ratio histograms in a new root file
     # get info from info :-)
     year        = info["year"]
@@ -344,7 +344,10 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, e
     eff_key_fullsim = "TTJets_FullSim_{0}".format(year)
     eff_fastsim     = eff_map[eff_key_fastsim]["ratio"]
     eff_fullsim     = eff_map[eff_key_fullsim]["ratio"]
-    scale_factor    = -1
+    # scale factor from ratio of eff. with eff. from total event counts
+    # use 5% unc. to cover stat. and syst. unc.
+    scale_factor        = -1
+    scale_factor_unc    = 0.05
     # get file and hist names
     names = {}
     if ratio_name == "FastOverFull":
@@ -358,7 +361,7 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, e
         print("ERROR: The ratio_name \"{0}\" is not supported. Quitting now!".format(ratio_name))
         return
     
-    print("ratio_name: {0}, year: {1}, scale_factor: {2}".format(ratio_name, year, scale_factor))
+    #print("ratio_name: {0}, year: {1}, scale_factor: {2}".format(ratio_name, year, scale_factor))
     
     f_num_name = names["f_num_name"]
     f_den_name = names["f_den_name"]
@@ -411,42 +414,59 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, e
     dummy.Draw()
     
     # draw weighted avg. with unc.
-    if draw_w_avg:
+    if draw_line:
         # WARNING: hardcoded row indices... needs to match positions of values in row
         # output_column_titles = ["name", "year", "flavor", "variable", "n_values", "scale_factor", "weighted_avg", "mean", "std_dev"]
         w_avg       = output_row[-3]
         std_dev     = output_row[-1]
         w_avg_up    = w_avg + std_dev
         w_avg_down  = w_avg - std_dev
+        scale_factor_up     = scale_factor + scale_factor_unc
+        scale_factor_down   = scale_factor - scale_factor_unc
+        
         # TLine (Double_t x1, Double_t y1, Double_t x2, Double_t y2)
-        line_w_avg      = ROOT.TLine(x_min, w_avg,      x_max, w_avg)
-        line_w_avg_up   = ROOT.TLine(x_min, w_avg_up,   x_max, w_avg_up)
-        line_w_avg_down = ROOT.TLine(x_min, w_avg_down, x_max, w_avg_down)
+        
+        # lines for weighted avg. and std. dev.
+        #line_center = ROOT.TLine(x_min, w_avg,      x_max, w_avg)
+        #line_up     = ROOT.TLine(x_min, w_avg_up,   x_max, w_avg_up)
+        #line_down   = ROOT.TLine(x_min, w_avg_down, x_max, w_avg_down)
+        
+        # lines for scale factor (eff. ratio, eff. from total event counts)
+        line_center = ROOT.TLine(x_min, scale_factor,       x_max,  scale_factor)
+        line_up     = ROOT.TLine(x_min, scale_factor_up,    x_max,  scale_factor_up)
+        line_down   = ROOT.TLine(x_min, scale_factor_down,  x_max,  scale_factor_down)
+        
         # setup lines
         mean_color  = "tomato red"
         unc_color   = "azure"
         line_width  = 3
         line_style  = 7
-        tools.setupLine(line_w_avg,         mean_color, line_width, line_style)
-        tools.setupLine(line_w_avg_up,      unc_color,  line_width, line_style)
-        tools.setupLine(line_w_avg_down,    unc_color,  line_width, line_style)
+        tools.setupLine(line_center,    mean_color, line_width, line_style)
+        tools.setupLine(line_up,        unc_color,  line_width, line_style)
+        tools.setupLine(line_down,      unc_color,  line_width, line_style)
+        
         # draw lines
-        line_w_avg.Draw()
-        line_w_avg_up.Draw()
-        line_w_avg_down.Draw()
+        line_center.Draw()
+        line_up.Draw()
+        line_down.Draw()
         
         # legend
-        legend_x1 = 0.70
-        legend_x2 = 0.90
+        legend_x1 = 0.65
+        legend_x2 = 0.85
         legend_y1 = 0.70
         legend_y2 = 0.90
         # legend: TLegend(x1,y1,x2,y2)
         legend = ROOT.TLegend(legend_x1, legend_y1, legend_x2, legend_y2)
         tools.setupLegend(legend)
+
+        #legend.AddEntry(h_ratio,        "eff. ratio",       "l")
+        #legend.AddEntry(line_w_avg,     "#mu",              "l")
+        #legend.AddEntry(line_w_avg_up,  "#mu #pm #sigma",   "l")
+
+        legend.AddEntry(h_ratio,        "eff. ratio",           "l")
+        legend.AddEntry(line_center,    "SF",                   "l")
+        legend.AddEntry(line_up,        "SF #pm #sigma_{SF}",   "l")
         
-        legend.AddEntry(h_ratio,        "eff. ratio",       "l")
-        legend.AddEntry(line_w_avg,     "#mu",              "l")
-        legend.AddEntry(line_w_avg_up,  "#mu #pm #sigma",   "l")
         legend.Draw()
     
     # draw
@@ -456,7 +476,8 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, e
         h_ratio.Draw("same")
 
     # text
-    if draw_w_avg:
+    if draw_line:
+        # text position
         text_x = x_min + 0.10 * (x_max - x_min)
         text_y = y_min + 0.90 * (y_max - y_min)
         #print("x_min = {0:.3f}, x_max = {1:.3f}, text_x = {2:.3f}".format(x_min, x_max, text_x))
@@ -465,7 +486,8 @@ def plotRatio(ratio_name, input_dir, plot_dir, plot_name, info, output_writer, e
         text.SetTextAlign(11) # left aligned
         text.SetTextFont(42)
         text.SetTextSize(0.05)
-        content = "#mu #pm #sigma = {0:.3f} #pm {1:.3f}".format(w_avg, std_dev)
+        #content = "#mu #pm #sigma = {0:.3f} #pm {1:.3f}".format(w_avg, std_dev)
+        content = "SF = {0:.2f} #pm {1:.2f}".format(scale_factor, scale_factor_unc)
         text.DrawLatex(text_x, text_y, content)
     
     # save plot
@@ -483,8 +505,8 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
     c = ROOT.TCanvas("c", "c", 800, 800)
     
     # legend
-    legend_x1 = 0.70
-    legend_x2 = 0.90
+    legend_x1 = 0.65
+    legend_x2 = 0.85
     legend_y1 = 0.70
     legend_y2 = 0.90
     # legend: TLegend(x1,y1,x2,y2)
@@ -567,7 +589,7 @@ def plotRatioMultiYear(ratio_name, input_dir, plot_dir, plot_name, years, info, 
 def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_writer, eff_map):
     use_eff     = True
     draw_err    = True
-    draw_w_avg  = True
+    draw_line   = True
     # make plot_dir if it does not exist
     tools.makeDir(plot_dir)
     # loop over years, flavors, and variables
@@ -583,7 +605,7 @@ def run(ratio_name, input_dir, plot_dir, years, flavors, variables, output_write
                 # plot efficiencies (fullsim and fastsim)
                 plotEff(ratio_name, input_dir, plot_dir, plot_name_eff, info)
                 # plot ratio of efficiencies
-                plotRatio(ratio_name, input_dir, plot_dir, plot_name_eff_ratios, info, output_writer, eff_map, use_eff, draw_err, draw_w_avg)
+                plotRatio(ratio_name, input_dir, plot_dir, plot_name_eff_ratios, info, output_writer, eff_map, use_eff, draw_err, draw_line)
     
     # loop over flavors and variables 
     for flavor in flavors:
@@ -624,6 +646,9 @@ def main():
     years           = ["2016", "2017", "2018"]
     flavors         = ["isB", "isC", "isLight"]
     variables       = ["PT", "Eta"]
+    
+    csv_output_dir  = "sv_sf"
+    tools.makeDir(csv_output_dir)
 
     eff_map     = {}
     json_file   = "sv_eff/sv_eff.json"
@@ -637,7 +662,7 @@ def main():
     
     for ratio_name in ratio_names:
         plot_dir        = "plots_{0}".format(ratio_name)
-        csv_output_name = "sv_{0}.csv".format(ratio_name)
+        csv_output_name = "{0}/sv_sf_{1}.csv".format(csv_output_dir, ratio_name)
         output_column_titles = ["name", "year", "flavor", "variable", "n_values", "scale_factor", "weighted_avg", "mean", "std_dev"]
         with open(csv_output_name, 'w') as output_csv:
             output_writer = csv.writer(output_csv)

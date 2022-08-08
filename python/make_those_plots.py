@@ -1020,42 +1020,42 @@ def make_new_hists(hists_, output_root_file_name, process, results):
                         long_name       = hist.GetName()
                         new_long_name   = hist.GetName().replace('discr','discr_div_nojets') 
                         # print names:
-                        print("# --------------------------------------- #")
-                        print("hist_name: {0}".format(hist_name))
-                        print("den_name: {0}".format(den_name))
-                        print("ratio_name: {0}".format(ratio_name))
-                        print("long_name: {0}".format(long_name))
-                        print("new_long_name: {0}".format(new_long_name))
-                        print("# --------------------------------------- #")
+                        #print("# --------------------------------------- #")
+                        #print("hist_name: {0}".format(hist_name))
+                        #print("den_name: {0}".format(den_name))
+                        #print("ratio_name: {0}".format(ratio_name))
+                        #print("long_name: {0}".format(long_name))
+                        #print("new_long_name: {0}".format(new_long_name))
+                        #print("# --------------------------------------- #")
                         temp_new[sample][tree][ratio_name] = hist.Clone(new_long_name)
                         # rebin hists before dividing
                         if DO_REBIN:
                             temp_new[sample][tree][ratio_name].Rebin(REBIN_NUM)
                             hists_[sample][tree][den_name].Rebin(REBIN_NUM)
                         # number of bins:
-                        print("{0}: n_bins = {1}".format(ratio_name, temp_new[sample][tree][ratio_name].GetNbinsX()))
-                        print("{0}: n_bins = {1}".format(den_name,   hists_[sample][tree][den_name].GetNbinsX()))
+                        #print("{0}: n_bins = {1}".format(ratio_name, temp_new[sample][tree][ratio_name].GetNbinsX()))
+                        #print("{0}: n_bins = {1}".format(den_name,   hists_[sample][tree][den_name].GetNbinsX()))
                         # calc eff for isB
                         if "isB" in new_long_name:
                             # number of events:
                             num_events  = getIntegral(temp_new[sample][tree][ratio_name])
                             den_events  = getIntegral(hists_[sample][tree][den_name])
                             ratio       = num_events / den_events
-                            print("CALC: number of events (numerator) = {0}".format(num_events))
-                            print("CALC: number of events (denominator) = {0}".format(den_events))
-                            print("CALC: ratio = {0:.3f}".format(ratio))
+                            #print("CALC: number of events (numerator) = {0}".format(num_events))
+                            #print("CALC: number of events (denominator) = {0}".format(den_events))
+                            #print("CALC: ratio = {0:.3f}".format(ratio))
                             results[process]["num_events"]  = num_events
                             results[process]["den_events"]  = den_events
                             results[process]["ratio"]       = ratio
                         # efficiency: do this before taking ratio!!
                         # TEfficiency::CheckConsistency(h_pass,h_total)
                         if rt.TEfficiency.CheckConsistency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name]):
-                            print("PASS CheckConsistency: {0} and {1}".format(ratio_name, den_name))
+                            #print("PASS CheckConsistency: {0} and {1}".format(ratio_name, den_name))
                             h_eff = rt.TEfficiency(temp_new[sample][tree][ratio_name], hists_[sample][tree][den_name])
-                            print("(1) h_eff.GetName(): {0}".format(h_eff.GetName()))
+                            #print("(1) h_eff.GetName(): {0}".format(h_eff.GetName()))
                             h_eff_name = new_long_name + "_eff"  
                             h_eff.SetName(h_eff_name)
-                            print("(2) h_eff.GetName(): {0}".format(h_eff.GetName()))
+                            #print("(2) h_eff.GetName(): {0}".format(h_eff.GetName()))
                             h_eff.Write()
                         # ratio
                         temp_new[sample][tree][ratio_name].Divide(hists_[sample][tree][den_name])
