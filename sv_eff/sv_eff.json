@@ -1,0 +1,32 @@
+{
+    "TTJets_FastSim_2016": {
+        "den_events": 6599.0, 
+        "num_events": 5181.0, 
+        "ratio": 0.7851189574177906
+    }, 
+    "TTJets_FastSim_2017": {
+        "den_events": 7103.0, 
+        "num_events": 5940.0, 
+        "ratio": 0.8362663663240885
+    }, 
+    "TTJets_FastSim_2018": {
+        "den_events": 7190.0, 
+        "num_events": 5993.0, 
+        "ratio": 0.8335187760778859
+    }, 
+    "TTJets_FullSim_2016": {
+        "den_events": 10985.0, 
+        "num_events": 8217.0, 
+        "ratio": 0.7480200273099681
+    }, 
+    "TTJets_FullSim_2017": {
+        "den_events": 67104.0, 
+        "num_events": 54739.0, 
+        "ratio": 0.8157337863614688
+    }, 
+    "TTJets_FullSim_2018": {
+        "den_events": 59846.0, 
+        "num_events": 48919.0, 
+        "ratio": 0.8174146977241586
+    }
+}
