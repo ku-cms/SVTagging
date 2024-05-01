@@ -23,6 +23,8 @@ helper   = imp.load_source('fix'     , './python/help.py')
 tdrstyle = imp.load_source('tdrstyle', './python/tdrstyle.py')
 CMS_lumi = imp.load_source('CMS_lumi', './python/CMS_lumi.py') 
 
+CMS_extraText = "Simulation"
+
 #tdrstyle.setTDRStyle()
 
 def getIntegral(hist):
@@ -99,7 +101,7 @@ def make_2D_plots(hists_, suffix_):
                 #hist.GetZaxis().SetRangeUser(0.9*hist.GetMinimum(0.0),1.1*hist.GetMaximum())
                 hist.GetZaxis().SetRangeUser(0.001,1.1*hist.GetMaximum())
                 CMS_lumi.writeExtraText = 1
-                CMS_lumi.extraText = 'Work in progress'
+                CMS_lumi.extraText = CMS_extraText
                 #CMS_lumi.CMS_lumi(can, 0, 10)
                 CMS_lumi.CMS_lumi(can, 0, 0)
                 l = rt.TLatex()
@@ -229,7 +231,7 @@ def make_overlay_plot(hists_, suffix_, output_name_):
 
         can.cd()
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = 'Work in progress'
+        CMS_lumi.extraText = CMS_extraText
         CMS_lumi.CMS_lumi(can, 0, 0)
         leg.Draw()
         #can.SetLogy()
@@ -387,7 +389,7 @@ def make_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''):
                     sig_hists_tmp[hist][sample][tree].Draw('histsame')
         can.Update()
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = 'Work in progress'
+        CMS_lumi.extraText = CMS_extraText
         CMS_lumi.CMS_lumi(can, 4, 0)
         #CMS_lumi.CMS_lumi(can, 0, 10)
         #l = rt.TLine(20., 0., 20., 0.2)
@@ -584,7 +586,7 @@ def make_stacked_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''
                     sig_hists_tmp[hist][sample][tree].Draw('histsame')
         can.Update()
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = 'Work in progress'
+        CMS_lumi.extraText = CMS_extraText
         CMS_lumi.CMS_lumi(can, 4, 0)
         leg.Draw()
         leg2.Draw()
@@ -823,7 +825,7 @@ def make_data_stacked_plots(data_, hists_, sig_hists_ = None, print_plots = True
         pad0.cd()
         CMS_lumi.lumi_13TeV = "41.5 fb^{-1}"
         CMS_lumi.writeExtraText = 1
-        CMS_lumi.extraText = 'Work in progress'
+        CMS_lumi.extraText = CMS_extraText
         CMS_lumi.CMS_lumi(pad0, 4, 0)
         can.Update()
         if print_plots:
@@ -884,7 +886,7 @@ def make_1D_plots(hists_, suffix_):
                 hist.GetYaxis().SetTitle(pc[hist_name]['ylabel'])
                 hist.GetYaxis().SetRangeUser(0.001,1.2*hist.GetMaximum())
                 CMS_lumi.writeExtraText = 1
-                CMS_lumi.extraText = 'Work in progress'
+                CMS_lumi.extraText = CMS_extraText
                 CMS_lumi.CMS_lumi(can, 0, 10)
                 l = rt.TLatex()
                 l.SetTextFont(42)
