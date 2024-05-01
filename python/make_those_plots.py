@@ -121,11 +121,11 @@ def make_2D_plots(hists_, suffix_):
 
 # main efficiency plot
 def make_overlay_plot(hists_, suffix_, output_name_):
-    #print("make_overlay_plot(): start")
+    print("make_overlay_plot(): start")
     title = output_name_
     hists_tmp = OrderedDict()
     plot_dir = './plots_' + output_name_ + '_' + date
-    #print("plot_dir: {0}".format(plot_dir))
+    print("plot_dir: {0}".format(plot_dir))
     if not (os.path.isdir(plot_dir)):
         os.mkdir(plot_dir)
     out_dir = os.path.join(plot_dir)
@@ -242,6 +242,8 @@ def make_overlay_plot(hists_, suffix_, output_name_):
         can.Update()
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.root')
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.pdf')
+    
+    print("make_overlay_plot(): end")
 
 def make_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''):
     '''
@@ -1164,7 +1166,8 @@ if __name__ == "__main__":
         "TTJets_FullSim_2018" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
 
-    input_file_map          = file_map_v6p1
+    input_file_map          = file_map_v1
+    #input_file_map          = file_map_v6p1
     output_dir              = "sv_eff"
     output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
     tools.makeDir(output_dir)
