@@ -121,14 +121,26 @@ def make_2D_plots(hists_, suffix_):
 
 # main efficiency plot
 def make_overlay_plot(hists_, suffix_, output_name_):
-    print("make_overlay_plot(): start")
+    debug = True
+    if debug:
+        print("make_overlay_plot(): start")
+        print(" - hists_: {0}".format(hists_))
+        print(" - suffix_: {0}".format(suffix_))
+        print(" - output_name_: {0}".format(output_name_))
+    
     title = output_name_
     hists_tmp = OrderedDict()
+    
     plot_dir = './plots_' + output_name_ + '_' + date
-    print("plot_dir: {0}".format(plot_dir))
+    if debug:
+        print("plot_dir: {0}".format(plot_dir))
+    
     if not (os.path.isdir(plot_dir)):
         os.mkdir(plot_dir)
+    
     out_dir = os.path.join(plot_dir)
+    if debug:
+        print("out_dir: {0}".format(out_dir))
 
     for sample in hists_:
         for tree in hists_[sample]:
@@ -145,6 +157,7 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 if not hist.InheritsFrom(rt.TH1.Class()): continue                    
                 if hist.InheritsFrom(rt.TH2.Class()): continue
                 hists_tmp[hist_name][sample] = OrderedDict()
+    
     for sample in hists_:
         for tree in hists_[sample]:
             for hist_name, hist in hists_[sample][tree].items():
@@ -153,7 +166,12 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 if hist.InheritsFrom(rt.TH2.Class()): continue                    
                 #if '500_490' not in tree: continue 
                 hists_tmp[hist_name][sample][tree] = hist
+    
+    if debug:
+        print("hists_tmp: {0}".format(hists_tmp))
     for hist in hists_tmp:
+        if debug:
+            print("hist: {0}".format(hist))
         can = make_me_a_canvas()
         can.cd() 
         #leg = rt.TLegend(0.2,0.73,0.75,0.93,'','brNDC') 
@@ -243,7 +261,8 @@ def make_overlay_plot(hists_, suffix_, output_name_):
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.root')
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.pdf')
     
-    print("make_overlay_plot(): end")
+    if debug:
+        print("make_overlay_plot(): end")
 
 def make_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''):
     '''
