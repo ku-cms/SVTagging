@@ -132,6 +132,7 @@ def make_overlay_plot(hists_, suffix_, output_name_):
     hists_tmp = OrderedDict()
     
     plot_dir = './plots_' + output_name_ + '_' + date
+    
     if debug:
         print("plot_dir: {0}".format(plot_dir))
     
@@ -139,36 +140,59 @@ def make_overlay_plot(hists_, suffix_, output_name_):
         os.mkdir(plot_dir)
     
     out_dir = os.path.join(plot_dir)
+    
     if debug:
         print("out_dir: {0}".format(out_dir))
 
     for sample in hists_:
+        print("sample: {0} at location 1".format(sample))
         for tree in hists_[sample]:
+            print("tree: {0} at location 1".format(tree))
             for hist_name, hist in hists_[sample][tree].items():
-                if hist_name not in pc: continue
-                if not hist.InheritsFrom(rt.TH1.Class()): continue                    
-                if hist.InheritsFrom(rt.TH2.Class()): continue                    
+                print("hist_name: {0} at location 1".format(hist_name))
+                if hist_name not in pc:
+                    print("WARNING: The hist_name {0} is not in pc at location 1.".format(hist_name))
+                    continue
+                if not hist.InheritsFrom(rt.TH1.Class()):
+                    continue                    
+                if hist.InheritsFrom(rt.TH2.Class()):
+                    continue                    
                 hists_tmp[hist_name] = OrderedDict()
 
     for sample in hists_:
+        print("sample: {0} at location 2".format(sample))
         for tree in hists_[sample]:
+            print("tree: {0} at location 2".format(tree))
             for hist_name, hist in hists_[sample][tree].items():
-                if hist_name not in pc: continue
-                if not hist.InheritsFrom(rt.TH1.Class()): continue                    
-                if hist.InheritsFrom(rt.TH2.Class()): continue
+                print("hist_name: {0} at location 2".format(hist_name))
+                if hist_name not in pc:
+                    print("WARNING: The hist_name {0} is not in pc at location 2.".format(hist_name))
+                    continue
+                if not hist.InheritsFrom(rt.TH1.Class()):
+                    continue                    
+                if hist.InheritsFrom(rt.TH2.Class()):
+                    continue
                 hists_tmp[hist_name][sample] = OrderedDict()
     
     for sample in hists_:
+        print("sample: {0} at location 3".format(sample))
         for tree in hists_[sample]:
+            print("tree: {0} at location 3".format(tree))
             for hist_name, hist in hists_[sample][tree].items():
-                if hist_name not in pc: continue
-                if not hist.InheritsFrom(rt.TH1.Class()): continue                    
-                if hist.InheritsFrom(rt.TH2.Class()): continue                    
+                print("hist_name: {0} at location 3".format(hist_name))
+                if hist_name not in pc:
+                    print("WARNING: The hist_name {0} is not in pc at location 3.".format(hist_name))
+                    continue
+                if not hist.InheritsFrom(rt.TH1.Class()):
+                    continue
+                if hist.InheritsFrom(rt.TH2.Class()):
+                    continue
                 #if '500_490' not in tree: continue 
                 hists_tmp[hist_name][sample][tree] = hist
     
     if debug:
         print("hists_tmp: {0}".format(hists_tmp))
+    
     for hist in hists_tmp:
         if debug:
             print("hist: {0}".format(hist))
