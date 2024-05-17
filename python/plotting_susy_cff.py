@@ -196,7 +196,8 @@ sample_configurables = {
   'style'  : 1,
   'width'  : 3,
   'fill'   : rt.kRed,
-  'fill_style'   : 1001,
+  #'fill_style'   : 1001,
+  'fill_style'   : 0,
 },
 'Tot2017_isC'   : {
   'legend' : 'C Flavor SVs',
@@ -204,7 +205,8 @@ sample_configurables = {
   'style'  : 1,
   'width'  : 3,
   'fill'   : rt.kCyan,
-  'fill_style'   : 3005,
+  #'fill_style'   : 3005,
+  'fill_style'   : 0,
 },
 'Tot2017_isLight'   : {
   'legend' : 'Light Flavor SVs',
@@ -212,7 +214,8 @@ sample_configurables = {
   'style'  : 1,
   'width'  : 3,
   'fill'   : rt.kBlue,
-  'fill_style'   : 3004,
+  #'fill_style'   : 3004,
+  'fill_style'   : 0,
 },
 # New Run 2 
 # FastSim
@@ -592,7 +595,7 @@ plot_configurables = {
               },
 'PT'    : {
   'xlabel'  : 'SV p_{T} [GeV]',
-  'ylabel'  : 'SV eff',
+  'ylabel'  : 'Efficiency',
   'nbins_x' : None,
   'xmin'    : None,
   'xmax'    : None,
@@ -636,7 +639,7 @@ plot_configurables = {
               },
 'Eta'    : {
   'xlabel'  : 'SV #eta',
-  'ylabel'  : 'SV eff',
+  'ylabel'  : 'Efficiency',
   'nbins_x' : None,
   'xmin'    : None,
   'xmax'    : None,

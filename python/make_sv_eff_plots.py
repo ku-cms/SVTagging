@@ -125,9 +125,10 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
         #print(" - hists_: {0}".format(hists_))
         print(" - suffix_: {0}".format(suffix_))
         print(" - output_name_: {0}".format(output_name_))
-    
-    title = output_name_
-    hists_tmp = OrderedDict()
+
+    DRAW_TITLE  = False
+    title       = output_name_
+    hists_tmp   = OrderedDict()
     
     plot_dir = './plots_' + output_name_ + '_' + date
     
@@ -214,6 +215,8 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
         leg.SetMargin(0.2)
         leg.SetFillStyle(0)
         for sample in hists_tmp[hist]:
+            if DEBUG:
+                print("sample: {0}".format(sample))
             for itr, tree in enumerate(hists_tmp[hist][sample]):
                 if int(hists_tmp[hist][sample][tree].GetEntries()) == 0:
                     continue
@@ -269,15 +272,16 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
                 hists_tmp[hist][sample][tree].Draw('histsame')
                 
                 # Draw title
-                title_x = -999
-                title_y = 1.1
-                if "PT" in hist:
-                    title_x = 13.0
-                elif "Eta" in hist:
-                    title_x = 0.5
-                mark = rt.TLatex()
-                mark.SetTextSize(0.03)
-                mark.DrawLatex(title_x, title_y, title)
+                if DRAW_TITLE:
+                    title_x = -999
+                    title_y = 1.1
+                    if "PT" in hist:
+                        title_x = 13.0
+                    elif "Eta" in hist:
+                        title_x = 0.5
+                    mark = rt.TLatex()
+                    mark.SetTextSize(0.03)
+                    mark.DrawLatex(title_x, title_y, title)
 
         can.cd()
         CMS_lumi.writeExtraText = 1
@@ -1238,7 +1242,7 @@ if __name__ == "__main__":
     USE_OLD_DATA            = True
     DO_REBIN                = False
     REBIN_NUM               = 10
-    DEBUG                   = False
+    DEBUG                   = True
     output_dir              = "sv_eff"
     output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
     tools.makeDir(output_dir)
