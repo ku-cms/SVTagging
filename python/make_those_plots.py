@@ -945,8 +945,11 @@ def make_1D_plots(hists_, suffix_):
                 can.SaveAs(out_dir+'/h_'+hist.GetName()+'_'+suffix_+'.pdf')
 
 def read_in_hists(in_file_):
-    USE_OLD_VERSION = False
-    #print("read_in_hists(): start")
+    print("read_in_hists(): start")
+    
+    # Use old 2017 version
+    USE_OLD_VERSION = True
+    
     in_file = rt.TFile(in_file_, 'r')
     hists = OrderedDict()
     for key in in_file.GetListOfKeys():
@@ -997,17 +1000,18 @@ def read_in_hists(in_file_):
                 else:
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-5])] = hist
     # debugging
-    # print(" --- hists (start) --- ")
-    # for key in hists:
-    #     print("{0}: {1}".format(key, len(hists[key])))
-    # print(" --- hists (end) --- ")
+    print("--- hists ---")
+    for key in hists:
+        print(" - {0}: {1}".format(key, len(hists[key])))
+    print("-------------")
+    print("read_in_hists(): end")
     return hists 
 
 # TODO:
 # Fix error: Error in <TH1D::Divide>: Cannot divide histograms with different number of bins
 # Fix rebinning (works for some ratios, but breaks others)
 def make_new_hists(hists_, output_root_file_name, process, results):
-    #print("make_new_hists(): start")
+    print("make_new_hists(): start")
     output_file = rt.TFile(output_root_file_name, "RECREATE")
     DO_REBIN  = True
     REBIN_NUM = 10
@@ -1115,6 +1119,7 @@ def make_new_hists(hists_, output_root_file_name, process, results):
                     #    bin_val = temp_new[sample][tree][new_hist].GetBinContent(ibin)
                     #    temp_new[sample][tree][new_hist].SetBinContent(ibin, bin_val / zero_value)
     hists_.update(temp_new)
+    print("make_new_hists(): end")
     return hists_
 
 def read_in_hists_opt(in_file_):
