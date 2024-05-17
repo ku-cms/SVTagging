@@ -118,13 +118,11 @@ def make_2D_plots(hists_, suffix_):
                 can.SaveAs(out_dir+'/h_'+hist.GetName()+'_'+suffix_+'.root')
                 can.SaveAs(out_dir+'/h_'+hist.GetName()+'_'+suffix_+'.pdf')
 
-
-# main efficiency plot
-def make_overlay_plot(hists_, suffix_, output_name_):
-    debug = True
-    if debug:
-        print("make_overlay_plot(): start")
-        print(" - hists_: {0}".format(hists_))
+# make efficiency plot
+def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
+    if DEBUG:
+        print("make_eff_plot(): start")
+        #print(" - hists_: {0}".format(hists_))
         print(" - suffix_: {0}".format(suffix_))
         print(" - output_name_: {0}".format(output_name_))
     
@@ -133,7 +131,7 @@ def make_overlay_plot(hists_, suffix_, output_name_):
     
     plot_dir = './plots_' + output_name_ + '_' + date
     
-    if debug:
+    if DEBUG:
         print("plot_dir: {0}".format(plot_dir))
     
     if not (os.path.isdir(plot_dir)):
@@ -141,15 +139,18 @@ def make_overlay_plot(hists_, suffix_, output_name_):
     
     out_dir = os.path.join(plot_dir)
     
-    if debug:
+    if DEBUG:
         print("out_dir: {0}".format(out_dir))
 
     for sample in hists_:
-        print("sample: {0} at location 1".format(sample))
+        if DEBUG:
+            print("sample: {0} at location 1".format(sample))
         for tree in hists_[sample]:
-            print("tree: {0} at location 1".format(tree))
+            if DEBUG:
+                print("tree: {0} at location 1".format(tree))
             for hist_name, hist in hists_[sample][tree].items():
-                print("hist_name: {0} at location 1".format(hist_name))
+                if DEBUG:
+                    print("hist_name: {0} at location 1".format(hist_name))
                 if hist_name not in pc:
                     print("WARNING: The hist_name {0} is not in pc at location 1.".format(hist_name))
                     continue
@@ -160,11 +161,14 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 hists_tmp[hist_name] = OrderedDict()
 
     for sample in hists_:
-        print("sample: {0} at location 2".format(sample))
+        if DEBUG:
+            print("sample: {0} at location 2".format(sample))
         for tree in hists_[sample]:
-            print("tree: {0} at location 2".format(tree))
+            if DEBUG:
+                print("tree: {0} at location 2".format(tree))
             for hist_name, hist in hists_[sample][tree].items():
-                print("hist_name: {0} at location 2".format(hist_name))
+                if DEBUG:
+                    print("hist_name: {0} at location 2".format(hist_name))
                 if hist_name not in pc:
                     print("WARNING: The hist_name {0} is not in pc at location 2.".format(hist_name))
                     continue
@@ -175,11 +179,14 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 hists_tmp[hist_name][sample] = OrderedDict()
     
     for sample in hists_:
-        print("sample: {0} at location 3".format(sample))
+        if DEBUG:
+            print("sample: {0} at location 3".format(sample))
         for tree in hists_[sample]:
-            print("tree: {0} at location 3".format(tree))
+            if DEBUG:
+                print("tree: {0} at location 3".format(tree))
             for hist_name, hist in hists_[sample][tree].items():
-                print("hist_name: {0} at location 3".format(hist_name))
+                if DEBUG:
+                    print("hist_name: {0} at location 3".format(hist_name))
                 if hist_name not in pc:
                     print("WARNING: The hist_name {0} is not in pc at location 3.".format(hist_name))
                     continue
@@ -190,11 +197,12 @@ def make_overlay_plot(hists_, suffix_, output_name_):
                 #if '500_490' not in tree: continue 
                 hists_tmp[hist_name][sample][tree] = hist
     
-    if debug:
-        print("hists_tmp: {0}".format(hists_tmp))
+    if DEBUG:
+        #print("hists_tmp: {0}".format(hists_tmp))
+        pass
     
     for hist in hists_tmp:
-        if debug:
+        if DEBUG:
             print("hist: {0}".format(hist))
         can = make_me_a_canvas()
         can.cd() 
@@ -285,8 +293,8 @@ def make_overlay_plot(hists_, suffix_, output_name_):
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.root')
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.pdf')
     
-    if debug:
-        print("make_overlay_plot(): end")
+    if DEBUG:
+        print("make_eff_plot(): end")
 
 def make_plots(hists_, sig_hists_ = None, print_plots = True, suffix_=''):
     '''
@@ -947,8 +955,9 @@ def make_1D_plots(hists_, suffix_):
 
 # read_in_hists()
 # USE_OLD_DATA: should be true for old 2017 data and false for new Run 2 data
-def read_in_hists(in_file_, USE_OLD_DATA):
-    print("read_in_hists(): start")
+def read_in_hists(in_file_, USE_OLD_DATA, DEBUG=False):
+    if DEBUG:
+        print("read_in_hists(): start")
     
     in_file = rt.TFile(in_file_, 'r')
     hists = OrderedDict()
@@ -1000,18 +1009,21 @@ def read_in_hists(in_file_, USE_OLD_DATA):
                 else:
                     hists[key_name][tree_name]['_'.join(hist_name.split('_')[:-5])] = hist
     # debugging
-    print("--- hists ---")
-    for key in hists:
-        print(" - {0}: {1}".format(key, len(hists[key])))
-    print("-------------")
-    print("read_in_hists(): end")
+    if DEBUG:
+        print("--- hists ---")
+        for key in hists:
+            print(" - {0}: {1}".format(key, len(hists[key])))
+        print("-------------")
+        print("read_in_hists(): end")
+    
     return hists 
 
 # FIXME:
 # Fix error: Error in <TH1D::Divide>: Cannot divide histograms with different number of bins
 # Fix rebinning (works for some ratios, but breaks others)
-def make_new_hists(hists_, output_root_file_name, process, results, DO_REBIN=False, REBIN_NUM=-1):
-    print("make_new_hists(): start")
+def make_new_hists(hists_, output_root_file_name, process, results, DO_REBIN=False, REBIN_NUM=-1, DEBUG=False):
+    if DEBUG:
+        print("make_new_hists(): start")
     
     output_file = rt.TFile(output_root_file_name, "RECREATE")
     temp_new = OrderedDict()
@@ -1118,8 +1130,12 @@ def make_new_hists(hists_, output_root_file_name, process, results, DO_REBIN=Fal
                     #for ibin in xrange(temp_new[sample][tree][new_hist].GetNbinsX()):
                     #    bin_val = temp_new[sample][tree][new_hist].GetBinContent(ibin)
                     #    temp_new[sample][tree][new_hist].SetBinContent(ibin, bin_val / zero_value)
+    
     hists_.update(temp_new)
-    print("make_new_hists(): end")
+    
+    if DEBUG:
+        print("make_new_hists(): end")
+    
     return hists_
 
 def read_in_hists_opt(in_file_):
@@ -1169,8 +1185,8 @@ if __name__ == "__main__":
     #make_1D_plots(b_hists, suffix)
     #make_stacked_plots(b_hists, sig_hists, True, suffix)
     #make_data_stacked_plots(data_hists, b_hists, sig_hists, True, suffix)
-    #make_overlay_plot(sig_hists_new, suffix)
-    #make_overlay_plot(b_hists_new, suffix)
+    #make_eff_plot(sig_hists_new, suffix)
+    #make_eff_plot(b_hists_new, suffix)
     #make_2D_plots(sig_hists, suffix)
     #make_2D_plots(b_hists, suffix)
     
@@ -1222,6 +1238,7 @@ if __name__ == "__main__":
     USE_OLD_DATA            = True
     DO_REBIN                = False
     REBIN_NUM               = 10
+    DEBUG                   = False
     output_dir              = "sv_eff"
     output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
     tools.makeDir(output_dir)
@@ -1233,9 +1250,9 @@ if __name__ == "__main__":
         results[process]        = {}
         background_file         = input_file_map[process]
         output_root_file_name   = "{0}/{1}_sv_eff.root".format(output_dir, process)
-        b_hists                 = read_in_hists(background_file, USE_OLD_DATA)
-        b_hists_new             = make_new_hists(b_hists, output_root_file_name, process, results, DO_REBIN, REBIN_NUM)
-        make_overlay_plot(b_hists_new, suffix, process)
+        b_hists                 = read_in_hists(background_file, USE_OLD_DATA, DEBUG)
+        b_hists_new             = make_new_hists(b_hists, output_root_file_name, process, results, DO_REBIN, REBIN_NUM, DEBUG)
+        make_eff_plot(b_hists_new, suffix, process, DEBUG)
 
     with open(output_json_file_name, 'w') as output_json:
         json.dump(results, output_json, indent=4, sort_keys=True)
