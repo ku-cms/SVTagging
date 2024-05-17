@@ -946,8 +946,7 @@ def make_1D_plots(hists_, suffix_):
 
 
 # read_in_hists()
-# USE_OLD_DATA:
-# should be true for old 2017 data and false for new Run 2 data
+# USE_OLD_DATA: should be true for old 2017 data and false for new Run 2 data
 def read_in_hists(in_file_, USE_OLD_DATA):
     print("read_in_hists(): start")
     
@@ -1008,15 +1007,15 @@ def read_in_hists(in_file_, USE_OLD_DATA):
     print("read_in_hists(): end")
     return hists 
 
-# TODO:
+# FIXME:
 # Fix error: Error in <TH1D::Divide>: Cannot divide histograms with different number of bins
 # Fix rebinning (works for some ratios, but breaks others)
-def make_new_hists(hists_, output_root_file_name, process, results):
+def make_new_hists(hists_, output_root_file_name, process, results, DO_REBIN=False, REBIN_NUM=-1):
     print("make_new_hists(): start")
+    
     output_file = rt.TFile(output_root_file_name, "RECREATE")
-    DO_REBIN  = True
-    REBIN_NUM = 10
     temp_new = OrderedDict()
+    
     for sample in hists_:
         temp_new[sample] = OrderedDict()
         for tree in hists_[sample]:
@@ -1214,12 +1213,15 @@ if __name__ == "__main__":
         "TTJets_FullSim_2017" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FullSim_2017.root",
         "TTJets_FullSim_2018" : "output_files_2022_07_13/output_background_hist_b_eff_TTJets_FullSim_2018.root",
     }
-
-    # USE_OLD_DATA:
-    # should be true for old 2017 data and false for new Run 2 data
-    USE_OLD_DATA            = True
+    
+    # specify dataset to use  
     input_file_map          = file_map_v1
     #input_file_map          = file_map_v6p1
+
+    # USE_OLD_DATA: should be true for old 2017 data and false for new Run 2 data
+    USE_OLD_DATA            = True
+    DO_REBIN                = True
+    REBIN_NUM               = 10
     output_dir              = "sv_eff"
     output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
     tools.makeDir(output_dir)
@@ -1232,7 +1234,7 @@ if __name__ == "__main__":
         background_file         = input_file_map[process]
         output_root_file_name   = "{0}/{1}_sv_eff.root".format(output_dir, process)
         b_hists                 = read_in_hists(background_file, USE_OLD_DATA)
-        b_hists_new             = make_new_hists(b_hists, output_root_file_name, process, results)
+        b_hists_new             = make_new_hists(b_hists, output_root_file_name, process, results, DO_REBIN, REBIN_NUM)
         make_overlay_plot(b_hists_new, suffix, process)
 
     with open(output_json_file_name, 'w') as output_json:
