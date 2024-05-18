@@ -33,10 +33,10 @@ def getIntegral(hist):
     return hist.Integral(bin1, bin2)
 
 def make_me_a_canvas():
-   can = rt.TCanvas('canvas', 'canvas', 800, 600)
+   can = rt.TCanvas('canvas', 'canvas', 800, 800)
    can.SetLeftMargin(0.15)
-   can.SetRightMargin(0.18)
-   #can.SetTopMargin(0.05)
+   can.SetRightMargin(0.05)
+   can.SetTopMargin(0.10)
    can.SetBottomMargin(0.15)
    #can.SetGridx()
    #can.SetGridy()
@@ -207,12 +207,14 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
             print("hist: {0}".format(hist))
         can = make_me_a_canvas()
         can.cd() 
-        #leg = rt.TLegend(0.2,0.73,0.75,0.93,'','brNDC') 
-        leg = rt.TLegend(0.3,0.80,0.8,0.88,'','brNDC') 
+        # legend: x1, y1, x2, y2
+        #leg = rt.TLegend(0.30, 0.80, 0.80, 0.88, '', 'brNDC')
+        leg = rt.TLegend(0.60, 0.75, 0.90, 0.90, '', 'brNDC')
         leg.SetBorderSize(0)
         leg.SetNColumns(1)
-        leg.SetTextSize(0.02)
-        leg.SetMargin(0.2)
+        leg.SetTextFont(42)
+        leg.SetTextSize(0.04)
+        leg.SetMargin(0.20)
         leg.SetFillStyle(0)
         for sample in hists_tmp[hist]:
             if DEBUG:
@@ -296,8 +298,11 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
         #can.SaveAs(out_dir+'/hoverlay_log_'+hist+'_'+suffix_+'.pdf')
         can.SetLogy(0)
         can.Update()
+        can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.C')
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.root')
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.pdf')
+        can.Close()
+        del can
     
     if DEBUG:
         print("make_eff_plot(): end")

@@ -193,7 +193,7 @@ sample_configurables = {
 # Old 2017 dataset
 'Tot2017_isB'   : {
   'legend'      : 'B Flavor SVs',
-  'color'       : rt.kRed,
+  'color'       : rt.kRed + 1,
   'style'       : 1,
   'width'       : 3,
   #'fill'        : rt.kRed,
@@ -203,7 +203,7 @@ sample_configurables = {
 },
 'Tot2017_isC'   : {
   'legend'      : 'C Flavor SVs',
-  'color'       : rt.kGreen,
+  'color'       : rt.kGreen + 1,
   'style'       : 1,
   'width'       : 3,
   #'fill'        : rt.kGreen,
@@ -213,7 +213,7 @@ sample_configurables = {
 },
 'Tot2017_isLight'   : {
   'legend'          : 'Light Flavor SVs',
-  'color'           : rt.kBlue,
+  'color'           : rt.kBlue + 1,
   'style'           : 1,
   'width'           : 3,
   #'fill'            : rt.kBlue,
