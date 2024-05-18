@@ -13,8 +13,8 @@ date = datetime.today().strftime('%Y_%m_%d')
 rt.gROOT.SetBatch()
 rt.gROOT.SetStyle('Plain')
 rt.gStyle.SetOptTitle(0)
-rt.gStyle.SetOptStat(0000)
-rt.gStyle.SetOptFit(0111)
+rt.gStyle.SetOptStat(0b0000)
+rt.gStyle.SetOptFit(0b0111)
 rt.gStyle.SetPalette(rt.kBlueRedYellow)
 rt.TH1.SetDefaultSumw2()
 rt.TH1.AddDirectory(rt.kFALSE)
@@ -48,8 +48,8 @@ def make_2D_plots(hists_, suffix_):
     rt.gROOT.SetBatch()
     rt.gROOT.SetStyle('Plain')
     rt.gStyle.SetOptTitle(0)
-    rt.gStyle.SetOptStat(0000)
-    rt.gStyle.SetOptFit(0111)
+    rt.gStyle.SetOptStat(0b0000)
+    rt.gStyle.SetOptFit(0b0111)
     rt.gStyle.SetPalette(rt.kBlueRedYellow)
     if not (os.path.isdir('./plots_'+date)): os.mkdir('./plots_'+date)
     for sample in hists_:
@@ -1249,7 +1249,7 @@ if __name__ == "__main__":
     USE_OLD_DATA            = True
     DO_REBIN                = False
     REBIN_NUM               = 10
-    DEBUG                   = True
+    DEBUG                   = False
     output_dir              = "sv_eff"
     output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
     tools.makeDir(output_dir)

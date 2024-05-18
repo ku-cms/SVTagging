@@ -7,7 +7,7 @@ SV Tagging for compressed SUSY search.
 1. Produce custom NANO AOD from MINI AOD (with extra SV variables)
 2. Produce reduced ntuples from NANO AOD (with extra SV variables)
 3. Produce efficiency input file (on condor)
-4. Create efficiency plot
+4. Create efficiency plots
 
 ### Produce Custom NANO AOD
 
@@ -79,3 +79,57 @@ python submitTreesLPC.py -c SUS-RunIISummer16NanoAODv7-cfg.py -d TTJets-DiLept-F
 ```
 
 </details>
+
+### Create Efficiency Plots
+
+#### Set up working area
+
+Login to a cmslpc Alma Linux 9 node (cmslpc-el9):
+```
+ssh -Y <username>@cmslpc-el9.fnal.gov
+```
+
+List available CMSSW versions and compatible scram architectures.
+```
+scram list CMSSW
+```
+
+Add this line to your ~/.bash_profile (or just run this command if you prefer):
+```
+export SCRAM_ARCH=el9_amd64_gcc12
+```
+
+If you edited ~/.bash_profile, logout and log back in to cmslpc-el9, or do:
+```
+source ~/.bash_profile
+```
+
+Then run these set up commands in a directory of your choice in ~/nobackup:
+```
+cd ~/nobackup/<working_area_path>
+cmsrel CMSSW_13_3_0
+cd CMSSW_13_3_0/src
+cmsenv
+git clone git@github.com:ku-cms/SVTagging.git
+cd SVTagging
+```
+
+Copy the input data files (only required once):
+```
+rsync -az /uscms/home/caleb/nobackup/KU_Compressed_SUSY/CMSSW_10_6_5/src/SVTagging/data .
+```
+
+#### Create plots
+
+Create efficiency plots with this command:
+```
+python3 python/make_sv_eff_plots.py
+```
+This script saves .pdf, .C, and .root files to an output directory. 
+
+You can copy these output files to your computer using rsync. 
+For example, you may run a command with this syntax from a terminal on your computer:
+```
+rsync -az <username>@cmslpc-el9.fnal.gov:<path_to_output_directory> .
+```
+
