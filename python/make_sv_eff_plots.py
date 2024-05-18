@@ -33,10 +33,10 @@ def getIntegral(hist):
     return hist.Integral(bin1, bin2)
 
 def make_me_a_canvas():
-   can = rt.TCanvas('canvas', 'canvas', 800, 600)
+   can = rt.TCanvas('canvas', 'canvas', 800, 800)
    can.SetLeftMargin(0.15)
-   can.SetRightMargin(0.18)
-   #can.SetTopMargin(0.05)
+   can.SetRightMargin(0.05)
+   can.SetTopMargin(0.10)
    can.SetBottomMargin(0.15)
    #can.SetGridx()
    #can.SetGridy()
@@ -125,9 +125,10 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
         #print(" - hists_: {0}".format(hists_))
         print(" - suffix_: {0}".format(suffix_))
         print(" - output_name_: {0}".format(output_name_))
-    
-    title = output_name_
-    hists_tmp = OrderedDict()
+
+    DRAW_TITLE  = False
+    title       = output_name_
+    hists_tmp   = OrderedDict()
     
     plot_dir = './plots_' + output_name_ + '_' + date
     
@@ -206,22 +207,28 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
             print("hist: {0}".format(hist))
         can = make_me_a_canvas()
         can.cd() 
-        #leg = rt.TLegend(0.2,0.73,0.75,0.93,'','brNDC') 
-        leg = rt.TLegend(0.3,0.80,0.8,0.88,'','brNDC') 
+        # legend: x1, y1, x2, y2
+        #leg = rt.TLegend(0.30, 0.80, 0.80, 0.88, '', 'brNDC')
+        leg = rt.TLegend(0.60, 0.75, 0.90, 0.90, '', 'brNDC')
         leg.SetBorderSize(0)
         leg.SetNColumns(1)
-        leg.SetTextSize(0.02)
-        leg.SetMargin(0.2)
+        leg.SetTextFont(42)
+        leg.SetTextSize(0.04)
+        leg.SetMargin(0.20)
         leg.SetFillStyle(0)
         for sample in hists_tmp[hist]:
+            if DEBUG:
+                print("sample: {0}".format(sample))
             for itr, tree in enumerate(hists_tmp[hist][sample]):
                 if int(hists_tmp[hist][sample][tree].GetEntries()) == 0:
                     continue
                 hists_tmp[hist][sample][tree].SetLineColor(sc[sample]['color']+itr*2)
                 hists_tmp[hist][sample][tree].SetLineStyle(sc[sample]['style'])
                 hists_tmp[hist][sample][tree].SetLineWidth(sc[sample]['width'])
-                if sc[sample]['fill']: hists_tmp[hist][sample][tree].SetFillColor(sc[sample]['fill'])
-                if sc[sample]['fill_style']: hists_tmp[hist][sample][tree].SetFillStyle(sc[sample]['fill_style'])
+                if sc[sample]['fill']:
+                    hists_tmp[hist][sample][tree].SetFillColor(sc[sample]['fill'])
+                if sc[sample]['fill_style']:
+                    hists_tmp[hist][sample][tree].SetFillStyle(sc[sample]['fill_style'])
                 #print hist, sample, tree
                 if 'SMS' in sample:
                     stop_m = tree.split('_')[1]
@@ -269,15 +276,16 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
                 hists_tmp[hist][sample][tree].Draw('histsame')
                 
                 # Draw title
-                title_x = -999
-                title_y = 1.1
-                if "PT" in hist:
-                    title_x = 13.0
-                elif "Eta" in hist:
-                    title_x = 0.5
-                mark = rt.TLatex()
-                mark.SetTextSize(0.03)
-                mark.DrawLatex(title_x, title_y, title)
+                if DRAW_TITLE:
+                    title_x = -999
+                    title_y = 1.1
+                    if "PT" in hist:
+                        title_x = 13.0
+                    elif "Eta" in hist:
+                        title_x = 0.5
+                    mark = rt.TLatex()
+                    mark.SetTextSize(0.03)
+                    mark.DrawLatex(title_x, title_y, title)
 
         can.cd()
         CMS_lumi.writeExtraText = 1
@@ -290,8 +298,11 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
         #can.SaveAs(out_dir+'/hoverlay_log_'+hist+'_'+suffix_+'.pdf')
         can.SetLogy(0)
         can.Update()
+        can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.C')
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.root')
         can.SaveAs(out_dir+'/hoverlay_'+hist+'_'+suffix_+'.pdf')
+        can.Close()
+        del can
     
     if DEBUG:
         print("make_eff_plot(): end")
@@ -1238,7 +1249,7 @@ if __name__ == "__main__":
     USE_OLD_DATA            = True
     DO_REBIN                = False
     REBIN_NUM               = 10
-    DEBUG                   = False
+    DEBUG                   = True
     output_dir              = "sv_eff"
     output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
     tools.makeDir(output_dir)
