@@ -99,7 +99,7 @@ Add this line to your ~/.bash_profile (or just run this command if you prefer):
 export SCRAM_ARCH=el9_amd64_gcc12
 ```
 
-Then logout and log back in to cmslpc-el9, or do:
+If you edited ~/.bash_profile, logout and log back in to cmslpc-el9, or do:
 ```
 source ~/.bash_profile
 ```
