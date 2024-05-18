@@ -1,7 +1,10 @@
+#ifdef __CLING__
+#pragma cling optimize(0)
+#endif
 void hoverlay_Eta_discr_ntrk_div_nojets_eff()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Sat May 18 12:13:41 2024) by ROOT version 6.14/09
+//=========  (Sat May 18 15:14:13 2024) by ROOT version 6.26/11
    TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,800,800);
    gStyle->SetOptFit(1);
    gStyle->SetOptStat(0);
@@ -122,8 +125,7 @@ void hoverlay_Eta_discr_ntrk_div_nojets_eff()
    Eta_discr_ntrk_div_nojets_Tot2017_isB_KUAnalysis__25->GetYaxis()->SetTitleOffset(1.12);
    Eta_discr_ntrk_div_nojets_Tot2017_isB_KUAnalysis__25->GetYaxis()->SetTitleFont(42);
    Eta_discr_ntrk_div_nojets_Tot2017_isB_KUAnalysis__25->GetZaxis()->SetLabelFont(42);
-   Eta_discr_ntrk_div_nojets_Tot2017_isB_KUAnalysis__25->GetZaxis()->SetLabelSize(0.035);
-   Eta_discr_ntrk_div_nojets_Tot2017_isB_KUAnalysis__25->GetZaxis()->SetTitleSize(0.035);
+   Eta_discr_ntrk_div_nojets_Tot2017_isB_KUAnalysis__25->GetZaxis()->SetTitleOffset(1);
    Eta_discr_ntrk_div_nojets_Tot2017_isB_KUAnalysis__25->GetZaxis()->SetTitleFont(42);
    Eta_discr_ntrk_div_nojets_Tot2017_isB_KUAnalysis__25->Draw("hist");
    
@@ -229,8 +231,7 @@ void hoverlay_Eta_discr_ntrk_div_nojets_eff()
    Eta_discr_ntrk_div_nojets_Tot2017_isC_KUAnalysis__26->GetYaxis()->SetTitleOffset(1.12);
    Eta_discr_ntrk_div_nojets_Tot2017_isC_KUAnalysis__26->GetYaxis()->SetTitleFont(42);
    Eta_discr_ntrk_div_nojets_Tot2017_isC_KUAnalysis__26->GetZaxis()->SetLabelFont(42);
-   Eta_discr_ntrk_div_nojets_Tot2017_isC_KUAnalysis__26->GetZaxis()->SetLabelSize(0.035);
-   Eta_discr_ntrk_div_nojets_Tot2017_isC_KUAnalysis__26->GetZaxis()->SetTitleSize(0.035);
+   Eta_discr_ntrk_div_nojets_Tot2017_isC_KUAnalysis__26->GetZaxis()->SetTitleOffset(1);
    Eta_discr_ntrk_div_nojets_Tot2017_isC_KUAnalysis__26->GetZaxis()->SetTitleFont(42);
    Eta_discr_ntrk_div_nojets_Tot2017_isC_KUAnalysis__26->Draw("histsame");
    
@@ -336,8 +337,7 @@ void hoverlay_Eta_discr_ntrk_div_nojets_eff()
    Eta_discr_ntrk_div_nojets_Tot2017_isLight_KUAnalysis__27->GetYaxis()->SetTitleOffset(1.12);
    Eta_discr_ntrk_div_nojets_Tot2017_isLight_KUAnalysis__27->GetYaxis()->SetTitleFont(42);
    Eta_discr_ntrk_div_nojets_Tot2017_isLight_KUAnalysis__27->GetZaxis()->SetLabelFont(42);
-   Eta_discr_ntrk_div_nojets_Tot2017_isLight_KUAnalysis__27->GetZaxis()->SetLabelSize(0.035);
-   Eta_discr_ntrk_div_nojets_Tot2017_isLight_KUAnalysis__27->GetZaxis()->SetTitleSize(0.035);
+   Eta_discr_ntrk_div_nojets_Tot2017_isLight_KUAnalysis__27->GetZaxis()->SetTitleOffset(1);
    Eta_discr_ntrk_div_nojets_Tot2017_isLight_KUAnalysis__27->GetZaxis()->SetTitleFont(42);
    Eta_discr_ntrk_div_nojets_Tot2017_isLight_KUAnalysis__27->Draw("histsame");
    TLatex *   tex = new TLatex(0.95,0.92,"");

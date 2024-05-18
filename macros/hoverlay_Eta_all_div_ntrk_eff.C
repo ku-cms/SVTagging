@@ -1,7 +1,10 @@
+#ifdef __CLING__
+#pragma cling optimize(0)
+#endif
 void hoverlay_Eta_all_div_ntrk_eff()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Sat May 18 12:13:41 2024) by ROOT version 6.14/09
+//=========  (Sat May 18 15:14:13 2024) by ROOT version 6.26/11
    TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,800,800);
    gStyle->SetOptFit(1);
    gStyle->SetOptStat(0);
@@ -122,8 +125,7 @@ void hoverlay_Eta_all_div_ntrk_eff()
    Eta_all_div_ntrk_Tot2017_isB_KUAnalysis__10->GetYaxis()->SetTitleOffset(1.12);
    Eta_all_div_ntrk_Tot2017_isB_KUAnalysis__10->GetYaxis()->SetTitleFont(42);
    Eta_all_div_ntrk_Tot2017_isB_KUAnalysis__10->GetZaxis()->SetLabelFont(42);
-   Eta_all_div_ntrk_Tot2017_isB_KUAnalysis__10->GetZaxis()->SetLabelSize(0.035);
-   Eta_all_div_ntrk_Tot2017_isB_KUAnalysis__10->GetZaxis()->SetTitleSize(0.035);
+   Eta_all_div_ntrk_Tot2017_isB_KUAnalysis__10->GetZaxis()->SetTitleOffset(1);
    Eta_all_div_ntrk_Tot2017_isB_KUAnalysis__10->GetZaxis()->SetTitleFont(42);
    Eta_all_div_ntrk_Tot2017_isB_KUAnalysis__10->Draw("hist");
    
@@ -229,8 +231,7 @@ void hoverlay_Eta_all_div_ntrk_eff()
    Eta_all_div_ntrk_Tot2017_isC_KUAnalysis__11->GetYaxis()->SetTitleOffset(1.12);
    Eta_all_div_ntrk_Tot2017_isC_KUAnalysis__11->GetYaxis()->SetTitleFont(42);
    Eta_all_div_ntrk_Tot2017_isC_KUAnalysis__11->GetZaxis()->SetLabelFont(42);
-   Eta_all_div_ntrk_Tot2017_isC_KUAnalysis__11->GetZaxis()->SetLabelSize(0.035);
-   Eta_all_div_ntrk_Tot2017_isC_KUAnalysis__11->GetZaxis()->SetTitleSize(0.035);
+   Eta_all_div_ntrk_Tot2017_isC_KUAnalysis__11->GetZaxis()->SetTitleOffset(1);
    Eta_all_div_ntrk_Tot2017_isC_KUAnalysis__11->GetZaxis()->SetTitleFont(42);
    Eta_all_div_ntrk_Tot2017_isC_KUAnalysis__11->Draw("histsame");
    
@@ -336,8 +337,7 @@ void hoverlay_Eta_all_div_ntrk_eff()
    Eta_all_div_ntrk_Tot2017_isLight_KUAnalysis__12->GetYaxis()->SetTitleOffset(1.12);
    Eta_all_div_ntrk_Tot2017_isLight_KUAnalysis__12->GetYaxis()->SetTitleFont(42);
    Eta_all_div_ntrk_Tot2017_isLight_KUAnalysis__12->GetZaxis()->SetLabelFont(42);
-   Eta_all_div_ntrk_Tot2017_isLight_KUAnalysis__12->GetZaxis()->SetLabelSize(0.035);
-   Eta_all_div_ntrk_Tot2017_isLight_KUAnalysis__12->GetZaxis()->SetTitleSize(0.035);
+   Eta_all_div_ntrk_Tot2017_isLight_KUAnalysis__12->GetZaxis()->SetTitleOffset(1);
    Eta_all_div_ntrk_Tot2017_isLight_KUAnalysis__12->GetZaxis()->SetTitleFont(42);
    Eta_all_div_ntrk_Tot2017_isLight_KUAnalysis__12->Draw("histsame");
    TLatex *   tex = new TLatex(0.95,0.92,"");
