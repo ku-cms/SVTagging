@@ -189,35 +189,40 @@ sample_configurables = {
              },
 
 #Flavors
-# Old 2017
+
+# Old 2017 dataset
 'Tot2017_isB'   : {
-  'legend' : 'B Flavor SVs',
-  'color'  : rt.kRed,
-  'style'  : 1,
-  'width'  : 3,
-  'fill'   : rt.kRed,
-  #'fill_style'   : 1001,
-  'fill_style'   : 0,
+  'legend'      : 'B Flavor SVs',
+  'color'       : rt.kRed,
+  'style'       : 1,
+  'width'       : 3,
+  #'fill'        : rt.kRed,
+  #'fill_style'  : 1001,
+  'fill'        : 0,
+  'fill_style'  : 0,
 },
 'Tot2017_isC'   : {
-  'legend' : 'C Flavor SVs',
-  'color'  : rt.kCyan,
-  'style'  : 1,
-  'width'  : 3,
-  'fill'   : rt.kCyan,
-  #'fill_style'   : 3005,
-  'fill_style'   : 0,
+  'legend'      : 'C Flavor SVs',
+  'color'       : rt.kGreen,
+  'style'       : 1,
+  'width'       : 3,
+  #'fill'        : rt.kGreen,
+  #'fill_style'  : 3005,
+  'fill'        : 0,
+  'fill_style'  : 0,
 },
 'Tot2017_isLight'   : {
-  'legend' : 'Light Flavor SVs',
-  'color'  : rt.kBlue,
-  'style'  : 1,
-  'width'  : 3,
-  'fill'   : rt.kBlue,
-  #'fill_style'   : 3004,
-  'fill_style'   : 0,
+  'legend'          : 'Light Flavor SVs',
+  'color'           : rt.kBlue,
+  'style'           : 1,
+  'width'           : 3,
+  #'fill'            : rt.kBlue,
+  #'fill_style'      : 3004,
+  'fill'            : 0,
+  'fill_style'      : 0,
 },
-# New Run 2 
+
+# New Run 2 dataset 
 # FastSim
 'TTJets_FastSim_2016_isB'   : {
   'legend' : 'B Flavor SVs',

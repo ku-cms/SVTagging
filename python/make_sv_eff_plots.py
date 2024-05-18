@@ -223,8 +223,10 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
                 hists_tmp[hist][sample][tree].SetLineColor(sc[sample]['color']+itr*2)
                 hists_tmp[hist][sample][tree].SetLineStyle(sc[sample]['style'])
                 hists_tmp[hist][sample][tree].SetLineWidth(sc[sample]['width'])
-                if sc[sample]['fill']: hists_tmp[hist][sample][tree].SetFillColor(sc[sample]['fill'])
-                if sc[sample]['fill_style']: hists_tmp[hist][sample][tree].SetFillStyle(sc[sample]['fill_style'])
+                if sc[sample]['fill']:
+                    hists_tmp[hist][sample][tree].SetFillColor(sc[sample]['fill'])
+                if sc[sample]['fill_style']:
+                    hists_tmp[hist][sample][tree].SetFillStyle(sc[sample]['fill_style'])
                 #print hist, sample, tree
                 if 'SMS' in sample:
                     stop_m = tree.split('_')[1]
