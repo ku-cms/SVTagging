@@ -4,7 +4,7 @@
 void hoverlay_PT_all_div_nojets_eff()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Thu May 30 12:34:53 2024) by ROOT version 6.26/11
+//=========  (Thu May 30 17:58:53 2024) by ROOT version 6.26/11
    TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,800,800);
    gStyle->SetOptFit(1);
    gStyle->SetOptStat(0);
@@ -135,6 +135,7 @@ void hoverlay_PT_all_div_nojets_eff()
    PT_all_div_nojets_Tot2017_isB_KUAnalysis__1->SetLineStyle(2);
    PT_all_div_nojets_Tot2017_isB_KUAnalysis__1->SetLineWidth(3);
    PT_all_div_nojets_Tot2017_isB_KUAnalysis__1->GetXaxis()->SetTitle("SV p_{T} [GeV]");
+   PT_all_div_nojets_Tot2017_isB_KUAnalysis__1->GetXaxis()->SetRange(1,100);
    PT_all_div_nojets_Tot2017_isB_KUAnalysis__1->GetXaxis()->CenterTitle(true);
    PT_all_div_nojets_Tot2017_isB_KUAnalysis__1->GetXaxis()->SetLabelFont(42);
    PT_all_div_nojets_Tot2017_isB_KUAnalysis__1->GetXaxis()->SetLabelSize(0.05);
@@ -264,6 +265,7 @@ void hoverlay_PT_all_div_nojets_eff()
    PT_all_div_nojets_Tot2017_isC_KUAnalysis__2->SetLineColor(ci);
    PT_all_div_nojets_Tot2017_isC_KUAnalysis__2->SetLineWidth(3);
    PT_all_div_nojets_Tot2017_isC_KUAnalysis__2->GetXaxis()->SetTitle("SV p_{T} [GeV]");
+   PT_all_div_nojets_Tot2017_isC_KUAnalysis__2->GetXaxis()->SetRange(1,100);
    PT_all_div_nojets_Tot2017_isC_KUAnalysis__2->GetXaxis()->CenterTitle(true);
    PT_all_div_nojets_Tot2017_isC_KUAnalysis__2->GetXaxis()->SetLabelFont(42);
    PT_all_div_nojets_Tot2017_isC_KUAnalysis__2->GetXaxis()->SetLabelSize(0.05);
@@ -394,6 +396,7 @@ void hoverlay_PT_all_div_nojets_eff()
    PT_all_div_nojets_Tot2017_isLight_KUAnalysis__3->SetLineStyle(7);
    PT_all_div_nojets_Tot2017_isLight_KUAnalysis__3->SetLineWidth(3);
    PT_all_div_nojets_Tot2017_isLight_KUAnalysis__3->GetXaxis()->SetTitle("SV p_{T} [GeV]");
+   PT_all_div_nojets_Tot2017_isLight_KUAnalysis__3->GetXaxis()->SetRange(1,100);
    PT_all_div_nojets_Tot2017_isLight_KUAnalysis__3->GetXaxis()->CenterTitle(true);
    PT_all_div_nojets_Tot2017_isLight_KUAnalysis__3->GetXaxis()->SetLabelFont(42);
    PT_all_div_nojets_Tot2017_isLight_KUAnalysis__3->GetXaxis()->SetLabelSize(0.05);

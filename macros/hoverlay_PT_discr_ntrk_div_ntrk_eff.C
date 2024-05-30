@@ -4,7 +4,7 @@
 void hoverlay_PT_discr_ntrk_div_ntrk_eff()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Thu May 30 12:34:53 2024) by ROOT version 6.26/11
+//=========  (Thu May 30 17:58:53 2024) by ROOT version 6.26/11
    TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,800,800);
    gStyle->SetOptFit(1);
    gStyle->SetOptStat(0);
@@ -135,6 +135,7 @@ void hoverlay_PT_discr_ntrk_div_ntrk_eff()
    PT_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__22->SetLineStyle(2);
    PT_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__22->SetLineWidth(3);
    PT_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__22->GetXaxis()->SetTitle("SV p_{T} [GeV]");
+   PT_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__22->GetXaxis()->SetRange(1,100);
    PT_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__22->GetXaxis()->CenterTitle(true);
    PT_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__22->GetXaxis()->SetLabelFont(42);
    PT_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__22->GetXaxis()->SetLabelSize(0.05);
@@ -264,6 +265,7 @@ void hoverlay_PT_discr_ntrk_div_ntrk_eff()
    PT_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__23->SetLineColor(ci);
    PT_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__23->SetLineWidth(3);
    PT_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__23->GetXaxis()->SetTitle("SV p_{T} [GeV]");
+   PT_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__23->GetXaxis()->SetRange(1,100);
    PT_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__23->GetXaxis()->CenterTitle(true);
    PT_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__23->GetXaxis()->SetLabelFont(42);
    PT_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__23->GetXaxis()->SetLabelSize(0.05);
@@ -394,6 +396,7 @@ void hoverlay_PT_discr_ntrk_div_ntrk_eff()
    PT_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__24->SetLineStyle(7);
    PT_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__24->SetLineWidth(3);
    PT_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__24->GetXaxis()->SetTitle("SV p_{T} [GeV]");
+   PT_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__24->GetXaxis()->SetRange(1,100);
    PT_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__24->GetXaxis()->CenterTitle(true);
    PT_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__24->GetXaxis()->SetLabelFont(42);
    PT_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__24->GetXaxis()->SetLabelSize(0.05);

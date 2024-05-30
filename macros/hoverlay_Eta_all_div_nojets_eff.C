@@ -4,13 +4,13 @@
 void hoverlay_Eta_all_div_nojets_eff()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Thu May 30 12:34:53 2024) by ROOT version 6.26/11
+//=========  (Thu May 30 17:58:53 2024) by ROOT version 6.26/11
    TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,800,800);
    gStyle->SetOptFit(1);
    gStyle->SetOptStat(0);
    gStyle->SetOptTitle(0);
    canvas->SetHighLightColor(2);
-   canvas->Range(-4.31969,-0.25,3.534292,1.416667);
+   canvas->Range(-3.455752,-0.25,2.827433,1.416667);
    canvas->SetFillColor(0);
    canvas->SetBorderMode(0);
    canvas->SetBorderSize(2);
@@ -112,6 +112,7 @@ void hoverlay_Eta_all_div_nojets_eff()
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->SetLineStyle(2);
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->SetLineWidth(3);
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->GetXaxis()->SetTitle("SV #eta");
+   Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->GetXaxis()->SetRange(11,90);
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->GetXaxis()->CenterTitle(true);
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->GetXaxis()->SetLabelFont(42);
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->GetXaxis()->SetLabelSize(0.05);
@@ -218,6 +219,7 @@ void hoverlay_Eta_all_div_nojets_eff()
    Eta_all_div_nojets_Tot2017_isC_KUAnalysis__8->SetLineColor(ci);
    Eta_all_div_nojets_Tot2017_isC_KUAnalysis__8->SetLineWidth(3);
    Eta_all_div_nojets_Tot2017_isC_KUAnalysis__8->GetXaxis()->SetTitle("SV #eta");
+   Eta_all_div_nojets_Tot2017_isC_KUAnalysis__8->GetXaxis()->SetRange(11,90);
    Eta_all_div_nojets_Tot2017_isC_KUAnalysis__8->GetXaxis()->CenterTitle(true);
    Eta_all_div_nojets_Tot2017_isC_KUAnalysis__8->GetXaxis()->SetLabelFont(42);
    Eta_all_div_nojets_Tot2017_isC_KUAnalysis__8->GetXaxis()->SetLabelSize(0.05);
@@ -325,6 +327,7 @@ void hoverlay_Eta_all_div_nojets_eff()
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->SetLineStyle(7);
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->SetLineWidth(3);
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->GetXaxis()->SetTitle("SV #eta");
+   Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->GetXaxis()->SetRange(11,90);
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->GetXaxis()->CenterTitle(true);
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->GetXaxis()->SetLabelFont(42);
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->GetXaxis()->SetLabelSize(0.05);

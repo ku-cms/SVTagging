@@ -4,13 +4,13 @@
 void hoverlay_Eta_discr_ntrk_div_ntrk_eff()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Thu May 30 12:34:53 2024) by ROOT version 6.26/11
+//=========  (Thu May 30 17:58:53 2024) by ROOT version 6.26/11
    TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,800,800);
    gStyle->SetOptFit(1);
    gStyle->SetOptStat(0);
    gStyle->SetOptTitle(0);
    canvas->SetHighLightColor(2);
-   canvas->Range(-4.31969,-0.25,3.534292,1.416667);
+   canvas->Range(-3.455752,-0.25,2.827433,1.416667);
    canvas->SetFillColor(0);
    canvas->SetBorderMode(0);
    canvas->SetBorderSize(2);
@@ -112,6 +112,7 @@ void hoverlay_Eta_discr_ntrk_div_ntrk_eff()
    Eta_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__28->SetLineStyle(2);
    Eta_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__28->SetLineWidth(3);
    Eta_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__28->GetXaxis()->SetTitle("SV #eta");
+   Eta_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__28->GetXaxis()->SetRange(11,90);
    Eta_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__28->GetXaxis()->CenterTitle(true);
    Eta_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__28->GetXaxis()->SetLabelFont(42);
    Eta_discr_ntrk_div_ntrk_Tot2017_isB_KUAnalysis__28->GetXaxis()->SetLabelSize(0.05);
@@ -218,6 +219,7 @@ void hoverlay_Eta_discr_ntrk_div_ntrk_eff()
    Eta_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__29->SetLineColor(ci);
    Eta_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__29->SetLineWidth(3);
    Eta_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__29->GetXaxis()->SetTitle("SV #eta");
+   Eta_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__29->GetXaxis()->SetRange(11,90);
    Eta_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__29->GetXaxis()->CenterTitle(true);
    Eta_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__29->GetXaxis()->SetLabelFont(42);
    Eta_discr_ntrk_div_ntrk_Tot2017_isC_KUAnalysis__29->GetXaxis()->SetLabelSize(0.05);
@@ -325,6 +327,7 @@ void hoverlay_Eta_discr_ntrk_div_ntrk_eff()
    Eta_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__30->SetLineStyle(7);
    Eta_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__30->SetLineWidth(3);
    Eta_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__30->GetXaxis()->SetTitle("SV #eta");
+   Eta_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__30->GetXaxis()->SetRange(11,90);
    Eta_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__30->GetXaxis()->CenterTitle(true);
    Eta_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__30->GetXaxis()->SetLabelFont(42);
    Eta_discr_ntrk_div_ntrk_Tot2017_isLight_KUAnalysis__30->GetXaxis()->SetLabelSize(0.05);
