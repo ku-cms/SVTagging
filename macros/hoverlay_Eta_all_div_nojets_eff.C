@@ -4,7 +4,7 @@
 void hoverlay_Eta_all_div_nojets_eff()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Sat May 18 15:14:13 2024) by ROOT version 6.26/11
+//=========  (Thu May 30 12:34:53 2024) by ROOT version 6.26/11
    TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,800,800);
    gStyle->SetOptFit(1);
    gStyle->SetOptStat(0);
@@ -109,6 +109,7 @@ void hoverlay_Eta_all_div_nojets_eff()
    TColor *color; // for color definition with alpha
    ci = TColor::GetColor("#cc0000");
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->SetLineColor(ci);
+   Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->SetLineStyle(2);
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->SetLineWidth(3);
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->GetXaxis()->SetTitle("SV #eta");
    Eta_all_div_nojets_Tot2017_isB_KUAnalysis__7->GetXaxis()->CenterTitle(true);
@@ -321,6 +322,7 @@ void hoverlay_Eta_all_div_nojets_eff()
 
    ci = TColor::GetColor("#0000cc");
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->SetLineColor(ci);
+   Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->SetLineStyle(7);
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->SetLineWidth(3);
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->GetXaxis()->SetTitle("SV #eta");
    Eta_all_div_nojets_Tot2017_isLight_KUAnalysis__9->GetXaxis()->CenterTitle(true);
@@ -367,18 +369,18 @@ tex->SetNDC();
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("Eta_all_div_nojets_Tot2017_isB_KUAnalysis","B Flavor SVs","fl");
+   TLegendEntry *entry=leg->AddEntry("Eta_all_div_nojets_Tot2017_isB_KUAnalysis","b flavor SVs","fl");
    entry->SetFillStyle(1001);
 
    ci = TColor::GetColor("#cc0000");
    entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
+   entry->SetLineStyle(2);
    entry->SetLineWidth(3);
    entry->SetMarkerColor(1);
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("Eta_all_div_nojets_Tot2017_isC_KUAnalysis","C Flavor SVs","fl");
+   entry=leg->AddEntry("Eta_all_div_nojets_Tot2017_isC_KUAnalysis","c flavor SVs","fl");
    entry->SetFillStyle(1001);
 
    ci = TColor::GetColor("#00cc00");
@@ -389,12 +391,12 @@ tex->SetNDC();
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
-   entry=leg->AddEntry("Eta_all_div_nojets_Tot2017_isLight_KUAnalysis","Light Flavor SVs","fl");
+   entry=leg->AddEntry("Eta_all_div_nojets_Tot2017_isLight_KUAnalysis","light flavor SVs","fl");
    entry->SetFillStyle(1001);
 
    ci = TColor::GetColor("#0000cc");
    entry->SetLineColor(ci);
-   entry->SetLineStyle(1);
+   entry->SetLineStyle(7);
    entry->SetLineWidth(3);
    entry->SetMarkerColor(1);
    entry->SetMarkerStyle(21);
