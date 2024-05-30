@@ -194,7 +194,7 @@ sample_configurables = {
 'Tot2017_isB'   : {
   'legend'      : 'b flavor SVs',
   'color'       : rt.kRed + 1,
-  'style'       : 1,
+  'style'       : 2,
   'width'       : 3,
   #'fill'        : rt.kRed,
   #'fill_style'  : 1001,
@@ -214,7 +214,7 @@ sample_configurables = {
 'Tot2017_isLight'   : {
   'legend'          : 'light flavor SVs',
   'color'           : rt.kBlue + 1,
-  'style'           : 1,
+  'style'           : 9,
   'width'           : 3,
   #'fill'            : rt.kBlue,
   #'fill_style'      : 3004,
