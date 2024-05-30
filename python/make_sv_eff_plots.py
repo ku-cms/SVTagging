@@ -1247,8 +1247,8 @@ if __name__ == "__main__":
 
     # USE_OLD_DATA: should be true for old 2017 data and false for new Run 2 data
     USE_OLD_DATA            = True
-    DO_REBIN                = False
-    REBIN_NUM               = 10
+    DO_REBIN                = True
+    REBIN_NUM               = 2
     DEBUG                   = False
     output_dir              = "sv_eff"
     output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
