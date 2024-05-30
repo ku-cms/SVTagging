@@ -1018,6 +1018,8 @@ plot_configurables = {
               },
 }
 
+# List of selections
+
 selections = [
                                  'ntrk',
                                  'nojets',
@@ -1588,6 +1590,11 @@ selections = [
 #               'negel_bronze_ge4sj_isrb',
     ]
 
+# Make a copy of the plot settings for each selection.
+# This is the magic that allows us to access the settings using the specific selection.
+# Users be warned... !
 for plot in plot_configurables.copy():
     for sel in selections:
         plot_configurables[plot + '_' + sel] = plot_configurables[plot].copy()
+
+

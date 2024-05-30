@@ -265,11 +265,12 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
                 ymax = hists_tmp[hist][sample][tree].GetMaximum()
                 #hists_tmp[hist][sample][tree].SetMinimum(0.01)
                 #hists_tmp[hist][sample][tree].SetMaximum(250*ymax)
-                if pc[hist_name]['xmax'] is not None: 
-                    xmin = pc[hist_name]['xmin']
-                    xmax = pc[hist_name]['xmax']
+                if pc[hist]['xmax'] is not None: 
+                    xmin = pc[hist]['xmin']
+                    xmax = pc[hist]['xmax']
                     # debug
-                    print("hist: {0}, hist_name: {1}, xmin: {2}, xmax: {3}".format(hist, hist_name, xmin, xmax))
+                    print("hist: {0}, xmin: {1}, xmax: {2}".format(hist, xmin, xmax))
+                    #print(pc[hist])
                     hists_tmp[hist][sample][tree].GetXaxis().SetRangeUser(xmin, xmax) 
 
                 hists_tmp[hist][sample][tree].SetMinimum(0.0)
