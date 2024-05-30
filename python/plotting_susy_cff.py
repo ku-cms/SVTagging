@@ -192,9 +192,9 @@ sample_configurables = {
 
 # Old 2017 dataset
 'Tot2017_isB'   : {
-  'legend'      : 'B Flavor SVs',
+  'legend'      : 'b flavor SVs',
   'color'       : rt.kRed + 1,
-  'style'       : 1,
+  'style'       : 2,
   'width'       : 3,
   #'fill'        : rt.kRed,
   #'fill_style'  : 1001,
@@ -202,7 +202,7 @@ sample_configurables = {
   'fill_style'  : 0,
 },
 'Tot2017_isC'   : {
-  'legend'      : 'C Flavor SVs',
+  'legend'      : 'c flavor SVs',
   'color'       : rt.kGreen + 1,
   'style'       : 1,
   'width'       : 3,
@@ -212,9 +212,9 @@ sample_configurables = {
   'fill_style'  : 0,
 },
 'Tot2017_isLight'   : {
-  'legend'          : 'Light Flavor SVs',
+  'legend'          : 'light flavor SVs',
   'color'           : rt.kBlue + 1,
-  'style'           : 1,
+  'style'           : 7,
   'width'           : 3,
   #'fill'            : rt.kBlue,
   #'fill_style'      : 3004,
@@ -225,7 +225,7 @@ sample_configurables = {
 # New Run 2 dataset 
 # FastSim
 'TTJets_FastSim_2016_isB'   : {
-  'legend' : 'B Flavor SVs',
+  'legend' : 'b flavor SVs',
   'color'  : rt.kRed,
   'style'  : 1,
   'width'  : 3,
@@ -233,7 +233,7 @@ sample_configurables = {
   'fill_style'   : 1001,
 },
 'TTJets_FastSim_2016_isC'   : {
-  'legend' : 'C Flavor SVs',
+  'legend' : 'c flavor SVs',
   'color'  : rt.kCyan,
   'style'  : 1,
   'width'  : 3,
@@ -241,7 +241,7 @@ sample_configurables = {
   'fill_style'   : 3005,
 },
 'TTJets_FastSim_2016_isLight'   : {
-  'legend' : 'Light Flavor SVs',
+  'legend' : 'light flavor SVs',
   'color'  : rt.kBlue,
   'style'  : 1,
   'width'  : 3,
@@ -249,7 +249,7 @@ sample_configurables = {
   'fill_style'   : 3004,
 },
 'TTJets_FastSim_2017_isB'   : {
-  'legend' : 'B Flavor SVs',
+  'legend' : 'b flavor SVs',
   'color'  : rt.kRed,
   'style'  : 1,
   'width'  : 3,
@@ -257,7 +257,7 @@ sample_configurables = {
   'fill_style'   : 1001,
 },
 'TTJets_FastSim_2017_isC'   : {
-  'legend' : 'C Flavor SVs',
+  'legend' : 'c flavor SVs',
   'color'  : rt.kCyan,
   'style'  : 1,
   'width'  : 3,
@@ -265,7 +265,7 @@ sample_configurables = {
   'fill_style'   : 3005,
 },
 'TTJets_FastSim_2017_isLight'   : {
-  'legend' : 'Light Flavor SVs',
+  'legend' : 'light flavor SVs',
   'color'  : rt.kBlue,
   'style'  : 1,
   'width'  : 3,
@@ -273,7 +273,7 @@ sample_configurables = {
   'fill_style'   : 3004,
 },
 'TTJets_FastSim_2018_isB'   : {
-  'legend' : 'B Flavor SVs',
+  'legend' : 'b flavor SVs',
   'color'  : rt.kRed,
   'style'  : 1,
   'width'  : 3,
@@ -281,7 +281,7 @@ sample_configurables = {
   'fill_style'   : 1001,
 },
 'TTJets_FastSim_2018_isC'   : {
-  'legend' : 'C Flavor SVs',
+  'legend' : 'c flavor SVs',
   'color'  : rt.kCyan,
   'style'  : 1,
   'width'  : 3,
@@ -289,7 +289,7 @@ sample_configurables = {
   'fill_style'   : 3005,
 },
 'TTJets_FastSim_2018_isLight'   : {
-  'legend' : 'Light Flavor SVs',
+  'legend' : 'light flavor SVs',
   'color'  : rt.kBlue,
   'style'  : 1,
   'width'  : 3,
@@ -298,7 +298,7 @@ sample_configurables = {
 },
 # FullSim
 'TTJets_FullSim_2016_isB'   : {
-  'legend' : 'B Flavor SVs',
+  'legend' : 'b flavor SVs',
   'color'  : rt.kRed,
   'style'  : 1,
   'width'  : 3,
@@ -306,7 +306,7 @@ sample_configurables = {
   'fill_style'   : 1001,
 },
 'TTJets_FullSim_2016_isC'   : {
-  'legend' : 'C Flavor SVs',
+  'legend' : 'c flavor SVs',
   'color'  : rt.kCyan,
   'style'  : 1,
   'width'  : 3,
@@ -314,7 +314,7 @@ sample_configurables = {
   'fill_style'   : 3005,
 },
 'TTJets_FullSim_2016_isLight'   : {
-  'legend' : 'Light Flavor SVs',
+  'legend' : 'light flavor SVs',
   'color'  : rt.kBlue,
   'style'  : 1,
   'width'  : 3,
@@ -322,7 +322,7 @@ sample_configurables = {
   'fill_style'   : 3004,
 },
 'TTJets_FullSim_2017_isB'   : {
-  'legend' : 'B Flavor SVs',
+  'legend' : 'b flavor SVs',
   'color'  : rt.kRed,
   'style'  : 1,
   'width'  : 3,
@@ -330,7 +330,7 @@ sample_configurables = {
   'fill_style'   : 1001,
 },
 'TTJets_FullSim_2017_isC'   : {
-  'legend' : 'C Flavor SVs',
+  'legend' : 'c flavor SVs',
   'color'  : rt.kCyan,
   'style'  : 1,
   'width'  : 3,
@@ -338,7 +338,7 @@ sample_configurables = {
   'fill_style'   : 3005,
 },
 'TTJets_FullSim_2017_isLight'   : {
-  'legend' : 'Light Flavor SVs',
+  'legend' : 'light flavor SVs',
   'color'  : rt.kBlue,
   'style'  : 1,
   'width'  : 3,
@@ -346,7 +346,7 @@ sample_configurables = {
   'fill_style'   : 3004,
 },
 'TTJets_FullSim_2018_isB'   : {
-  'legend' : 'B Flavor SVs',
+  'legend' : 'b flavor SVs',
   'color'  : rt.kRed,
   'style'  : 1,
   'width'  : 3,
@@ -354,7 +354,7 @@ sample_configurables = {
   'fill_style'   : 1001,
 },
 'TTJets_FullSim_2018_isC'   : {
-  'legend' : 'C Flavor SVs',
+  'legend' : 'c flavor SVs',
   'color'  : rt.kCyan,
   'style'  : 1,
   'width'  : 3,
@@ -362,7 +362,7 @@ sample_configurables = {
   'fill_style'   : 3005,
 },
 'TTJets_FullSim_2018_isLight'   : {
-  'legend' : 'Light Flavor SVs',
+  'legend' : 'light flavor SVs',
   'color'  : rt.kBlue,
   'style'  : 1,
   'width'  : 3,
@@ -602,8 +602,8 @@ plot_configurables = {
   'xlabel'  : 'SV p_{T} [GeV]',
   'ylabel'  : 'Efficiency',
   'nbins_x' : None,
-  'xmin'    : None,
-  'xmax'    : None,
+  'xmin'    : 2.0,
+  'xmax'    : 20.0,
   'nbinsy'  : None,
   'ymin'    : None,
   'ymax'    : None,
@@ -613,8 +613,8 @@ plot_configurables = {
   'xlabel'  : 'SV p_{T} [GeV]',
   'ylabel'  : 'SVs',
   'nbins_x' : None,
-  'xmin'    : None,
-  'xmax'    : None,
+  'xmin'    : 2.0,
+  'xmax'    : 20.0,
   'nbinsy'  : None,
   'ymin'    : None,
   'ymax'    : None,
@@ -646,8 +646,8 @@ plot_configurables = {
   'xlabel'  : 'SV #eta',
   'ylabel'  : 'Efficiency',
   'nbins_x' : None,
-  'xmin'    : None,
-  'xmax'    : None,
+  'xmin'    : -2.5,
+  'xmax'    : 2.5,
   'nbinsy'  : None,
   'ymin'    : None,
   'ymax'    : None,
@@ -657,8 +657,8 @@ plot_configurables = {
   'xlabel'  : 'SV #eta',
   'ylabel'  : 'SVs',
   'nbins_x' : None,
-  'xmin'    : None,
-  'xmax'    : None,
+  'xmin'    : -2.5,
+  'xmax'    : 2.5,
   'nbinsy'  : None,
   'ymin'    : None,
   'ymax'    : None,
@@ -1017,6 +1017,8 @@ plot_configurables = {
   'log'     : True,
               },
 }
+
+# List of selections
 
 selections = [
                                  'ntrk',
@@ -1588,6 +1590,11 @@ selections = [
 #               'negel_bronze_ge4sj_isrb',
     ]
 
+# Make a copy of the plot settings for each selection.
+# This is the magic that allows us to access the settings using the specific selection.
+# Users be warned... !
 for plot in plot_configurables.copy():
     for sel in selections:
         plot_configurables[plot + '_' + sel] = plot_configurables[plot].copy()
+
+

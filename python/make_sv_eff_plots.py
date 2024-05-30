@@ -265,10 +265,13 @@ def make_eff_plot(hists_, suffix_, output_name_, DEBUG=False):
                 ymax = hists_tmp[hist][sample][tree].GetMaximum()
                 #hists_tmp[hist][sample][tree].SetMinimum(0.01)
                 #hists_tmp[hist][sample][tree].SetMaximum(250*ymax)
-                if pc[hist_name]['xmax'] is not None: 
-                    xmin = pc[hist_name]['xmin']
-                    xmax = pc[hist_name]['xmax']
-                    hist.GetXaxis().SetRangeUser(xmin, xmax) 
+                if pc[hist]['xmax'] is not None: 
+                    xmin = pc[hist]['xmin']
+                    xmax = pc[hist]['xmax']
+                    # debug
+                    print("hist: {0}, xmin: {1}, xmax: {2}".format(hist, xmin, xmax))
+                    #print(pc[hist])
+                    hists_tmp[hist][sample][tree].GetXaxis().SetRangeUser(xmin, xmax) 
 
                 hists_tmp[hist][sample][tree].SetMinimum(0.0)
                 hists_tmp[hist][sample][tree].SetMaximum(1.25)
@@ -1247,8 +1250,8 @@ if __name__ == "__main__":
 
     # USE_OLD_DATA: should be true for old 2017 data and false for new Run 2 data
     USE_OLD_DATA            = True
-    DO_REBIN                = False
-    REBIN_NUM               = 10
+    DO_REBIN                = True
+    REBIN_NUM               = 2
     DEBUG                   = False
     output_dir              = "sv_eff"
     output_json_file_name   = "{0}/sv_eff.json".format(output_dir)
